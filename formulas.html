@@ -15,13 +15,14 @@
   <div class="subtitle">公式與武器 — 先公式、再數值表</div>
   <nav class="site">
     <a href="index.html">首頁</a>
-    <a href="formulas.html" aria-current="page">公式與武器</a>
-    <a href="stats.html">配點</a>
     <a href="zones.html">地圖圖鑑</a>
-    <a href="skills.html">技能表</a>
-    <a href="materials.html">素材表</a>
-    <a href="effects.html">裝備屬性</a>
+    <a href="skills.html">技能圖鑑</a>
+    <a href="materials.html">素材圖鑑</a>
+    <a href="effects.html">裝備圖鑑</a>
+    <a href="formulas.html" aria-current="page">公式與武器</a>
+    <a href="stats.html">配點攻略</a>
     <a href="allocation.html">點數計算機</a>
+    <a href="updates.html">版本情報</a>
   </nav>
 </header>
 <main>
@@ -34,7 +35,7 @@
 <tr><th>項</th><th>是什麼</th><th>怎麼算</th></tr>
 <tr><td><strong>有效攻擊</strong></td><td>這一手真正打出去的攻擊</td><td>非武器攻擊 ＋ 該手武器攻擊 × 熟練折算比（見 §2）</td></tr>
 <tr><td><strong>型別倍率</strong></td><td>武器型別×持法的固定倍率</td><td>查 §3 表；狙擊 1.8 ⋯ 雙持衝鋒槍 0.72</td></tr>
-<tr><td>穿透</td><td>角色穿透值（pierceValue）</td><td>40 ＋ 力量（v3.1.7 拆包公式）；破甲特效另外無視部分防禦</td></tr>
+<tr><td>穿透</td><td>角色穿透值（pierceValue）</td><td>40 ＋ 力量（v3.1.8 拆包公式）；破甲特效另外無視部分防禦</td></tr>
 <tr><td>敵防禦／韌性</td><td>戰報 enemies[].def／tou</td><td>減傷項</td></tr>
 <tr><td>爆擊</td><td>倍率固定 ×1.5</td><td>技巧影響爆擊率、不影響倍率</td></tr>
 <tr><td>雙持</td><td>一次出手＝兩手各算一次再相加</td><td>各用自己那把的攻擊與倍率（§3 的雙持列）</td></tr>
@@ -132,7 +133,7 @@
 
 </main>
 <footer class="site">
-9aohelper · 資料來源：遊戲前端拆包（現行版 v3.1.7，2026-09-03 同步）、官方數值表與鍛造模擬器 · 版本更新後請自行複驗
+9aohelper · 資料來源：遊戲前端拆包（現行版 v3.1.8，2026-09-04 同步）、官方數值表與鍛造模擬器 · 版本更新後請自行複驗
 </footer>
 </body>
 </html>

@@ -266,6 +266,76 @@ async function main() {
       d.querySelector('footer.site').textContent.trim().startsWith('9aohelper'));
     dom.window.close();
   }
+
+  // -------------------------------------------------------------------------
+  console.log('⑪ 圖鑑站改版（2026-09-04）：地圖卡片、版本情報、全站搜尋');
+  {
+    // 地圖圖鑑卡片：13 張全在，描述是官方文案（拆包逐字），秘境名對得上
+    const dom = await load('zones.html');
+    const d = dom.window.document;
+    const cards = [...d.querySelectorAll('.zcard')];
+    ok('地圖卡片 13 張（11 戰鬥圖＋2 城鎮）', cards.length === 13);
+    ok('城鎮卡標成 town 樣式', d.querySelectorAll('.zcard.town').length === 2);
+    const eagle = cards.find((c) => c.textContent.includes('eagle_cave'));
+    ok('鷹洞卡片帶官方描述與秘境「陰洞」',
+      eagle.textContent.includes('猛禽盤旋的峭壁洞窟') && eagle.textContent.includes('秘境：陰洞'));
+    const huofeng = cards.find((c) => c.textContent.includes('huofeng_liaoyuan'));
+    ok('火鳳燎原卡片寫明三國秘境三選一與巾色山麥岔路',
+      huofeng.textContent.includes('三選一') && huofeng.textContent.includes('巾色山麥'));
+    dom.window.close();
+
+    // 版本情報：549 條變更、可搜尋、可篩類型
+    const dom2 = await load('updates.html');
+    const d2 = dom2.window.document, w2 = dom2.window;
+    const table = d2.querySelector('table[data-search]');
+    const rows = [...table.querySelectorAll('tbody tr')];
+    ok('更新日誌 549 條全在', rows.length === 549);
+    const bar = table.closest('.table-wrap').previousElementSibling;
+    const input = bar.querySelector('input[type="search"]');
+    type(input, '鷹洞', w2);
+    ok('打「鷹洞」篩得到相關更新', vis(rows) > 3 && vis(rows) < 549);
+    type(input, '', w2);
+    const chips = [...bar.querySelectorAll('.chip')];
+    ok('類型籤（新功能／調整／修復…）生出來了', chips.length === 5);
+    chips.find((b) => b.textContent.startsWith('修復')).click();
+    ok('按「修復」→ 只剩修復類（206 條）', vis(rows) === 206);
+    ok('標題掛 9aohelper、頁面沒有「GAO 攻略站」',
+      /<title>[^<]*9aohelper<\/title>/.test(fs.readFileSync(path.join(SITE, 'updates.html'), 'utf8')) &&
+      !d2.body.textContent.includes('GAO 攻略站'));
+    dom2.window.close();
+
+    // 全站搜尋：索引檔存在，打片段跳得到分類頁
+    const dom3 = await load('index.html');
+    const d3 = dom3.window.document, w3 = dom3.window;
+    const s = d3.createElement('script');   // <script src> jsdom 不抓，手動注入索引
+    s.textContent = fs.readFileSync(path.join(SITE, 'data', 'search-index.js'), 'utf8');
+    d3.body.appendChild(s);
+    ok('搜尋索引載入且條目 > 350', (w3.SEARCH_INDEX || []).length > 350);
+    const gq = d3.getElementById('gq'), hits = d3.getElementById('ghits');
+    ok('首頁有全站搜尋框', !!gq && !!hits);
+    type(gq, '秘銀', w3);
+    ok('打「秘銀」→ 命中素材，連去素材圖鑑',
+      !hits.hidden && [...hits.querySelectorAll('a')].some((a) => a.href.includes('materials.html')));
+    type(gq, '陰洞', w3);
+    ok('打「陰洞」→ 命中秘境，連去地圖圖鑑',
+      [...hits.querySelectorAll('a')].some((a) => a.href.includes('zones.html')));
+    type(gq, '對空鳴槍', w3);
+    ok('打「對空鳴槍」→ 命中技能，連去技能圖鑑',
+      [...hits.querySelectorAll('a')].some((a) => a.href.includes('skills.html')));
+    type(gq, '', w3);
+    ok('清空後結果收起來', hits.hidden === true);
+    dom3.window.close();
+
+    // 首頁是圖鑑入口：分類卡片連到四本圖鑑＋攻略工具
+    const dom4 = await load('index.html');
+    const d4 = dom4.window.document;
+    const cat = [...d4.querySelectorAll('a.catcard')].map((a) => a.getAttribute('href'));
+    ok('分類卡片含四本圖鑑', ['zones.html', 'skills.html', 'materials.html', 'effects.html']
+      .every((u) => cat.includes(u)));
+    ok('分類卡片含攻略、工具與版本情報', ['formulas.html', 'stats.html', 'allocation.html', 'updates.html']
+      .every((u) => cat.includes(u)));
+    dom4.window.close();
+  }
 }
 
 main().then(() => {

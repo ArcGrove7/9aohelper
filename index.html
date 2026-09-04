@@ -4,32 +4,71 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>9aohelper</title>
-<meta name="description" content="傷害公式、熟練折算、武器型別、配點、素材與鍛造計算機。資料取自遊戲拆包與官方數值表。">
+<meta name="description" content="圖鑑與攻略查表站：地圖、技能、素材、裝備特效圖鑑，傷害公式、熟練折算、配點與點數計算機。資料取自遊戲拆包與官方數值表。">
 <meta name="theme-color" content="#0b0e14">
 <link rel="stylesheet" href="style.css">
 <script src="site.js" defer></script>
+<script src="data/search-index.js" defer></script>
 </head>
 <body>
 <header class="site">
   <div class="title">9aohelper</div>
-  <div class="subtitle">拆包資料與客觀公式的查表站</div>
+  <div class="subtitle">圖鑑與攻略查表站</div>
   <nav class="site">
     <a href="index.html" aria-current="page">首頁</a>
-    <a href="formulas.html">公式與武器</a>
-    <a href="stats.html">配點</a>
     <a href="zones.html">地圖圖鑑</a>
-    <a href="skills.html">技能表</a>
-    <a href="materials.html">素材表</a>
-    <a href="effects.html">裝備屬性</a>
+    <a href="skills.html">技能圖鑑</a>
+    <a href="materials.html">素材圖鑑</a>
+    <a href="effects.html">裝備圖鑑</a>
+    <a href="formulas.html">公式與武器</a>
+    <a href="stats.html">配點攻略</a>
     <a href="allocation.html">點數計算機</a>
+    <a href="updates.html">版本情報</a>
   </nav>
 </header>
 <main>
-<h1>這個站在講什麼</h1>
-<p class="lead">
-這裡的資料來自<strong>遊戲前端拆包、官方數值表與鍛造模擬器</strong>——
-數值表、係數與公式照原樣呈現，機制未明的地方會直說「未知」，不放猜的。
-</p>
+<div class="hero">
+  <h1>查資料，不用翻攻略文</h1>
+  <p class="lead">地圖、技能、素材、裝備特效的<strong>圖鑑</strong>，加上公式與配點的<strong>攻略</strong>——
+  資料來自遊戲前端拆包、官方數值表與鍛造模擬器，機制未明的地方直說「未知」，不放猜的。</p>
+  <div class="gsearch">
+    <input id="gq" type="search" placeholder="全站搜尋：素材、技能、特效、地圖、更新…（打片段就好）"
+           aria-label="全站搜尋" autocomplete="off">
+    <div class="hits" id="ghits" hidden></div>
+  </div>
+</div>
+
+<h2>圖鑑</h2>
+<div class="catcards">
+  <a class="catcard" href="zones.html"><span class="ci">🗺️</span>
+    <h3>地圖圖鑑 <span class="cn">13</span></h3>
+    <p>官方描述、編號數法、秘境對照、王關與樓層機制。</p></a>
+  <a class="catcard" href="skills.html"><span class="ci">⚔️</span>
+    <h3>技能圖鑑 <span class="cn">34</span></h3>
+    <p>依武器型別分組的招式表，刷熟關鍵技能的機制。</p></a>
+  <a class="catcard" href="materials.html"><span class="ci">🪨</span>
+    <h3>素材圖鑑 <span class="cn">241</span></h3>
+    <p>攻・防・幸・重・耐與鍛造特效，可篩標籤與特效。</p></a>
+  <a class="catcard" href="effects.html"><span class="ci">🛡️</span>
+    <h3>裝備圖鑑 <span class="cn">15＋31</span></h3>
+    <p>15 種裝備類型係數、品質倍率，與 31 種特效機制。</p></a>
+</div>
+
+<h2>攻略與工具</h2>
+<div class="catcards">
+  <a class="catcard" href="formulas.html"><span class="ci">📐</span>
+    <h3>公式與武器</h3>
+    <p>傷害公式、熟練折算曲線、武器型別倍率表、戰報欄位對照。</p></a>
+  <a class="catcard" href="stats.html"><span class="ci">🎯</span>
+    <h3>配點攻略</h3>
+    <p>能力點到屬性的伺服器公式，刷熟與打硬仗兩套建議。</p></a>
+  <a class="catcard" href="allocation.html"><span class="ci">🧮</span>
+    <h3>點數計算機</h3>
+    <p>離線點數配置計算機（單檔工具，開新分頁使用）。</p></a>
+  <a class="catcard" href="updates.html"><span class="ci">📰</span>
+    <h3>版本情報 <span class="cn">256 版</span></h3>
+    <p>官方更新日誌全文檢索——很多機制的官方說法只在這裡。</p></a>
+</div>
 
 <h2>如果只記五件事</h2>
 <div class="cards">
@@ -60,24 +99,24 @@
   </div>
 </div>
 
-<h2>怎麼查</h2>
-<div class="tip">表格上方都有一條搜尋列：<strong>打片段就會篩，不必輸入完整名稱</strong>
-（例如素材表打「水晶」「毒」，技能表打「追擊」）。旁邊那排籤可以複選當篩選器，
-按「清除條件」還原。<strong>手機上表格會攤成一列一張卡片</strong>，不必左右拖。</div>
+<h2>這個站的查法</h2>
+<div class="tip">每張表上方都有一條搜尋列：<strong>打片段就會篩，不必輸入完整名稱</strong>
+（例如素材表打「水晶」「毒」，技能表打「追擊」，版本情報打「格擋」）。旁邊那排籤可以複選當篩選器，
+按「清除條件」還原。<strong>手機上表格會攤成一列一張卡片</strong>，不必左右拖。
+首頁最上面那條是<strong>全站搜尋</strong>——素材、技能、特效、地圖、裝備打片段直接跳到那一頁。</div>
 
-<h2>站內導覽</h2>
-<ul>
-  <li><a href="formulas.html">公式與武器</a>——傷害公式、熟練折算、武器型別倍率表（可搜尋）、戰報欄位對照。</li>
-  <li><a href="stats.html">配點</a>——能力點到屬性的伺服器公式、刷熟與打硬仗兩套配點建議。</li>
-  <li><a href="zones.html">地圖圖鑑</a>——11 張地圖的編號數法、秘境入口與王關樓層。</li>
-  <li><a href="skills.html">技能表</a>——34 招併成一張可搜尋的表，可按武器型別篩。</li>
-  <li><a href="materials.html">素材表</a>——241 種素材的攻・防・幸・重・耐與<strong>鍛造特效</strong>，可打關鍵字、按標籤／特效籤篩。</li>
-  <li><a href="effects.html">裝備屬性</a>——挑一件裝備看它的四維係數、品質倍率，與 31 種特效機制對照（可搜尋）。</li>
-  <li><a href="allocation.html">點數計算機</a>——離線點數配置計算機（單檔工具，開新分頁使用）。</li>
-</ul>
+<h2>資料怎麼來的</h2>
+<div class="cards">
+  <div class="card"><h3>📦 遊戲前端拆包</h3>
+    <p>公式、地圖、特效、更新日誌逐字取自遊戲 bundle（現行 v3.1.8），標「拆包」等級。</p></div>
+  <div class="card"><h3>📋 官方數值表</h3>
+    <p>素材與裝備係數沿用官方數值表與鍛造模擬器的原始數字，不加工。</p></div>
+  <div class="card"><h3>❓ 未知就寫未知</h3>
+    <p>伺服器端才有的數字（王關樓層、秘境入口層）與機制未明的特效，一律直說，不外插。</p></div>
+</div>
 </main>
 <footer class="site">
-9aohelper · 資料來源：遊戲前端拆包（現行版 v3.1.7，2026-09-03 同步）、官方數值表與鍛造模擬器 · 版本更新後請自行複驗
+9aohelper · 資料來源：遊戲前端拆包（現行版 v3.1.8，2026-09-04 同步）、官方數值表與鍛造模擬器 · 版本更新後請自行複驗
 </footer>
 </body>
 </html>

@@ -126,6 +126,50 @@
     render();
   }
 
+  /* ---- 4) 全站搜尋（首頁 hero；索引在 data/search-index.js） ---- */
+  function attachGlobalSearch() {
+    const input = document.getElementById('gq');
+    const box = document.getElementById('ghits');
+    if (!input || !box) return;
+    let sel = -1;
+    function render() {
+      const idx = window.SEARCH_INDEX || [];
+      const q = norm(input.value);
+      sel = -1;
+      if (!q) { box.hidden = true; box.innerHTML = ''; return; }
+      const hits = [];
+      for (const [n, c, u, k] of idx) {
+        if (norm(n).includes(q) || norm(k).includes(q) || norm(c).includes(q)) hits.push([n, c, u]);
+        if (hits.length > 60) break;
+      }
+      const top = hits.slice(0, 12);
+      box.innerHTML = top.map(([n, c, u]) =>
+        '<a href="' + u + '"><span class="hn">' + n + '</span><span class="hc">' + c + '</span></a>').join('')
+        + (hits.length > top.length ? '<div class="hmore">還有更多——到分類頁用表格搜尋列細篩</div>' : '')
+        + (hits.length ? '' : '<div class="hmore">沒有符合的項目——試試少打幾個字</div>');
+      box.hidden = false;
+    }
+    function move(d) {
+      const links = [...box.querySelectorAll('a')];
+      if (!links.length) return;
+      sel = (sel + d + links.length) % links.length;
+      links.forEach((a, i) => a.classList.toggle('sel', i === sel));
+    }
+    input.addEventListener('input', render);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
+      else if (e.key === 'Enter') {
+        const a = box.querySelector('a.sel') || box.querySelector('a');
+        if (a) location.href = a.href;
+      } else if (e.key === 'Escape') { box.hidden = true; }
+    });
+    document.addEventListener('click', (e) => {
+      if (!box.contains(e.target) && e.target !== input) box.hidden = true;
+    });
+    input.addEventListener('focus', () => { if (input.value) render(); });
+  }
+
   /* ---- 3) 回到頂端 ---- */
   function backToTop() {
     const b = document.createElement('button');
@@ -144,6 +188,7 @@
   function boot() {
     document.querySelectorAll('table.rtable').forEach(labelCells);
     document.querySelectorAll('table[data-search]').forEach(attachSearch);
+    attachGlobalSearch();
     const cur = document.querySelector('nav.site a[aria-current="page"]');
     if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: 'nearest', inline: 'center' });
     backToTop();

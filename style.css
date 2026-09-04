@@ -520,3 +520,74 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
   .eqstats { grid-template-columns: 1fr; gap: 0.5rem; }
   .eqcard { padding: 0.85rem 0.9rem 0.95rem; }
 }
+
+/* ============================================================
+   圖鑑站改版（2026-09-04）——配置與 UX 邏輯參考 artale 式圖鑑站：
+   首頁「主打入口＋分類卡片＋全站搜尋」、地圖圖鑑用卡片瀏覽。
+   ============================================================ */
+
+/* ---- 首頁 hero 與全站搜尋 ---- */
+.hero { text-align: center; padding: 1.6rem 0.5rem 0.4rem; }
+.hero h1 { border-bottom: none; font-size: 1.6rem; margin-bottom: 0.4rem; }
+.hero p.lead { max-width: 34rem; margin: 0.4rem auto; }
+.gsearch { position: relative; max-width: 30rem; margin: 1.1rem auto 0.4rem; text-align: left; }
+.gsearch input {
+  width: 100%; padding: 0.65rem 0.95rem; font-size: 16px;
+  background: var(--card); color: var(--ink);
+  border: 1px solid var(--edge); border-radius: 8px;
+}
+.gsearch input:focus { outline: none; border-color: var(--accent); }
+.gsearch .hits {
+  position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 30;
+  background: var(--bg2); border: 1px solid var(--edge); border-radius: 8px;
+  max-height: 19rem; overflow-y: auto; box-shadow: 0 8px 24px #0009;
+}
+.gsearch .hits a {
+  display: flex; align-items: baseline; gap: 0.6rem;
+  padding: 0.5rem 0.9rem; text-decoration: none;
+  border-bottom: 1px solid var(--line); min-height: 2.75rem; box-sizing: border-box;
+}
+.gsearch .hits a:last-child { border-bottom: none; }
+.gsearch .hits a:hover, .gsearch .hits a.sel { background: var(--code-bg); }
+.gsearch .hits .hn { color: var(--ink); }
+.gsearch .hits .hc { margin-left: auto; font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+.gsearch .hits .hmore { padding: 0.4rem 0.9rem; font-size: 0.8rem; color: var(--muted); }
+
+/* ---- 首頁分類卡片（可點的入口卡） ---- */
+.catcards {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem; margin: 1.2rem 0;
+}
+a.catcard {
+  display: block; background: var(--card); border: 1px solid var(--line);
+  border-radius: 8px; padding: 0.9rem 1rem; text-decoration: none; color: var(--txt2);
+}
+a.catcard:hover { border-color: var(--accent); }
+a.catcard .ci { font-size: 1.5rem; display: block; }
+a.catcard h3 { margin: 0.25rem 0 0.2rem; font-size: 0.98rem; color: var(--accent-hi); }
+a.catcard p { margin: 0; font-size: 0.85rem; color: var(--muted); }
+a.catcard .cn { font-size: 0.75rem; color: var(--muted); font-family: var(--mono); }
+
+/* ---- 地圖圖鑑卡片 ---- */
+.zonecards {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 1rem; margin: 1.2rem 0;
+}
+.zcard { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 0.9rem 1rem; }
+.zcard .zhead { display: flex; align-items: center; gap: 0.6rem; }
+.zcard .zicon { font-size: 1.7rem; line-height: 1; }
+.zcard h3 { margin: 0; font-size: 1rem; color: var(--ink); }
+.zcard .zkey { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); display: block; }
+.zcard .znum {
+  margin-left: auto; font-family: var(--mono); font-size: 0.8rem; color: var(--accent);
+  border: 1px solid var(--line); border-radius: 99px; padding: 0.05rem 0.55rem; white-space: nowrap;
+}
+.zcard .zdesc { margin: 0.5rem 0; font-size: 0.88rem; }
+.zcard .zmeta { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.zcard .zmeta span {
+  font-size: 0.78rem; padding: 0.12rem 0.55rem; border-radius: 99px;
+  background: var(--code-bg); border: 1px solid var(--line); white-space: nowrap;
+}
+.zcard .zmeta .zr { color: var(--accent-2); }
+.zcard.town { border-style: dashed; }
+.zcard.town .zdesc, .zcard.town h3 { color: var(--muted); }

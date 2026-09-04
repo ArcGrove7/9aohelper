@@ -1,2 +1,58 @@
 # 9aohelper
-9aohelper
+
+圖鑑與攻略查表站——純靜態網站（HTML＋CSS＋一支 `site.js`，零組建、零相依）。
+資料取自遊戲前端拆包、官方數值表與鍛造模擬器；機制未明的地方直說「未知」，不放猜的。
+
+原本住在 `GunartonlineHelper/site/`，2026-09-04 拆成獨立儲存庫。
+
+## 頁面
+
+| 頁 | 內容 |
+|---|---|
+| `index.html` | 首頁：全站搜尋＋分類入口卡片 |
+| `zones.html` | 地圖圖鑑：13 張地圖的官方描述、編號數法、秘境對照 |
+| `skills.html` | 技能圖鑑：34 招可搜尋、可篩型別 |
+| `materials.html` | 素材圖鑑：241 種素材 × 8 欄，可篩標籤與特效 |
+| `effects.html` | 裝備圖鑑：15 種裝備係數（一次看一件）、品質倍率、31 種特效機制 |
+| `formulas.html` | 公式與武器：傷害公式、熟練折算、型別倍率表 |
+| `stats.html` | 配點攻略：能力點公式與建議 |
+| `allocation.html` | 點數計算機（離線單檔工具） |
+| `updates.html` | 版本情報：官方更新日誌 256 版全文檢索 |
+
+## 部署到 Cloudflare Pages
+
+1. 登入 <https://dash.cloudflare.com> → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**。
+2. 選 `ArcGrove7/9aohelper`。
+3. 建置設定：**Production branch** `main`、**Build command** 留空、**Build output directory** `/`（儲存庫根目錄就是網站）。
+4. **Save and Deploy**。之後合進 `main` 就自動重新部署。
+
+不想連 Git 的話：
+
+    npm install -g wrangler
+    wrangler login
+    wrangler pages project create 9aohelper --production-branch main
+    wrangler pages deploy . --project-name 9aohelper
+
+## 開發
+
+站本身零組建。只有兩個輔助工序：
+
+- **鎖定測試**（手機 UX、搜尋篩選、圖鑑改版，共 104 項）：
+
+      npm install
+      npm test
+
+- **全站搜尋索引**：改了任何圖鑑內容後重跑一次，產物（`data/search-index.js`）進版控：
+
+      node tools/build-search-index.js
+
+## 內容規矩（人下的令，沿自 2026-09-03；加新內容前先讀）
+
+- **站上只放拆包資料與客觀公式**——不放帳號名、角色名、自家數值、戰力天花板情報、
+  任何「實測」戰報回歸與觸發率統計。這個站是給網友看的。
+- **站名只用 `9aohelper`**，不出現「GAO 攻略站」這種字樣（標題、頁首、頁尾、meta 全都是）。
+- **不放圖表**——同樣的資訊用表格呈現。
+- **手機優先**：新表格要掛 `class="rtable"`＋`<thead>`；要可搜尋就加 `data-search="提示"`，
+  比對一律「包含片段」。細節見 `style.css` 的 `@media` 段與 `site.js` 開頭註解。
+- **鍛造計算機不要加回來**（功能有誤，2026-09-03 移除）。
+- 資料同步版本寫在每頁頁尾（現行 v3.1.8，2026-09-04）；遊戲更新後請自行複驗再改。
