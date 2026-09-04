@@ -336,11 +336,11 @@ async function main() {
     const d2 = dom2.window.document, w2 = dom2.window;
     const table = d2.querySelector('table[data-search]');
     const rows = [...table.querySelectorAll('tbody tr')];
-    ok('更新日誌 549 條全在', rows.length === 549);
+    ok('更新日誌 550 條全在（含 3.1.9）', rows.length === 550);
     const bar = table.closest('.table-wrap').previousElementSibling;
     const input = bar.querySelector('input[type="search"]');
     type(input, '鷹洞', w2);
-    ok('打「鷹洞」篩得到相關更新', vis(rows) > 3 && vis(rows) < 549);
+    ok('打「鷹洞」篩得到相關更新', vis(rows) > 3 && vis(rows) < 550);
     type(input, '', w2);
     const chips = [...bar.querySelectorAll('.chip')];
     ok('類型籤（新功能／調整／修復…）生出來了', chips.length === 5);
@@ -825,6 +825,56 @@ async function main() {
     d.getElementById('wprev').click();
     ok('按 ‹ 也能往回繞', panels[0].hidden && !panels[1].hidden);
     dom.window.close();
+  }
+
+  // -------------------------------------------------------------------------
+  console.log('㉒ 圖鑑圖示與遊戲原生特效色（v3.1.9 對齊）');
+  {
+    // 敵人表與卡片：名稱前有圖示
+    const de = await load('enemies.html', '', ['data/icons.js', 'data/db.js']);
+    const ed = de.window.document;
+    const firstA = ed.querySelector('table tbody tr a.dlink');
+    ok('敵人表名稱前有圖示（小白兔 → 🐇）',
+      firstA.querySelector('.ic') && firstA.textContent.includes('🐇'));
+    const card = ed.querySelector('#ecards .ecard header');
+    ok('敵人卡片名稱前也有圖示', !!card.querySelector('.ic'));
+    de.window.close();
+
+    // 素材表：名稱前有圖示、特效用遊戲原生色
+    const dm = await load('materials.html', '', ['data/icons.js']);
+    const md = dm.window.document;
+    const rows = [...md.querySelectorAll('#mtab tbody tr')];
+    const obsidian = rows.find((tr) => tr.textContent.includes('藍黑曜石'));
+    ok('藍黑曜石名稱前有石頭圖示', obsidian.querySelector('.ic') &&
+      obsidian.textContent.includes('🪨'));
+    const nail = rows.find((tr) => tr.textContent.includes('巴洛古的指甲'));
+    const evil = [...nail.querySelectorAll('.el')].find((el) => el.textContent.includes('邪惡力量'));
+    ok('特效小標籤套遊戲原生色（邪惡力量＝#c97aff）',
+      evil.getAttribute('style').includes('#c97aff'));
+    const curse = [...nail.querySelectorAll('.el')].find((el) => el.textContent.includes('詛咒'));
+    ok('詛咒也是 elements 模組的紫色', curse.getAttribute('style').includes('#c97aff'));
+    dm.window.close();
+
+    // 技能表：依型別的武器圖示；特效表：名稱套原生色
+    const dk = await load('skills.html', '', ['data/icons.js']);
+    ok('技能表名稱前有型別圖示',
+      !!dk.window.document.querySelector('table tbody tr a.dlink .ic'));
+    dk.window.close();
+    const df = await load('effects.html', '', ['data/icons.js']);
+    const fxA = [...df.window.document.querySelectorAll('table[data-search] tbody tr a.dlink')];
+    const fire = fxA.find((a) => a.textContent.includes('火焰') && !a.textContent.includes('抗性'));
+    ok('特效表名稱套遊戲原生色（火焰＝#ff4655）',
+      fire.style.color && fire.style.color.replace(/\s/g, '') !== '');
+    df.window.close();
+
+    // 3.1.9 入庫與版本標記
+    const du = await load('updates.html');
+    ok('3.1.9（技能書機率調整）已入版本情報',
+      du.window.document.body.textContent.includes('3.1.9') &&
+      du.window.document.body.textContent.includes('技能書機率全面統一'));
+    ok('頁尾版本標記更新為 v3.1.9',
+      du.window.document.querySelector('footer').textContent.includes('v3.1.9'));
+    du.window.close();
   }
 }
 

@@ -14,7 +14,7 @@ const read = (p) => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const doc = (p) => new JSDOM(read(p)).window.document;
 const fail = (msg) => { console.error('✗ ' + msg); process.exitCode = 1; };
 
-const GAME_VERSION = '3.1.8';
+const GAME_VERSION = '3.1.9';
 
 /* ---- 特效（31 種：名／分類／機制／鍵） ---- */
 const effects = [];

@@ -13,6 +13,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://9aohelper.pages.dev/materials">
 <link rel="stylesheet" href="style.css">
+<script src="data/icons.js"></script>
 <script src="site.js" defer></script>
 <script src="data/search-index.js" defer></script>
 </head>
@@ -155,8 +156,11 @@ const M=[["巴洛古的指甲",35.5,12,0,5.75,10,"生物·銳利","詛咒:2|邪�
     if(!s)return '—';
     return s.split('|').map(p=>{
       const a=p.split(':'), k=a[0], v=a[1];
-      const bad=(k==='邪惡力量'||k==='詛咒');   // 邪惡力量是鐵令禁穿的那一種，標紅提醒
-      return '<span class="el'+(bad?' bad':'')+'">'+k+' <b>'+v+'</b></span>';
+      const bad=(k==='邪惡力量'||k==='詛咒');   // 邪惡力量是鐵令禁穿的那一種，另掛班別
+      // 顏色照遊戲 elements 模組的原生定義（data/icons.js 的 fxColor）
+      const c=window.GAOICON?window.GAOICON.fxColor(k):'';
+      const st=c?' style="color:'+c+';border-color:'+c+'55"':'';
+      return '<span class="el'+(bad?' bad':'')+'"'+st+'>'+k+' <b>'+v+'</b></span>';
     }).join('');
   }
   function render(){
@@ -178,7 +182,7 @@ const M=[["巴洛古的指甲",35.5,12,0,5.75,10,"生物·銳利","詛咒:2|邪�
     // 兩個 flex item，否則特效那種小標籤會疊到欄名上（2026-09-03 手機實測）。
     const cell=(cls,label,html)=>'<td'+(cls?' class="'+cls+'"':'')+' data-label="'+label+'"><span class="v">'+html+'</span></td>';
     tb.innerHTML=list.map(o=>{const r=o.r;return '<tr>'
-      +cell('title','名稱','<a class="dlink" href="detail.html?t=material&id='+encodeURIComponent(r[0])+'">'+r[0]+'</a>')
+      +cell('title','名稱','<a class="dlink" href="detail.html?t=material&id='+encodeURIComponent(r[0])+'">'+(window.GAOICON?'<span class="ic" aria-hidden="true">'+window.GAOICON.mat(r[0],r[6])+'</span>':'')+r[0]+'</a>')
       +cell('num','攻',r[1])
       +cell('num','防',r[2])
       +cell('num','幸',r[3])
@@ -216,7 +220,7 @@ const M=[["巴洛古的指甲",35.5,12,0,5.75,10,"生物·銳利","詛咒:2|邪�
 </script>
 </main>
 <footer class="site">
-9aohelper · 遊戲版本 v3.1.8 · 2026-09-04 更新
+9aohelper · 遊戲版本 v3.1.9 · 2026-09-05 更新
 </footer>
 </body>
 </html>

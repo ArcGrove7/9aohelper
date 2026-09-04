@@ -205,7 +205,9 @@
     const cards = DB.enemies.map((e) => {
       const card = document.createElement('article');
       card.className = 'ecard';
-      let h = '<header>' + dlink('enemy', e.id, e.n)
+      const ic = window.GAOICON ? window.GAOICON.enemy(e.n, e.race) : '';
+      let h = '<header>' + (ic ? '<span class="ic" aria-hidden="true">' + ic + '</span>' : '')
+        + dlink('enemy', e.id, e.n)
         + '<span class="lvb">LV ' + (e.lv ? esc(e.lv) : '?') + '</span>'
         + (e.race ? '<span class="raceb">' + esc(e.race) + '</span>' : '')
         + '</header>';
@@ -299,6 +301,36 @@
       order.forEach((i) => { grid.append(cards[i]); tbody.append(rows[i]); });
     });
     if (bar) bar.append(sel);
+  }
+
+  /* ---- 9) 圖鑑圖示：table[data-icons] 的名稱前加上該實體的 emoji 圖示，
+     規則在 data/icons.js（與遊戲本身的 emoji 視覺語言一致）。 ---- */
+  function iconizeTables() {
+    const G = window.GAOICON;
+    if (!G) return;
+    document.querySelectorAll('table[data-icons]').forEach((table) => {
+      const kind = table.dataset.icons;
+      bodyRows(table).forEach((tr) => {
+        const a = tr.children[0] && tr.children[0].querySelector('a');
+        if (!a || a.querySelector('.ic')) return;
+        const name = a.textContent.trim();
+        let icon = '';
+        if (kind === 'enemy') icon = G.enemy(name, tr.children[5] ? tr.children[5].textContent : '');
+        else if (kind === 'material') icon = G.mat(name, tr.children[6] ? tr.children[6].textContent : '');
+        else if (kind === 'skill') icon = G.skill(tr.children[1] ? tr.children[1].textContent : '');
+        else if (kind === 'effect') {
+          icon = G.effectCat(tr.children[1] ? tr.children[1].textContent : '');
+          const c = G.fxColor(name);
+          if (c) a.style.color = c;
+        }
+        if (!icon) return;
+        const sp = document.createElement('span');
+        sp.className = 'ic';
+        sp.textContent = icon;
+        sp.setAttribute('aria-hidden', 'true');
+        a.prepend(sp);
+      });
+    });
   }
 
   /* ---- 7) 易讀模式：放大字距行距、表格攤成卡片，整站記住 ---- */
@@ -408,6 +440,7 @@
 
   function boot() {
     document.querySelectorAll('table.rtable').forEach(labelCells);
+    iconizeTables();
     document.querySelectorAll('table[data-search]').forEach(attachSearch);
     attachGlobalSearch();
     enemyCards();

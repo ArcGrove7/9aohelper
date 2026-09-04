@@ -863,3 +863,8 @@ html.readable .ecard { font-size: 1.02em; }
 .zmystery h3 { margin: 0; font-size: 1rem; color: var(--muted); }
 .zmystery .zhead { display: flex; align-items: center; gap: 0.6rem; }
 .zmystery .zdesc { margin: 0.5rem 0 0; font-size: 0.88rem; }
+
+/* 圖鑑名稱前的實體圖示（data/icons.js 指派） */
+.ic { margin-right: 0.35rem; font-style: normal; }
+.dhead h1 .ic { margin-right: 0.5rem; }
+.ecard header .ic { font-size: 1.25rem; margin-right: 0; }
