@@ -62,39 +62,39 @@
 素材帶哪些特效、值多少，在<a href="materials.html">素材表</a>的「特效」欄與特效籤。</p>
 <div class="table-wrap">
 <table class="rtable" data-icons="effect" data-search="搜尋特效名、鍵名或機制（例：毒、格擋、回合）" data-chip-col="1">
-<thead><tr><th>名稱</th><th>分類</th><th>機制</th><th>鍵</th></tr></thead>
+<thead><tr><th>名稱</th><th>分類</th><th>機制</th><th hidden>鍵</th></tr></thead>
 <tbody>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=火焰">火焰</a></td><td>攻擊</td><td>命中疊「燃燒」層，每回合 DOT 跳傷</td><td><code>fire</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=冰霜">冰霜</a></td><td>攻擊</td><td>機率「冰凍」目標，冰凍中跳過行動</td><td><code>ice</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=中毒">中毒</a></td><td>攻擊</td><td><strong>每次命中疊 N 層毒</strong>（小數無條件進位），每回合跳傷 ＝ (總層 − 對方解毒) × 10，<strong>無視防禦與減傷</strong></td><td><code>poison</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=麻痺毒">麻痺毒</a></td><td>攻擊</td><td>疊「毒素麻痺」層，發作時跳過行動</td><td><code>toxin</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=麻痺">麻痺</a></td><td>攻擊</td><td>疊「電流麻痺」層，麻痺中無法行動</td><td><code>paralysis</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=睡眠">睡眠</a></td><td>攻擊</td><td>機率使目標昏睡，睡著跳過行動</td><td><code>sleep</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=噴墨">噴墨</a></td><td>攻擊</td><td>使目標<strong>命中與閃避降低</strong>，數回合後消散</td><td><code>ink</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=詛咒">詛咒</a></td><td>攻擊</td><td>機率使目標<strong>暈眩</strong>；效果隨目標種族改變</td><td><code>curse</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=攝魂">攝魂</a></td><td>攻擊</td><td>機率<strong>沉默</strong>：X 回合內無法使用技能</td><td><code>soul_capture</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=月牙">月牙</a></td><td>攻擊</td><td>機率追加一刀「月牙天沖」</td><td><code>crescent</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=破甲">破甲</a></td><td>攻擊</td><td>攻擊時<strong>無視部分防禦</strong>；也削弱對手格擋率與減傷型增益</td><td><code>armor_pen</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=精準">精準</a></td><td>攻擊</td><td>提升<strong>命中</strong>，命中加成同時壓低對手格擋率</td><td><code>precision</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=魔物傷害">魔物傷害</a></td><td>攻擊</td><td>對「怪物」種族傷害加成（連擊／反擊段也適用）</td><td><code>anti_monster</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=動物傷害">動物傷害</a></td><td>攻擊</td><td>對「動物」種族傷害加成</td><td><code>anti_animal</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=人形傷害">人形傷害</a></td><td>攻擊</td><td>對「人形」種族傷害加成</td><td><code>anti_humanoid</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=邪惡力量"><strong>邪惡力量</strong></a></td><td>攻擊</td><td>雙面刃：傷害加成，但<strong>穿戴者每回合被侵蝕扣血</strong>；攻擊不死／邪惡系會<strong>反噬成治癒對方</strong>。見下方警告</td><td><code>evil_power</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=酚">酚</a></td><td>攻擊</td><td>未明。戰報 DOT 只有燃燒／中毒／腸胃炎三種，酚可能是疊腸胃炎的來源</td><td><code>phenol</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=減傷">減傷</a></td><td>防禦</td><td><strong>受到物理／技能傷害 −N%</strong>，獨立於防禦的乘項；<strong>對毒 DOT 無效</strong>（精確百分比映射未明）</td><td><code>dmg_reduction</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=防彈">防彈</a></td><td>防禦</td><td>受<strong>子彈攻擊</strong>時再減 N%，戰報會寫「（防彈減傷 N%）」</td><td><code>bulletproof</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=反應子彈">反應子彈</a></td><td>防禦</td><td><strong>機率把射來的子彈整發砍掉</strong>。光劍＝帶反應子彈 50 的單手劍</td><td><code>bullet_parry</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=守護">守護</a></td><td>防禦</td><td><strong>機率整發免傷</strong>；官方明言觸發率有上限</td><td><code>guardian</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=格擋">格擋</a></td><td>防禦</td><td>提升<strong>格擋率</strong>（會被破甲、命中加成削弱）</td><td><code>block_element</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=迴避">迴避</a></td><td>防禦</td><td>提升<strong>閃避率</strong></td><td><code>evasion</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=火焰抗性">火焰抗性</a></td><td>防禦</td><td>抗火，且攻擊帶火抗的目標可能被反噬治癒防守方</td><td><code>fire_resist</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=解暈">解暈</a></td><td>防禦</td><td><strong>每回合移除 N 層暈眩</strong></td><td><code>destun</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=解毒">解毒</a></td><td>防禦</td><td><strong>毒跳傷時抵銷 N 層＋每跳多消 N+1 層；總層 ≤ N 完全不掉血</strong>（結算公式見下）</td><td><code>poison_immune</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=生命恢復">生命恢復</a></td><td>防禦</td><td><strong>每回合回 N 點 HP</strong>，全裝備槽加總；戰局內唯一被動回血</td><td><code>hp_regen</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=魔力恢復">魔力恢復</a></td><td>防禦</td><td>每回合回 MP（數值映射未明）</td><td><code>mp_regen</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=風水">風水</a></td><td>特殊</td><td>戰鬥中機率對隨機敵人發動「風水輪流轉」：攻／防／幸運等價換算輪轉。五寶石各 1 鍛造生成</td><td><code>feng_shui</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=迅捷">迅捷</a></td><td>特殊</td><td>未明。歸敏捷系（可以是負值）</td><td><code>swift</code></td></tr>
-<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=士氣">士氣</a></td><td>特殊</td><td>未明</td><td><code>morale</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=火焰">火焰</a></td><td>攻擊</td><td>命中疊「燃燒」層，每回合 DOT 跳傷</td><td hidden><code>fire</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=冰霜">冰霜</a></td><td>攻擊</td><td>機率「冰凍」目標，冰凍中跳過行動</td><td hidden><code>ice</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=中毒">中毒</a></td><td>攻擊</td><td><strong>每次命中疊 N 層毒</strong>（小數無條件進位），每回合跳傷 ＝ (總層 − 對方解毒) × 10，<strong>無視防禦與減傷</strong></td><td hidden><code>poison</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=麻痺毒">麻痺毒</a></td><td>攻擊</td><td>疊「毒素麻痺」層，發作時跳過行動</td><td hidden><code>toxin</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=麻痺">麻痺</a></td><td>攻擊</td><td>疊「電流麻痺」層，麻痺中無法行動</td><td hidden><code>paralysis</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=睡眠">睡眠</a></td><td>攻擊</td><td>機率使目標昏睡，睡著跳過行動</td><td hidden><code>sleep</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=噴墨">噴墨</a></td><td>攻擊</td><td>使目標<strong>命中與閃避降低</strong>，數回合後消散</td><td hidden><code>ink</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=詛咒">詛咒</a></td><td>攻擊</td><td>機率使目標<strong>暈眩</strong>；效果隨目標種族改變</td><td hidden><code>curse</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=攝魂">攝魂</a></td><td>攻擊</td><td>機率<strong>沉默</strong>：X 回合內無法使用技能</td><td hidden><code>soul_capture</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=月牙">月牙</a></td><td>攻擊</td><td>機率追加一刀「月牙天沖」</td><td hidden><code>crescent</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=破甲">破甲</a></td><td>攻擊</td><td>攻擊時<strong>無視部分防禦</strong>；也削弱對手格擋率與減傷型增益</td><td hidden><code>armor_pen</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=精準">精準</a></td><td>攻擊</td><td>提升<strong>命中</strong>，命中加成同時壓低對手格擋率</td><td hidden><code>precision</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=魔物傷害">魔物傷害</a></td><td>攻擊</td><td>對「怪物」種族傷害加成（連擊／反擊段也適用）</td><td hidden><code>anti_monster</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=動物傷害">動物傷害</a></td><td>攻擊</td><td>對「動物」種族傷害加成</td><td hidden><code>anti_animal</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=人形傷害">人形傷害</a></td><td>攻擊</td><td>對「人形」種族傷害加成</td><td hidden><code>anti_humanoid</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=邪惡力量"><strong>邪惡力量</strong></a></td><td>攻擊</td><td>雙面刃：傷害加成，但<strong>穿戴者每回合被侵蝕扣血</strong>；攻擊不死／邪惡系會<strong>反噬成治癒對方</strong>。見下方警告</td><td hidden><code>evil_power</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=酚">酚</a></td><td>攻擊</td><td>未明。戰報 DOT 只有燃燒／中毒／腸胃炎三種，酚可能是疊腸胃炎的來源</td><td hidden><code>phenol</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=減傷">減傷</a></td><td>防禦</td><td><strong>受到物理／技能傷害 −N%</strong>，獨立於防禦的乘項；<strong>對毒 DOT 無效</strong>（精確百分比映射未明）</td><td hidden><code>dmg_reduction</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=防彈">防彈</a></td><td>防禦</td><td>受<strong>子彈攻擊</strong>時再減 N%，戰報會寫「（防彈減傷 N%）」</td><td hidden><code>bulletproof</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=反應子彈">反應子彈</a></td><td>防禦</td><td><strong>機率把射來的子彈整發砍掉</strong>。光劍＝帶反應子彈 50 的單手劍</td><td hidden><code>bullet_parry</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=守護">守護</a></td><td>防禦</td><td><strong>機率整發免傷</strong>；官方明言觸發率有上限</td><td hidden><code>guardian</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=格擋">格擋</a></td><td>防禦</td><td>提升<strong>格擋率</strong>（會被破甲、命中加成削弱）</td><td hidden><code>block_element</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=迴避">迴避</a></td><td>防禦</td><td>提升<strong>閃避率</strong></td><td hidden><code>evasion</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=火焰抗性">火焰抗性</a></td><td>防禦</td><td>抗火，且攻擊帶火抗的目標可能被反噬治癒防守方</td><td hidden><code>fire_resist</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=解暈">解暈</a></td><td>防禦</td><td><strong>每回合移除 N 層暈眩</strong></td><td hidden><code>destun</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=解毒">解毒</a></td><td>防禦</td><td><strong>毒跳傷時抵銷 N 層＋每跳多消 N+1 層；總層 ≤ N 完全不掉血</strong>（結算公式見下）</td><td hidden><code>poison_immune</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=生命恢復">生命恢復</a></td><td>防禦</td><td><strong>每回合回 N 點 HP</strong>，全裝備槽加總；戰局內唯一被動回血</td><td hidden><code>hp_regen</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=魔力恢復">魔力恢復</a></td><td>防禦</td><td>每回合回 MP（數值映射未明）</td><td hidden><code>mp_regen</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=風水">風水</a></td><td>特殊</td><td>戰鬥中機率對隨機敵人發動「風水輪流轉」：攻／防／幸運等價換算輪轉。五寶石各 1 鍛造生成</td><td hidden><code>feng_shui</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=迅捷">迅捷</a></td><td>特殊</td><td>未明。歸敏捷系（可以是負值）</td><td hidden><code>swift</code></td></tr>
+<tr><td><a class="dlink" href="detail.html?t=effect&amp;id=士氣">士氣</a></td><td>特殊</td><td>未明</td><td hidden><code>morale</code></td></tr>
 </tbody>
 </table>
 </div>

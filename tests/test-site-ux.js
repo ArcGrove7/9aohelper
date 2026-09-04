@@ -704,9 +704,9 @@ async function main() {
     ok('易讀模式的字級與行距規則在',
       /html\.readable body \{[^}]*font-size/.test(css) &&
       /html\.readable body \{[^}]*line-height/.test(css));
-    ok('易讀模式下 rtable 在任何寬度都攤成卡片',
-      css.includes('html.readable table.rtable td::before') &&
-      /html\.readable table\.rtable thead \{ display: none/.test(css));
+    ok('卡片模式（預設開）下 rtable 在任何寬度都攤成卡片',
+      css.includes('html.cards table.rtable td::before') &&
+      /html\.cards table\.rtable thead \{ display: none/.test(css));
     ok('表格有斑馬紋與滑過高亮（逐行閱讀輔助）',
       css.includes('tbody tr:nth-child(even)') && css.includes('tbody tr:hover'));
 
@@ -896,6 +896,42 @@ async function main() {
     ok('頁尾版本標記更新為 v3.1.9',
       du.window.document.querySelector('footer').textContent.includes('v3.1.9'));
     du.window.close();
+  }
+
+  // -------------------------------------------------------------------------
+  console.log('㉓ 全表格卡片化預設＋系統鍵名隱藏');
+  {
+    const css = fs.readFileSync(path.join(SITE, 'style.css'), 'utf8');
+    ok('[hidden] 欄位在卡片模式也藏得住（!important）',
+      css.includes('th[hidden], td[hidden] { display: none !important; }'));
+    ok('地圖卡片的系統鍵名（zkey）不顯示', css.includes('.zcard .zkey { display: none; }'));
+
+    const dom = await load('skills.html');
+    const d = dom.window.document, w = dom.window;
+    ok('進頁預設就是卡片模式（html.cards）',
+      d.documentElement.classList.contains('cards'));
+    ok('搜尋列上有「卡片／表格」切換', !!d.querySelector('.tbar .vbtn'));
+    const tb = [...d.querySelectorAll('.vbtn')].find((b) => b.textContent.includes('表格'));
+    tb.click();
+    ok('切表格：html.cards 移除、偏好記住',
+      !d.documentElement.classList.contains('cards') &&
+      w.localStorage.getItem('pref.tableview') === '1');
+    ok('技能表的 ID 欄整欄 hidden（玩家看不到，搜尋照吃）',
+      d.querySelectorAll('table thead th[hidden]').length === 1 &&
+      d.querySelectorAll('table tbody td[hidden]').length === 197);
+    dom.window.close();
+
+    const de = await load('effects.html');
+    ok('特效表的鍵欄整欄 hidden',
+      de.window.document.querySelectorAll('table[data-search] tbody td[hidden]').length === 31);
+    de.window.close();
+
+    const dd = await load('detail.html', '?t=effect&id=' + encodeURIComponent('邪惡力量'), ['data/db.js', 'data/icons.js']);
+    ok('特效詳情不再顯示鍵名', !dd.window.document.body.textContent.includes('evil_power'));
+    dd.window.close();
+    const dk3 = await load('detail.html', '?t=skill&id=' + encodeURIComponent('短刃'), ['data/db.js', 'data/icons.js']);
+    ok('技能詳情不再顯示技能 ID', !dk3.window.document.body.textContent.includes('技能 ID'));
+    dk3.window.close();
   }
 }
 

@@ -657,33 +657,33 @@ html.readable th, html.readable td { padding: 0.65rem 0.85rem; }
 html.readable .zcard .zdesc, html.readable .card p, html.readable a.catcard p { font-size: 1em; }
 
 /* ---- 易讀模式：所有 rtable 攤成卡片（規則與手機卡片模式同一套） ---- */
-html.readable table.rtable, html.readable table.rtable tbody,
-html.readable table.rtable tr, html.readable table.rtable td { display: block; width: 100%; }
-html.readable table.rtable thead { display: none; }
-html.readable table.rtable tr {
+html.cards table.rtable, html.cards table.rtable tbody,
+html.cards table.rtable tr, html.cards table.rtable td { display: block; width: 100%; }
+html.cards table.rtable thead { display: none; }
+html.cards table.rtable tr {
   border: 1px solid var(--edge);
   border-radius: 10px;
   margin: 0 0 0.7rem;
   padding: 0.6rem 0.8rem;
   background: var(--card);
 }
-html.readable table tbody tr:nth-child(even) { background: var(--card); }
-html.readable table.rtable td {
+html.cards table tbody tr:nth-child(even) { background: var(--card); }
+html.cards table.rtable td {
   border: 0;
   display: flex;
   align-items: baseline;
   gap: 0.6rem;
   padding: 0.2rem 0;
 }
-html.readable table.rtable td::before {
+html.cards table.rtable td::before {
   content: attr(data-label);
   flex: 0 0 5rem;
   color: var(--muted);
   font-size: 0.82em;
   font-family: var(--mono);
 }
-html.readable table.rtable td > .v { flex: 1 1 auto; min-width: 0; }
-html.readable table.rtable td.title {
+html.cards table.rtable td > .v { flex: 1 1 auto; min-width: 0; }
+html.cards table.rtable td.title {
   display: block;
   font-size: 1.1em;
   font-weight: 700;
@@ -692,17 +692,17 @@ html.readable table.rtable td.title {
   padding-bottom: 0.3rem;
   border-bottom: 1px solid var(--line);
 }
-html.readable table.rtable td.title::before { content: none; }
-html.readable table.rtable td:empty { display: none; }
-html.readable table.rtable td.num {
+html.cards table.rtable td.title::before { content: none; }
+html.cards table.rtable td:empty { display: none; }
+html.cards table.rtable td.num {
   display: inline-flex;
   width: auto;
   gap: 0.3rem;
   margin-right: 1rem;
 }
-html.readable table.rtable td.num > .v { flex: 0 0 auto; }
-html.readable table.rtable td.num::before { flex: 0 0 auto; }
-html.readable .mattbl { max-height: none; overflow: visible; }
+html.cards table.rtable td.num > .v { flex: 0 0 auto; }
+html.cards table.rtable td.num::before { flex: 0 0 auto; }
+html.cards .mattbl { max-height: none; overflow: visible; }
 
 /* ============================================================
    逐點卡片（2026-09-05）——攻略文字不再用長段落與長列表：
@@ -868,3 +868,12 @@ html.readable .ecard { font-size: 1.02em; }
 .ic { margin-right: 0.35rem; font-style: normal; }
 .dhead h1 .ic { margin-right: 0.5rem; }
 .ecard header .ic { font-size: 1.25rem; margin-right: 0; }
+
+/* 系統鍵名不給一般玩家看（資料仍在 DOM，搜尋照吃） */
+th[hidden], td[hidden] { display: none !important; }
+.zcard .zkey { display: none; }
+
+/* 費茲定律：可點目標放大——卡片模式的名稱連結吃滿整行、籤與 chips 加高 */
+html.cards table.rtable td.title a.dlink { display: block; padding: 0.15rem 0; }
+.chips .chip { min-height: 2.4rem; padding: 0.3rem 0.75rem; }
+.dchips a, .dchips span { min-height: 2.4rem; padding: 0.3rem 0.8rem; }

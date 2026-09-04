@@ -61,6 +61,7 @@
     row1.className = 'row';
     row1.append(input, count);
     bar.append(row1);
+    cardsToggleButtons(row1, table);
 
     /* 篩選籤：從指定欄位的值切出來（以「·」「、」「／」分隔） */
     let chipBox = null;
@@ -303,6 +304,44 @@
     if (bar) bar.append(sel);
   }
 
+  /* ---- 10) 表格卡片化：預設所有 rtable 攤成「一列一張卡」（html.cards），
+     搜尋列上可切回傳統表格，偏好整站記住。 ---- */
+  const CKEY = 'pref.tableview';
+  function cardsPref() {
+    let table = false;
+    try { table = localStorage.getItem(CKEY) === '1'; } catch (e) {}
+    document.documentElement.classList.toggle('cards', !table);
+    return !table;
+  }
+  function cardsToggleButtons(bar, table) {
+    if (!bar || table.id === 'etab') return;   // 敵人圖鑑有自己的怪物卡檢視
+    const btns = {};
+    const apply = () => {
+      const on = document.documentElement.classList.contains('cards');
+      btns.cards.setAttribute('aria-pressed', String(on));
+      btns.table.setAttribute('aria-pressed', String(!on));
+    };
+    [['cards', '▦ 卡片'], ['table', '☰ 表格']].forEach(([m, label]) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'vbtn';
+      b.textContent = label;
+      b.setAttribute('aria-label', label + '檢視');
+      b.addEventListener('click', () => {
+        try { localStorage.setItem(CKEY, m === 'table' ? '1' : '0'); } catch (e) {}
+        const on = cardsPref();
+        // 同一頁可能有多張表各一組切換鈕，全部同步（敵人圖鑑自己的檢視鈕不在此列）
+        document.querySelectorAll('.tbar .vbtn').forEach((x) => {
+          if (x.textContent.includes('卡片')) x.setAttribute('aria-pressed', String(on));
+          else if (x.textContent.includes('表格')) x.setAttribute('aria-pressed', String(!on));
+        });
+      });
+      btns[m] = b;
+      bar.append(b);
+    });
+    apply();
+  }
+
   /* ---- 9) 圖鑑圖示：table[data-icons] 的名稱前加上該實體的 emoji 圖示，
      規則在 data/icons.js（與遊戲本身的 emoji 視覺語言一致）。 ---- */
   function iconizeTables() {
@@ -440,6 +479,7 @@
 
   function boot() {
     document.querySelectorAll('table.rtable').forEach(labelCells);
+    cardsPref();
     iconizeTables();
     document.querySelectorAll('table[data-search]').forEach(attachSearch);
     attachGlobalSearch();
