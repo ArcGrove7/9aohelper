@@ -569,6 +569,57 @@ async function main() {
       DB2.wmult.length === 21 &&
       DB2.wmult.find((x) => x.id === '狙擊槍').hit === 1.8);
   }
+
+  // -------------------------------------------------------------------------
+  console.log('⑯ 帶入路徑：計算機吃網址、攻略頁一鍵開配方、技能↔裝備↔比較器互通');
+  {
+    // 配點計算機：?lv=…&配點 直接還原（分享連結）
+    const da = await load('allocation.html', '?lv=60&agi=100&con=50');
+    const ad = da.window.document, aw = da.window;
+    ok('分享連結還原等級與配點',
+      ad.querySelector('input[aria-label="角色等級"]').value === '60' &&
+      ad.querySelector('input[aria-label="敏捷 配點"]').value === '100' &&
+      ad.querySelector('input[aria-label="體質 配點"]').value === '50');
+    [...ad.querySelectorAll('button')].find((b) => b.textContent === '+1').click();
+    ok('改配點後網址跟著同步（str=1）', aw.location.search.includes('str=1') &&
+      aw.location.search.includes('lv=60'));
+    da.window.close();
+
+    // ?preset=pvp 一鍵套配方，套完把 preset 從網址拿掉
+    const dp = await load('allocation.html', '?preset=pvp');
+    const pd = dp.window.document;
+    const leftCell = [...pd.querySelectorAll('.cell')].find((c) => c.textContent.includes('剩餘'));
+    ok('?preset=pvp → 配方鋪滿（剩餘 0）、技巧有份量',
+      leftCell.querySelector('.v').textContent === '0' &&
+      Number(pd.querySelector('input[aria-label="技巧 配點"]').value) > 0);
+    ok('套完網址不再帶 preset', !dp.window.location.search.includes('preset'));
+    dp.window.close();
+
+    // 配點攻略頁 → 計算機
+    const ds = await load('stats.html');
+    ok('攻略頁有三個一鍵開配方的連結',
+      [...ds.window.document.querySelectorAll('a')].filter((a) =>
+        a.href.includes('allocation.html?preset=')).length === 3);
+    ds.window.close();
+
+    // 技能詳情 → 裝備類型與比較器
+    const dk = await load('detail.html', '?t=skill&id=' + encodeURIComponent('短刃'), ['data/db.js']);
+    const kd = dk.window.document;
+    ok('技能詳情連到裝備類型（短刀）',
+      [...kd.querySelectorAll('a')].some((a) =>
+        a.href.includes('detail.html?t=eqtype') && decodeURIComponent(a.href).includes('短刀')));
+    ok('技能詳情列出對應持法的比較器帶入（單持／雙持／帶盾共 3 條）',
+      [...kd.querySelectorAll('a')].filter((a) => a.href.includes('compare.html?at=')).length === 3);
+    dk.window.close();
+
+    // 裝備類型詳情：手槍列出單持與雙持兩種持法
+    const dq = await load('detail.html', '?t=eqtype&id=' + encodeURIComponent('手槍'), ['data/db.js']);
+    const links = [...dq.window.document.querySelectorAll('a')]
+      .filter((a) => a.href.includes('compare.html?at='));
+    ok('手槍詳情列出 2 種持法各自帶入比較器',
+      links.length === 2 && links.every((a) => decodeURIComponent(a.href).includes('手槍')));
+    dq.window.close();
+  }
 }
 
 main().then(() => {

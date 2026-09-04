@@ -1034,6 +1034,16 @@ const GAOCALC = (function () {
   }
   function save() {
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+    try {
+      const u = new URL(location.href);
+      u.searchParams.set('lv', state.level);
+      C.STAT_KEYS.forEach(function (k) {
+        if (state[k]) u.searchParams.set(k, state[k]);
+        else u.searchParams.delete(k);
+      });
+      u.searchParams.delete('preset');
+      history.replaceState(null, '', u);
+    } catch (e) { /* 環境不支援就算了 */ }
   }
   function used() { return C.spentOf(state); }
   function left() { return state.total - used(); }
@@ -1092,14 +1102,14 @@ const GAOCALC = (function () {
 
   // ---- 建議配點：PVE 與 PVP 分開 ------------------------------------------
   const PRESETS = [
-    { name: 'PVE・練功', desc: '速度買出手與段數，體質撐長戰鬥。',
+    { key: 'grind', name: 'PVE・練功', desc: '速度買出手與段數，體質撐長戰鬥。',
       weights: [['agi', 45], ['con', 30], ['tou', 15], ['str', 10]] },
-    { name: 'PVE・打王', desc: '活得久才有輸出：血量與防禦優先，敏捷保出手。',
+    { key: 'boss', name: 'PVE・打王', desc: '活得久才有輸出：血量與防禦優先，敏捷保出手。',
       weights: [['con', 35], ['tou', 25], ['agi', 20], ['str', 10], ['tec', 10]] },
-    { name: 'PVP・切磋', desc: '先手與命中定勝負：速度與技巧優先，體質抗暴。',
+    { key: 'pvp', name: 'PVP・切磋', desc: '先手與命中定勝負：速度與技巧優先，體質抗暴。',
       weights: [['agi', 30], ['tec', 25], ['con', 25], ['tou', 10], ['str', 10]] },
   ];
-  function applyPreset(p) {
+  function presetStats(p) {
     C.STAT_KEYS.forEach(function (k) { state[k] = 0; });
     let spent = 0;
     p.weights.forEach(function (w) {
@@ -1107,8 +1117,29 @@ const GAOCALC = (function () {
       state[w[0]] = pts; spent += pts;
     });
     state[p.weights[0][0]] += state.total - spent;   // 零頭補給第一優先的能力
-    save(); render();
   }
+  function applyPreset(p) { presetStats(p); save(); render(); }
+  (function fromUrl() {
+    const p = new URLSearchParams(location.search);
+    if (p.has('lv')) {
+      state.level = C.clampInt(p.get('lv'), C.LIMIT.levelMin, C.LIMIT.levelMax);
+      state.total = C.statPointsFor(state.level);
+    }
+    if (C.STAT_KEYS.some(function (k) { return p.has(k); })) {
+      C.STAT_KEYS.forEach(function (k) {
+        state[k] = C.clampInt(p.get(k) || 0, 0, C.LIMIT.statMax);
+      });
+      let over = used() - state.total;
+      for (let i = C.STAT_KEYS.length - 1; i >= 0 && over > 0; i--) {
+        const k = C.STAT_KEYS[i];
+        const cut = Math.min(state[k], over);
+        state[k] -= cut; over -= cut;
+      }
+    }
+    const pr = PRESETS.find(function (x) { return x.key === p.get('preset'); });
+    if (pr) { presetStats(pr); save(); }   // 這裡還沒到 render 定義處，只鋪點數
+  })();
+
   function renderPresets(host) {
     host.appendChild(el('div', 'h', '建議配點（點「套用」直接鋪滿總點數）'));
     const grid = el('div', 'grid');
@@ -1135,6 +1166,7 @@ const GAOCALC = (function () {
 
   function renderBuilds(host) {
     host.appendChild(el('div', 'h', '我的配置'));
+    host.appendChild(el('div', 'hint', '網址會跟著目前配點同步——複製網址就能把這套配置分享給別人。'));
     const list = builds();
     const row = el('div', 'row');
 

@@ -154,6 +154,20 @@
     const same = DB.skills.filter((x) => x.type === s.type && x.id !== s.id);
     h += '<h2>同型別的其他技能（' + same.length + '）</h2><div class="chips dchips">'
       + same.map((x) => link('skill', x.id)).join('') + '</div>';
+    const eqt = (DB.eqtypes || []).find((x) => x.id === s.type);
+    const wms = (DB.wmult || []).filter((w) => w.id.includes(s.type));
+    const guns = s.type === '通用槍械'
+      ? (DB.eqtypes || []).filter((x) => ['手槍', '衝鋒槍', '輕機槍', '狙擊槍'].includes(x.id)) : [];
+    if (eqt || wms.length || guns.length) {
+      h += '<h2>拿什麼武器用它</h2><div class="chips dchips">';
+      if (eqt) h += link('eqtype', eqt.id, eqt.id + '（裝備類型）');
+      guns.forEach((g) => { h += link('eqtype', g.id, g.id); });
+      wms.forEach((w) => {
+        h += '<a href="compare.html?at=' + encodeURIComponent(w.id) + '">'
+          + esc(w.id) + ' 放進比較器</a>';
+      });
+      h += '</div>';
+    }
     h += updBlock(s, s.id);
     h += '<p class="note">' + listLink('skills.html', s.id, '在技能圖鑑檢視 →') + '</p>';
     return h;
@@ -167,10 +181,13 @@
              ['素材需求', esc(e.q) + ' 個']]);
     h += kv([['部位', esc(e.slot)], ['持法', esc(e.hand)], ['tag', '<code>' + esc(e.tag) + '</code>']]);
     h += updBlock(e, e.id);
-    if (e.hand !== '—') {
-      const wm = (DB.wmult || []).find((w) => w.id.includes(e.id));
-      if (wm) h += '<p class="note"><a href="compare.html?at=' + encodeURIComponent(wm.id)
-        + '">放進武器比較器（' + esc(wm.id) + '）→</a></p>';
+    const vars = (DB.wmult || []).filter((w) =>
+      w.id.includes(e.id) || (e.id === '盾牌' && w.id.includes('盾')));
+    if (vars.length) {
+      h += '<h2>放進武器比較器</h2><div class="chips dchips">'
+        + vars.map((w) => '<a href="compare.html?at=' + encodeURIComponent(w.id) + '">'
+          + esc(w.id) + '（命中 ×' + w.hit + '）</a>').join('')
+        + '</div>';
     }
     h += '<p class="note">' + listLink('effects.html', '', '完整係數與品質倍率在裝備圖鑑 →')
       + '　' + listLink('formulas.html', '', '戰鬥中的型別倍率在公式與武器 →') + '</p>';
