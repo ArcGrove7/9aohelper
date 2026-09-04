@@ -347,6 +347,8 @@ async function main() {
     const css = fs.readFileSync(path.join(SITE, 'style.css'), 'utf8');
     ok('header.site 是 flex 橫排', /header\.site \{[^}]*display: flex/.test(css));
     ok('導覽不換行（flex-wrap: nowrap），塞不下就橫滑', css.includes('flex-wrap: nowrap'));
+    ok('主內容區放寬到 110rem（桌機不留大片左右空白）',
+      /main \{[^}]*max-width: 110rem/.test(css));
     for (const p of ['index.html', 'formulas.html', 'stats.html', 'zones.html',
                      'skills.html', 'materials.html', 'effects.html', 'updates.html',
                      'allocation.html', 'compare.html', 'enemies.html']) {

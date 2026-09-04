@@ -65,10 +65,12 @@ nav.site a[aria-current="page"] {
   border-bottom-color: var(--accent);
 }
 nav.site a:hover { border-bottom-color: var(--accent); }
+/* 主內容區放寬（人下的令，2026-09-05）：桌機不留大片左右空白。
+   寬螢幕吃到 110rem，表格與卡片格自己撐滿；窄螢幕行為不變。 */
 main {
-  max-width: 60rem;
+  max-width: 110rem;
   margin: 0 auto;
-  padding: 1.5rem 1.2rem 4rem;
+  padding: 1.5rem clamp(1.2rem, 2.5vw, 2.5rem) 4rem;
 }
 h1 { font-size: 1.4rem; color: var(--ink); border-bottom: 1px solid var(--edge); padding-bottom: 0.4rem; }
 h2 { font-size: 1.05rem; margin-top: 2.2rem; color: var(--accent);
