@@ -141,7 +141,7 @@ async function main() {
     type(input, 'evil', w);
     ok('打鍵名片段「evil」也找得到邪惡力量', vis(rows) === 1);
     type(input, '', w);
-    const chips = [...bar.querySelectorAll('.chip')];
+    const chips = [...bar.querySelectorAll('.chip:not(.colchip)')];
     ok('分類籤（攻擊／防禦／特殊）生出來了', chips.length === 3);
     chips.find((b) => b.textContent.startsWith('防禦')).click();
     ok('按「防禦」→ 只剩防禦・回復那一組', vis(rows) === 11);
@@ -342,7 +342,7 @@ async function main() {
     type(input, '鷹洞', w2);
     ok('打「鷹洞」篩得到相關更新', vis(rows) > 3 && vis(rows) < 550);
     type(input, '', w2);
-    const chips = [...bar.querySelectorAll('.chip')];
+    const chips = [...bar.querySelectorAll('.chip:not(.colchip)')];
     ok('類型籤（新功能／調整／修復…）生出來了', chips.length === 5);
     chips.find((b) => b.textContent.startsWith('修復')).click();
     ok('按「修復」→ 只剩修復類（206 條）', vis(rows) === 206);
@@ -619,7 +619,7 @@ async function main() {
     type(input, '狗頭人爪', w);
     ok('打掉落物「狗頭人爪」也搜得到', vis(rows) >= 2);
     type(input, '', w);
-    const chips = [...d.querySelectorAll('.tbar .chip')];
+    const chips = [...d.querySelectorAll('.tbar .chip:not(.colchip)')];
     ok('地圖籤有 9 張圖', chips.length === 9);
     ok('地圖籤多了鷹洞', chips.some((b) => b.textContent.startsWith('鷹洞')));
 
@@ -932,6 +932,68 @@ async function main() {
     const dk3 = await load('detail.html', '?t=skill&id=' + encodeURIComponent('短刃'), ['data/db.js', 'data/icons.js']);
     ok('技能詳情不再顯示技能 ID', !dk3.window.document.body.textContent.includes('技能 ID'));
     dk3.window.close();
+  }
+
+  // -------------------------------------------------------------------------
+  console.log('㉔ 篩選欄摺疊＋隱藏欄位＋卡片一排多張');
+  {
+    const css = fs.readFileSync(path.join(SITE, 'style.css'), 'utf8');
+    ok('卡片模式 tbody 用 grid：一排塞多張、不留大片空白',
+      /html\.cards table\.rtable tbody \{\n  display: grid;/.test(css) &&
+      css.includes('repeat(auto-fill, minmax(20rem, 1fr))'));
+    ok('長文表標 data-cards="wide" 維持一欄（版本情報）',
+      css.includes('html.cards table.rtable[data-cards="wide"] tbody { display: block; }') &&
+      fs.readFileSync(path.join(SITE, 'updates.html'), 'utf8').includes('data-cards="wide"'));
+    ok('被篩掉的列在卡片模式也真的消失（[hidden] 全域 !important）',
+      css.includes('[hidden] { display: none !important; }'));
+
+    // 通用搜尋列：篩選籤預設收合、「欄位」鈕可整欄隱藏，怪物卡跟著收
+    const dom = await load('enemies.html', '', ['data/db.js', 'data/icons.js']);
+    const d = dom.window.document, w = dom.window;
+    const chips = d.querySelector('.tbar .chips:not(.wrap)');
+    ok('篩選籤預設收合（省空間）', !!chips && chips.hidden === true);
+    const fbtn = [...d.querySelectorAll('.tbar .vbtn')].find((b) => b.textContent.startsWith('篩選'));
+    fbtn.click();
+    ok('按「篩選」展開籤、狀態整站記住',
+      chips.hidden === false && w.localStorage.getItem('pref.filters') === '1');
+    const cbtn = [...d.querySelectorAll('.tbar .vbtn')].find((b) => b.textContent.startsWith('欄位'));
+    ok('搜尋列有「欄位」鈕、欄位籤預設收合',
+      !!cbtn && d.querySelector('.tbar .chips.wrap').hidden === true);
+    cbtn.click();
+    const drop = [...d.querySelectorAll('.colchip')].find((b) => b.textContent === '掉落素材');
+    drop.click();
+    const etab = d.getElementById('etab');
+    ok('點「掉落素材」→ 表頭與 162 格整欄 hidden',
+      etab.querySelector('tr').children[6].hidden === true &&
+      [...etab.querySelectorAll('tbody tr')].every((tr) => tr.children[6].hidden));
+    const cardDrops = [...d.querySelectorAll('#ecards [data-c="掉落素材"]')];
+    ok('怪物卡上的掉落素材一起收', cardDrops.length > 100 && cardDrops.every((el) => el.hidden));
+    ok('隱藏欄位整站記住（pref.hidecols）',
+      (w.localStorage.getItem('pref.hidecols.enemies.html:etab') || '').includes('掉落素材'));
+    drop.click();
+    ok('再點一下整欄顯示回來', etab.querySelector('tr').children[6].hidden === false &&
+      cardDrops.every((el) => !el.hidden));
+    dom.window.close();
+
+    // 素材頁自家工具列：同一套摺疊與欄位隱藏
+    const dm = await load('materials.html', '', ['data/icons.js']);
+    const md = dm.window.document;
+    ok('素材頁籤區預設收合（#mfilters）', md.getElementById('mfilters').hidden === true);
+    md.getElementById('mfbtn').click();
+    ok('按「篩選」展開標籤與特效籤',
+      md.getElementById('mfilters').hidden === false &&
+      md.querySelectorAll('#mtags .chip').length > 5);
+    const mcbtn = [...md.querySelectorAll('.tbar .vbtn')].find((b) => b.textContent.startsWith('欄位'));
+    ok('素材工具列也有「欄位」鈕', !!mcbtn);
+    mcbtn.click();
+    [...md.querySelectorAll('.colchip')].find((b) => b.textContent === '特效').click();
+    ok('隱藏「特效」欄 → 241 列的特效格都 hidden',
+      [...md.querySelectorAll('#mtab tbody tr')].every((tr) => tr.children[7].hidden));
+    md.getElementById('mdir').click();          // tbody 整個重畫
+    await new Promise((r) => setTimeout(r, 30));
+    ok('表格重畫後隱藏欄仍生效（MutationObserver 補掛）',
+      [...md.querySelectorAll('#mtab tbody tr')].every((tr) => tr.children[7].hidden));
+    dm.window.close();
   }
 }
 

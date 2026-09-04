@@ -36,7 +36,8 @@
 <h1>素材屬性一覽</h1>
 <h2>素材基值（241 種）</h2>
 <p class="note">打幾個字就篩，<strong>不必輸入完整名稱</strong>——名稱、標籤、特效都吃。
-下面的籤可以複選（標籤是「同時符合」、特效是「任一符合」），手機上左右滑可以看到全部。</p>
+按「篩選」展開籤可以複選（標籤是「同時符合」、特效是「任一符合」）；
+按「欄位」能把用不到的欄整欄藏起來。</p>
 <div class="tbar">
   <div class="row">
     <input id="mq" type="search" placeholder="搜尋素材名 / 標籤 / 特效（例：秘銀、水晶、毒）" aria-label="搜尋素材名、標籤或特效">
@@ -52,12 +53,15 @@
       <option value="0">依名稱</option>
     </select>
     <button type="button" id="mdir" class="chip" aria-pressed="true" title="切換升冪／降冪">▾ 由大到小</button>
+    <button type="button" id="mfbtn" class="vbtn" aria-expanded="false">篩選 ▾</button>
     <button type="button" id="mreset" class="chip reset">清除條件</button>
   </div>
-  <p class="hint">標籤（複選＝同時符合）</p>
-  <div class="chips" id="mtags" role="group" aria-label="標籤篩選"></div>
-  <p class="hint">特效（複選＝任一符合）</p>
-  <div class="chips" id="mels" role="group" aria-label="特效篩選"></div>
+  <div id="mfilters" class="foldbox" hidden>
+    <p class="hint">標籤（複選＝同時符合）</p>
+    <div class="chips" id="mtags" role="group" aria-label="標籤篩選"></div>
+    <p class="hint">特效（複選＝任一符合）</p>
+    <div class="chips" id="mels" role="group" aria-label="特效篩選"></div>
+  </div>
 </div>
 <div class="table-wrap mattbl">
 <table id="mtab" class="rtable">
@@ -117,9 +121,23 @@ const M=[["巴洛古的指甲",35.5,12,0,5.75,10,"生物·銳利","詛咒:2|邪�
         ct=document.getElementById('mcount'), tagBox=document.getElementById('mtags'),
         elBox=document.getElementById('mels'), sortSel=document.getElementById('msort'),
         dirBtn=document.getElementById('mdir'), reset=document.getElementById('mreset'),
-        empty=document.getElementById('mempty');
+        empty=document.getElementById('mempty'),
+        fbtn=document.getElementById('mfbtn'), fbox=document.getElementById('mfilters');
   const pickedTags=new Set(), pickedEls=new Set();
   let sk=1, desc=true;
+
+  // 籤預設收合（占太多空間），按「篩選」展開；狀態整站記住（與其他頁同一把鑰匙）
+  try{fbox.hidden=localStorage.getItem('pref.filters')!=='1';}catch(e){}
+  function flabel(){
+    const n=pickedTags.size+pickedEls.size;
+    fbtn.textContent='篩選'+(n?'（'+n+'）':'')+(fbox.hidden?' ▾':' ▴');
+    fbtn.setAttribute('aria-expanded',String(!fbox.hidden));
+  }
+  fbtn.addEventListener('click',function(){
+    fbox.hidden=!fbox.hidden;
+    try{localStorage.setItem('pref.filters',fbox.hidden?'0':'1');}catch(e){}
+    flabel();
+  });
 
   // 先把每列的搜尋字串與標籤／特效清單算好，之後每次篩選都不必重算
   const rows=M.map(r=>({
@@ -193,6 +211,7 @@ const M=[["巴洛古的指甲",35.5,12,0,5.75,10,"生物·銳利","詛咒:2|邪�
       +'</tr>';}).join('');
     ct.innerHTML='<b>'+list.length+'</b> / '+rows.length+' 種';
     empty.hidden=list.length!==0;
+    flabel();
     document.querySelectorAll('#mtab thead th').forEach(h=>{
       h.textContent=h.textContent.replace(/ [▾▴]$/,'');
       if(+h.dataset.k===sk)h.textContent+=desc?' ▾':' ▴';
