@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>裝備屬性 — 9aohelper</title>
+<meta name="description" content="裝備屬性：15 種裝備類型的鍛造係數、品質倍率階梯，與 31 種特效（附魔）的真實機制對照。">
+<meta name="theme-color" content="#0b0e14">
+<link rel="stylesheet" href="style.css">
+<script src="site.js" defer></script>
+</head>
+<body>
+<header class="site">
+  <div class="title">9aohelper</div>
+  <div class="subtitle">裝備屬性 — 類型係數、品質倍率與特效機制</div>
+  <nav class="site">
+    <a href="index.html">首頁</a>
+    <a href="formulas.html">公式與武器</a>
+    <a href="stats.html">配點</a>
+    <a href="zones.html">地圖圖鑑</a>
+    <a href="skills.html">技能表</a>
+    <a href="materials.html">素材表</a>
+    <a href="effects.html" aria-current="page">裝備屬性</a>
+    <a href="allocation.html">點數計算機</a>
+  </nav>
+</header>
+<main>
+<h1>裝備屬性表</h1>
+<p class="lead">鍛造成品的數值＝素材那邊算出來的底 × <strong>裝備類型係數</strong> × <strong>品質倍率</strong>（再乘鍛造力）。
+這一頁給這兩張官方表，下半頁是裝備「特效」（附魔）的機制對照。素材那半在<a href="materials.html">素材表</a>。</p>
+
+<h2>裝備類型係數：先挑一件，再看它的四維</h2>
+<p>鍛造成品的攻／防／幸／耐，都要再乘上「這件裝備的類型係數」。
+<strong>選一件看它自己的四維</strong>就好——不必把 15 種攤開來互相比。</p>
+<div class="tbar">
+  <div class="row">
+    <select id="eqsel" aria-label="選擇裝備類別"></select>
+    <span class="count" id="eqq"></span>
+  </div>
+  <div class="chips" id="eqslots" role="group" aria-label="部位篩選"></div>
+</div>
+<div class="eqcard" id="eqcard" aria-live="polite"></div>
+<p class="note">係數只決定「同一批素材做成這件會變成多少」，跟武器在戰鬥中的型別倍率是兩回事
+（那張在<a href="formulas.html">公式與武器</a>）。素材量是做一件要投入幾個素材。</p>
+
+<h2>品質倍率：一翻兩瞪眼的樂透</h2>
+<p>成品整體再乘一次品質倍率，從「屎一般」到「神器」差 <strong>6 倍</strong>：</p>
+<div class="qladder"><span>神器 <b>×2.5</b></span><span>傳說 <b>×2.3</b></span><span>神話 <b>×2.1</b></span><span>史詩 <b>×2</b></span><span>完美 <b>×1.85</b></span><span>頂級 <b>×1.65</b></span><span>精良 <b>×1.5</b></span><span>高級 <b>×1.33</b></span><span>上等 <b>×1.16</b></span><span>普通 <b>×1</b></span><span>次等 <b>×0.9</b></span><span>劣質 <b>×0.8</b></span><span>破爛 <b>×0.7</b></span><span>垃圾般 <b>×0.55</b></span><span>屎一般 <b>×0.4</b></span></div>
+<p class="note">品質是鍛造時擲出來的；投入帶「臭臭」標籤的素材會擲兩次取較差。</p>
+
+<h2>特效（附魔）機制對照</h2>
+<p>掛在武器／彈藥上的攻擊性特效隨攻擊發動；掛在防具上的防禦／回復特效常駐。
+下表整理自遊戲前端拆包（官方附魔對照表、戰報渲染器）與官方更新日誌；31 個鍵名與中文名已逐字對上 v3.1.7 的 elements 模組。機制未明的直接標「未明」。</p>
+
+<h3>特效總表（31 種，可搜尋・可篩分類）</h3>
+<p class="note">三類併成一張表——<strong>打片段就會篩</strong>（例：「毒」「機率」「回合」），不必記得完整名稱或鍵名。
+素材帶哪些特效、值多少，在<a href="materials.html">素材表</a>的「特效」欄與特效籤。</p>
+<div class="table-wrap">
+<table class="rtable" data-search="搜尋特效名、鍵名或機制（例：毒、格擋、回合）" data-chip-col="1">
+<thead><tr><th>名稱</th><th>分類</th><th>機制</th><th>鍵</th></tr></thead>
+<tbody>
+<tr><td>火焰</td><td>攻擊</td><td>命中疊「燃燒」層，每回合 DOT 跳傷</td><td><code>fire</code></td></tr>
+<tr><td>冰霜</td><td>攻擊</td><td>機率「冰凍」目標，冰凍中跳過行動</td><td><code>ice</code></td></tr>
+<tr><td>中毒</td><td>攻擊</td><td><strong>每次命中疊 N 層毒</strong>（小數無條件進位），每回合跳傷 ＝ (總層 − 對方解毒) × 10，<strong>無視防禦與減傷</strong></td><td><code>poison</code></td></tr>
+<tr><td>麻痺毒</td><td>攻擊</td><td>疊「毒素麻痺」層，發作時跳過行動</td><td><code>toxin</code></td></tr>
+<tr><td>麻痺</td><td>攻擊</td><td>疊「電流麻痺」層，麻痺中無法行動</td><td><code>paralysis</code></td></tr>
+<tr><td>睡眠</td><td>攻擊</td><td>機率使目標昏睡，睡著跳過行動</td><td><code>sleep</code></td></tr>
+<tr><td>噴墨</td><td>攻擊</td><td>使目標<strong>命中與閃避降低</strong>，數回合後消散</td><td><code>ink</code></td></tr>
+<tr><td>詛咒</td><td>攻擊</td><td>機率使目標<strong>暈眩</strong>；效果隨目標種族改變</td><td><code>curse</code></td></tr>
+<tr><td>攝魂</td><td>攻擊</td><td>機率<strong>沉默</strong>：X 回合內無法使用技能</td><td><code>soul_capture</code></td></tr>
+<tr><td>月牙</td><td>攻擊</td><td>機率追加一刀「月牙天沖」</td><td><code>crescent</code></td></tr>
+<tr><td>破甲</td><td>攻擊</td><td>攻擊時<strong>無視部分防禦</strong>；也削弱對手格擋率與減傷型增益</td><td><code>armor_pen</code></td></tr>
+<tr><td>精準</td><td>攻擊</td><td>提升<strong>命中</strong>，命中加成同時壓低對手格擋率</td><td><code>precision</code></td></tr>
+<tr><td>魔物傷害</td><td>攻擊</td><td>對「怪物」種族傷害加成（連擊／反擊段也適用）</td><td><code>anti_monster</code></td></tr>
+<tr><td>動物傷害</td><td>攻擊</td><td>對「動物」種族傷害加成</td><td><code>anti_animal</code></td></tr>
+<tr><td>人形傷害</td><td>攻擊</td><td>對「人形」種族傷害加成</td><td><code>anti_humanoid</code></td></tr>
+<tr><td><strong>邪惡力量</strong></td><td>攻擊</td><td>雙面刃：傷害加成，但<strong>穿戴者每回合被侵蝕扣血</strong>；攻擊不死／邪惡系會<strong>反噬成治癒對方</strong>。見下方警告</td><td><code>evil_power</code></td></tr>
+<tr><td>酚</td><td>攻擊</td><td>未明。戰報 DOT 只有燃燒／中毒／腸胃炎三種，酚可能是疊腸胃炎的來源</td><td><code>phenol</code></td></tr>
+<tr><td>減傷</td><td>防禦</td><td><strong>受到物理／技能傷害 −N%</strong>，獨立於防禦的乘項；<strong>對毒 DOT 無效</strong>（精確百分比映射未明）</td><td><code>dmg_reduction</code></td></tr>
+<tr><td>防彈</td><td>防禦</td><td>受<strong>子彈攻擊</strong>時再減 N%——戰報渲染器原文即「（防彈減傷 N%）」</td><td><code>bulletproof</code></td></tr>
+<tr><td>反應子彈</td><td>防禦</td><td><strong>機率把射來的子彈整發砍掉</strong>。光劍＝帶反應子彈 50 的單手劍</td><td><code>bullet_parry</code></td></tr>
+<tr><td>守護</td><td>防禦</td><td><strong>機率整發免傷</strong>；官方明言觸發率有上限</td><td><code>guardian</code></td></tr>
+<tr><td>格擋</td><td>防禦</td><td>提升<strong>格擋率</strong>（會被破甲、命中加成削弱）</td><td><code>block_element</code></td></tr>
+<tr><td>迴避</td><td>防禦</td><td>提升<strong>閃避率</strong></td><td><code>evasion</code></td></tr>
+<tr><td>火焰抗性</td><td>防禦</td><td>抗火，且攻擊帶火抗的目標可能被反噬治癒防守方</td><td><code>fire_resist</code></td></tr>
+<tr><td>解暈</td><td>防禦</td><td><strong>每回合移除 N 層暈眩</strong></td><td><code>destun</code></td></tr>
+<tr><td>解毒</td><td>防禦</td><td><strong>毒跳傷時抵銷 N 層＋每跳多消 N+1 層；總層 ≤ N 完全不掉血</strong>（結算公式見下）</td><td><code>poison_immune</code></td></tr>
+<tr><td>生命恢復</td><td>防禦</td><td><strong>每回合回 N 點 HP</strong>，全裝備槽加總；戰局內唯一被動回血</td><td><code>hp_regen</code></td></tr>
+<tr><td>魔力恢復</td><td>防禦</td><td>每回合回 MP（數值映射未明）</td><td><code>mp_regen</code></td></tr>
+<tr><td>風水</td><td>特殊</td><td>戰鬥中機率對隨機敵人發動「風水輪流轉」：攻／防／幸運等價換算輪轉。五寶石各 1 鍛造生成</td><td><code>feng_shui</code></td></tr>
+<tr><td>迅捷</td><td>特殊</td><td>未明。歸敏捷系（可以是負值）</td><td><code>swift</code></td></tr>
+<tr><td>士氣</td><td>特殊</td><td>未明</td><td><code>morale</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>⚠ 邪惡力量：想清楚再穿</h3>
+<div class="warn">
+<p>官方定義就是雙面刃：增傷，但<strong>穿戴者每回合被侵蝕扣血</strong>（EVIL_DRAIN 事件），
+攻擊不死／邪惡系敵人時還會<strong>反噬成治癒對方</strong>（EVIL_HEAL 事件）。
+長時間掛機或長程爬塔挑裝備時，<strong>先濾掉邪惡力量、再排攻擊力</strong>。</p>
+</div>
+
+<h3>解毒的結算公式</h3>
+<pre>每回合毒結算：
+  有效層 = 總層 − 解毒值
+  有效層 ≤ 0 → 完全不跳（連事件都不發）
+  有效層 > 0 → 跳傷 = 有效層 × 10   （無視防禦、減傷、守護）
+  跳完後：總層 −= (解毒值 + 1)      （+1 疑為毒的自然衰減）</pre>
+<ul>
+  <li>解毒不是免疫開關，是<strong>層數抵銷值</strong>：擋得住淺層毒、擋不住上百層的疊毒。</li>
+  <li>消耗品清單裡沒有解毒——解毒只能靠裝備。</li>
+</ul>
+
+<h3>傷害結算順序（由官方更新日誌拼出）</h3>
+<pre>命中判定（精準／噴墨／命中 buff；同時削對手格擋率）
+→ 閃避（迴避）／格擋（會被破甲・穿透削弱）／守護・反應子彈（機率整發無效）
+→ 防禦力吸收（被破甲削弱）
+→ 暴擊
+→ 減傷（裝備減傷＋buff 型減傷）
+→ 防彈（子彈攻擊再 −X%）
+→ 保底 1 點
+毒 DOT 走另一條線：無視防禦、無視減傷、無視守護，直接結算
+</pre>
+
+<h3>機制未明（別當成已知）</h3>
+<ul>
+  <li>減傷的精確映射（14 ＝ −14%？多件相加或連乘？有無上限？）。</li>
+  <li>迅捷／士氣／酚的實際機制。</li>
+  <li>燃燒 DOT 是否比照毒（無視防禦／減傷／守護）。</li>
+</ul>
+</main>
+<script>
+const EQ=[{"n":"短刀","d":"連擊迅捷，但難以破甲","slot":"武器","hand":"單手","tag":"Dagger","q":12,"a":1.4,"df":1,"l":1.7,"u":1},{"n":"細劍","d":"講求精準刺擊的武器，輕巧易於閃避，格擋能力較差","slot":"武器","hand":"單手","tag":"Rapier","q":14,"a":1.2,"df":0.9,"l":1.4,"u":0.9},{"n":"單手劍","d":"攻守均衡的單手武器","slot":"武器","hand":"單手","tag":"Sword","q":16,"a":1.2,"df":1.2,"l":1,"u":1},{"n":"盾牌","d":"格擋取向的副手裝備，能打斷連擊，極難閃避","slot":"副手（盾）","hand":"—","tag":"Shield","q":16,"a":0.2,"df":1.5,"l":0.5,"u":1},{"n":"大衣","d":"輕便的防護外衣","slot":"身體","hand":"—","tag":"Armor・Light・Coat","q":16,"a":0.1,"df":0.7,"l":0.7,"u":0.8},{"n":"鎬子","d":"礦工的專用工具。裝備於工具欄提升挖礦效率，不參與戰鬥。","slot":"工具欄","hand":"—","tag":"Pickaxe","q":16,"a":0.1,"df":0,"l":0.2,"u":1},{"n":"盔甲","d":"厚重的全身鎧甲","slot":"身體","hand":"—","tag":"Armor・Heavy","q":20,"a":0.2,"df":1,"l":0.2,"u":1},{"n":"太刀","d":"追求一擊必中的武器，不擅連擊與格擋","slot":"武器","hand":"雙手","tag":"Katana","q":21,"a":1.2,"df":1.2,"l":1.1,"u":0.9},{"n":"弓","d":"精準的遠程武器，張弓亦可格擋，難以連射","slot":"武器","hand":"雙手","tag":"Bow","q":21,"a":1.2,"df":0.8,"l":1.5,"u":1.2},{"n":"雙手劍","d":"防禦取向的雙手武器，能稍微擊破護甲","slot":"武器","hand":"雙手","tag":"GreatSword","q":24,"a":1.4,"df":1.2,"l":0.9,"u":1},{"n":"雙手斧","d":"破甲能力最強的雙手武器，準度與格擋皆不足","slot":"武器","hand":"雙手","tag":"Axe","q":24,"a":1.5,"df":0.6,"l":1.2,"u":1.2},{"n":"手槍","d":"輕便的單手槍械，射速快且易於閃避，破甲不足","slot":"武器","hand":"單手","tag":"Pistol","q":25,"a":1.2,"df":1.2,"l":1,"u":0.9},{"n":"衝鋒槍","d":"高射速的單手槍械，彈幕連綿但準度低落","slot":"武器","hand":"單手","tag":"SMG","q":28,"a":1.2,"df":0.9,"l":1.4,"u":0.9},{"n":"輕機槍","d":"持續壓制的雙手槍械，火力綿密，準度與機動性略差","slot":"武器","hand":"雙手","tag":"LMG","q":36,"a":1.4,"df":1.2,"l":0.9,"u":0.9},{"n":"狙擊槍","d":"極度精準的雙手槍械，不擅連擊，也難以抵擋連擊","slot":"武器","hand":"雙手","tag":"Sniper","q":48,"a":1.5,"df":0.6,"l":1.2,"u":0.9}];
+/* 裝備類型係數：一次只顯示一件，做成卡片（人下的令，2026-09-03：
+   不要把 15 種攤開來比較）。資料是腳本內建的裝備表逐字搬過來的。 */
+(function(){
+  const sel=document.getElementById('eqsel'), card=document.getElementById('eqcard'),
+        slotBox=document.getElementById('eqslots'), qty=document.getElementById('eqq');
+  const KEYS=[['a','攻擊力','ATK'],['df','防禦力','DEF'],['l','幸運值','LUCK'],['u','耐久度','DUR']];
+  // 每一欄的全表最高，卡片上標「全表最高」用
+  const best={};
+  KEYS.forEach(([k])=>{best[k]=Math.max.apply(null,EQ.map(e=>e[k]));});
+  let slot='';                                    // '' = 全部部位
+
+  function options(){
+    const list=EQ.filter(e=>!slot||e.slot===slot);
+    sel.innerHTML=list.map((e,i)=>'<option value="'+EQ.indexOf(e)+'">'+e.n+'（需 '+e.q+' 個素材）</option>').join('');
+    show(+sel.value);
+  }
+  function show(i){
+    const e=EQ[i]; if(!e)return;
+    qty.innerHTML='素材需求 <b>'+e.q+'</b>';
+    card.innerHTML=
+      '<p class="eqdesc">'+e.d+'</p>'
+     +'<div class="eqmeta"><span>部位：'+e.slot+'</span><span>持法：'+e.hand+'</span>'
+       +'<span class="tag">'+e.tag+'</span></div>'
+     +'<div class="eqstats">'+KEYS.map(([k,zh,en])=>
+        '<div class="eqstat'+(e[k]===best[k]?' top':'')+'" data-k="'+k+'">'
+        +'<span class="l">'+zh+' <i>'+en+'</i></span>'
+        +'<span class="v">'+e[k]+'x</span>'
+        +(e[k]===best[k]?'<span class="mark">全表最高</span>':'')
+        +'</div>').join('')+'</div>';
+  }
+  const slots=[...new Set(EQ.map(e=>e.slot))];
+  slotBox.innerHTML='';
+  [['全部','']].concat(slots.map(s=>[s+' '+EQ.filter(e=>e.slot===s).length,s])).forEach(([label,v])=>{
+    const b=document.createElement('button');
+    b.type='button'; b.className='chip'; b.textContent=label;
+    b.setAttribute('aria-pressed', v===''?'true':'false');
+    b.addEventListener('click',()=>{
+      slot=v;
+      [...slotBox.children].forEach(c=>c.setAttribute('aria-pressed','false'));
+      b.setAttribute('aria-pressed','true');
+      options();
+    });
+    slotBox.append(b);
+  });
+  sel.addEventListener('change',()=>show(+sel.value));
+  options();
+})();
+</script>
+<footer class="site">
+9aohelper · 資料來源：遊戲前端拆包（現行版 v3.1.7，2026-09-03 同步）、官方數值表與鍛造模擬器 · 版本更新後請自行複驗
+</footer>
+</body>
+</html>

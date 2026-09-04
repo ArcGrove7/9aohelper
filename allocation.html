@@ -1,0 +1,1342 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>點數計算機 — 9aohelper</title>
+<style>
+  :root {
+    --bg: #0b0e14; --bg2: #12161f; --line: #ffffff17; --edge: #ffffff29;
+    --txt: #eef1f6; --txt2: #c3cad6; --txt3: #8b95a3;
+    --accent: #2cdcff; --accent-hi: #7ee8ff;
+    --up: #a8f02d; --down: #ff5566; --warn: #ffc933;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC",
+            "Microsoft JhengHei UI", "PingFang TC", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--txt2); font-family: var(--sans); }
+  body { padding: 16px 14px calc(28px + env(safe-area-inset-bottom, 0px)); font-size: 13px; line-height: 1.6; }
+  .wrap { max-width: 900px; margin: 0 auto; }
+
+  h1 { margin: 0 0 2px; font-size: 15px; letter-spacing: .08em; color: var(--accent-hi); font-family: var(--mono); }
+  .sub { margin: 0 0 14px; font-size: 11px; color: var(--txt3); font-family: var(--mono); }
+
+  .h { margin: 16px 0 7px; font-size: 11.5px; letter-spacing: .09em; color: var(--txt3);
+       font-family: var(--mono); border-bottom: 1px solid var(--line); padding-bottom: 5px; }
+  .hint { margin: 6px 0; font-size: 11px; line-height: 1.65; color: var(--txt3); }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 8px 0; }
+  .lbl { font-size: 11.5px; color: var(--txt3); font-family: var(--mono); }
+
+  input[type=number], input[type=text] {
+    background: #0d1119; color: var(--txt); border: 1px solid var(--edge); border-radius: 8px;
+    padding: 7px 9px; font: 600 13px var(--mono); width: 92px; text-align: right;
+  }
+  input:focus { outline: none; border-color: var(--accent); }
+  button {
+    background: #161c27; color: var(--txt2); border: 1px solid var(--edge); border-radius: 9px;
+    padding: 6px 10px; font: 600 12px var(--sans); cursor: pointer;
+  }
+  button:hover { border-color: var(--accent); color: var(--txt); }
+  button:disabled { opacity: .4; cursor: not-allowed; }
+  button[data-active="true"] { border-color: var(--accent); color: var(--accent-hi); background: #10222b; }
+
+  .tabs { display: flex; gap: 5px; flex-wrap: wrap; margin: 12px 0; }
+
+  .sum { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 8px; margin: 10px 0; }
+  .cell { padding: 9px 11px; border-radius: 10px; background: #ffffff0d; border: 1px solid var(--line); }
+  .cell .v { font: 650 15px var(--mono); color: var(--txt); }
+  .cell .l { margin-top: 2px; font-size: 10.5px; color: var(--txt3); }
+  .cell[data-over="true"] .v { color: var(--down); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(184px, 1fr)); gap: 8px; }
+  .tile { padding: 9px 10px; border-radius: 10px; background: #ffffff0d;
+          border: 1px solid var(--line); border-left: 2px solid var(--c, var(--accent)); }
+  .tile .name { font: 650 11.5px var(--mono); color: var(--txt2); }
+  .tile .name span { margin-left: 5px; font-weight: 400; color: var(--txt3); font-family: var(--sans); }
+  .tile .meta { font: 400 10.5px var(--mono); color: var(--txt3); }
+  .steps { display: flex; gap: 4px; margin-top: 7px; }
+  .steps button { flex: 1; padding: 5px 4px; font-size: 11px; font-family: var(--mono); }
+  .warn { margin-top: 7px; padding: 4px 6px; border-radius: 7px; font-size: 10.5px; line-height: 1.5;
+          color: var(--warn); background: #ffc9331a; border: 1px solid #ffc93347; }
+
+  .rgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(102px, 1fr)); gap: 6px; margin: 10px 0; }
+  .rcard { padding: 7px 8px; text-align: center; border-radius: 9px; background: #ffffff0d; border: 1px solid var(--line); }
+  .rcard .rv { font: 400 13.5px var(--mono); color: var(--txt); }
+  .rcard .rd { margin-left: 3px; font: 700 10.5px var(--mono); color: var(--accent-hi); }
+  .rcard .rl { display: block; margin-top: 2px; font-size: 10.5px; color: var(--txt3); }
+
+  .line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 7px; padding: 5px 0;
+          border-bottom: 1px solid #ffffff12; font: 400 11px var(--mono); color: var(--txt3); }
+  .nm { min-width: 46px; font-weight: 700; color: var(--txt2); }
+  .up { color: var(--up); } .down { color: var(--down); } .flat { color: var(--txt3); }
+  .src { flex: 1 1 100%; opacity: .72; overflow-wrap: anywhere; }
+  .tag { flex: 0 0 auto; padding: 1px 7px; border: 1px solid currentColor; border-radius: 999px;
+         font: 700 10px var(--mono); white-space: nowrap; }
+  .tag--confirmed { color: var(--up); }
+  .tag--inferred { color: var(--warn); }
+  .tag--unverifiable { color: var(--txt3); }
+  @media (pointer: coarse) { .steps button { padding: 9px 4px; font-size: 13px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p style="margin:0 0 10px;font-size:12px"><a href="index.html" style="color:var(--accent)">← 回 9aohelper</a></p>
+  <h1>點數計算機 · ALLOCATION</h1>
+  <p class="sub" id="meta"></p>
+  <div id="app"></div>
+</div>
+
+<!-- GAOCALC-CORE:BEGIN  ← build.ps1 把 src/36-calccore.js 原樣寫進這兩個標記之間 -->
+<script>
+const GAOCALC = (function () {
+  'use strict';
+
+  // META ＝ **這些公式最後一次逐字對照過哪一份 bundle**，不是「遊戲現在幾版」。
+  // 它只會在有人真的重新比對過之後才動。
+  //
+  // 2026-08-26 重新對照 2.8.50：函式本體**一字未改**，但住的地方變了——遊戲改用
+  // 程式碼分割，那段從主 bundle 的 wa() 搬進獨立的 assets/stats-*.js（匯出 `n`），
+  // 常數 .2 / 10-e*45 / 5-e*33 / 1-e*3 與十五個欄位全部逐字相同。
+  // 同一份檔案還帶來兩件新事實：
+  //   · miningPower: level×2 + talents.mine —— 礦值的算式現在**在前端**了
+  //     （原本只是天賦頁的說明文字），故 TALENTS.mine 的算式已可驗證。
+  //   · 每點效果表寫著 `反擊率 +0.1%（上限 50%）` —— 反擊率的天花板是 **50%**，
+  //     不是先前推的 100%。見 DERIVED.counterRate.ceiling。
+  //
+  // 2026-08-29 重新對照 3.0.30（更新日誌最後一筆 2026-08-27）：主 bundle 換了檔名
+  // （index-Cf6J2vG-.js → index-zZmLgN4n.js），但**面板公式一字未動**——
+  // statsChunk 逐位元組相同（sha256 沒變），maxLevel:80、市場費率、修理費、
+  // 回收價、升級門檻 300×lv×1.05^(lv-1) 也全部逐字相同。分割得更細了：
+  // 戰報（BattleLog-*.js）、附魔表（elements-*.js）、地圖名（zones-*.js）、
+  // 品質倍率表（SearchableSelect-*.js）各自成 chunk。有變動的資料
+  // （附魔多了 phenol、武器表多了單手錘/長槍、品質表門檻公式進了前端）
+  // 已回填到各自的表，見各表旁的註記。2.8.50 → 3.0.30 的更新日誌逐條掃過，
+  // 與這裡的公式相關的只有 3.0.28「反擊率新增上限」——與每點效果表的
+  // 「上限 50%」互相印證（見 DERIVED.counterRate.ceiling）；戰鬥面的調整
+  // （反擊判定順序、技能閃避／格擋性質、追加攻擊記到實際出手的那隻手）
+  // 都在伺服器端，前端公式不動。
+  //
+  // 2026-09-03 重新對照 3.1.7（更新日誌最後一筆 2026-09-02）：主 bundle 再換檔名
+  // （index-zZmLgN4n.js → index-VreE4PBI.js），statsChunk 檔名與 sha256 皆未變
+  // （stats-BrrATVLb.js，逐位元組相同）——面板公式一字未動。3.0.30 → 3.1.7 的
+  // 更新日誌逐條掃過，與這裡的公式相關的變動為零（成就通知、野牛樓層、
+  // UI 顯示調整皆與面板公式無關）。
+  const META = {
+    game: '3.1.7',
+    bundle: 'index-VreE4PBI.js',
+    statsChunk: 'stats-BrrATVLb.js',
+    sha256: 'e6671b4799eecca1e49e13276e5e4dbd2650d2092613fd74067fef19087a39a7',  // statsChunk
+    bundleSha256: '2dc39962dfbbb504b676e2d3b08c0f50773a93165306c29652d3d300478c0bcf',
+    snapshot: '技能頁另存檔',
+    symbol: 'stats-*.js 匯出的 n()（原 wa()）',
+    verified: '2026-09-03',
+    // ★ 這份報告在作者本機的「參考資料」目錄，**不在版控內**（同目錄的 Discord
+    //   筆記與素材表也是）。它是 v2.8.24 年代第一次萃取的出處紀錄；之後的
+    //   重新對照（含 2026-08-29 這次）都直接對線上 bundle，結論記在本檔各表旁，
+    //   不再回寫那份報告——對照 3.0.30 時它唯一過時的主題內容（技能槽 4 格）
+    //   已在 SKILL_API／SKILL_RULES 更正為「4＋LV80 第 5 格」。
+    report: '參考資料/GAO_技能與能力點萃取報告_v2.8.24.md',
+  };
+
+  // 可信度分級：confirmed＝bundle 可執行邏輯；inferred＝由 bundle 的每點效果表推得，
+  // 但基準值不在前端；unverifiable＝前端沒有這段計算。
+  const CONFIRMED = 'confirmed';
+  const INFERRED = 'inferred';
+  const UNVERIFIABLE = 'unverifiable';
+  const TIER_LABEL = {
+    confirmed: '已確認',
+    inferred: '合理推論',
+    unverifiable: '前端不可驗證',
+  };
+
+  // bundle：var ba=.2, xa=10-ba*45, Sa=5-ba*33, Ca=1-ba*3
+  const LEVEL_STAT_FACTOR = 0.2;
+  const HP_LEVEL_COEF = 10 - LEVEL_STAT_FACTOR * 45;
+  const MP_LEVEL_COEF = 5 - LEVEL_STAT_FACTOR * 33;
+  const SPEED_LEVEL_COEF = 1 - LEVEL_STAT_FACTOR * 3;
+
+  // 等級上限曾經抄自 bundle 的 var wh={maxLevel:75}，那份常數已經被實機推翻：
+  // 帳號裡就有 LV 80 的角色，而且它的「已配點 + statPoints = 484 = 4 + 6×80」與
+  // 每級 6 點的反推完全吻合（天賦單項上限 240 = 3×80 也對得上）。
+  //
+  // 拿舊常數去夾制真實角色的代價不是少顯示 5 級而已——實效能力 E(X) = X + 0.2×Lv，
+  // 等級被砍 5 級，六維同時少 1 點實效，整張面板（HP／ATK／DEF／暴擊…）連同
+  // 每點收益與 A／B 比較全部一起算錯。**伺服器回什麼等級就是什麼等級**，
+  // 遊戲欄位永遠比腳本裡的常數新，夾制只能用在玩家自己打進來的輸入上。
+  //   · levelMax        ＝ 純輸入夾制（與 statMax 同性質），寬到不會誤傷任何真實等級
+  //   · KNOWN_LEVEL_CAP ＝ 有可信來源時的滿級；沒有來源就是 null，
+  //                       null 代表「不知道滿級在哪」，任何 UI 都不得自稱滿級。
+  //
+  // 目前的滿級是 **80**，出自線上 bundle 的 var qr={maxLevel:80}
+  // （assets/index-Cf6J2vG-.js 首見；2026-08-29 於 index-zZmLgN4n.js 重新確認仍是 80），
+  // 而且遊戲自己就是這樣判滿級的：Home／TowerHall 都寫 `e.level >= t.maxLevel`，
+  // 緊接著同一條升級門檻 300×lv×1.05^(lv-1)——與本檔的 expNeed 同式。
+  // 它只回答「滿級了沒」，**永遠不拿來夾制角色等級**：下次官方再開上限，
+  // 壞掉的頂多是 EXP 條少寫一次 MAX，不會再有整張面板算錯 5 級這種事。
+  const LIMIT = {
+    levelMin: 1,
+    levelMax: 999,
+    statMax: 9999,
+    totalMax: 99999,
+  };
+  const KNOWN_LEVEL_CAP = 80;
+
+  // 「這隻角色滿級了嗎」只有一種情況答得出來：知道上限，而且已經到。
+  // 不知道（KNOWN_LEVEL_CAP 是 null）就回 false——寧可讓 EXP 條照實顯示，
+  // 也不要在還能升的等級上寫 MAX。
+  function atLevelCap(level) {
+    if (KNOWN_LEVEL_CAP == null) return false;
+    return clampInt(level, LIMIT.levelMin, LIMIT.levelMax) >= KNOWN_LEVEL_CAP;
+  }
+
+  // 能力點總額不在前端，由 567 場戰報的「已配點 + statPoints」反推，131 名角色全數吻合。
+  const STAT_POINT_BASE = 4;
+  const STAT_POINT_PER_LEVEL = 6;
+
+  function statPointsFor(level) {
+    return STAT_POINT_BASE + STAT_POINT_PER_LEVEL * clampInt(level, LIMIT.levelMin, LIMIT.levelMax);
+  }
+
+  // key＝計算機／localStorage／分享連結用的短鍵；api＝遊戲角色物件的欄位名。
+  const STATS = [
+    {
+      key: 'str', api: 'strength', label: 'STR', cjk: '力量', color: '#ff8a3d',
+      effect: '每點：攻擊 +5 · 穿透 +1 · 反擊 +0.1% · HP +15 · MP +10',
+    },
+    {
+      key: 'con', api: 'constitution', label: 'CON', cjk: '體質', color: '#ff4655',
+      effect: '每點：HP +20 · MP +15 · 抗暴 +1%',
+    },
+    {
+      key: 'tou', api: 'toughness', label: 'TOU', cjk: '韌性', color: '#ffc933',
+      effect: '每點：防禦 +5 · 格擋 +0.5 · 抗連擊 +0.5 · HP +10 · MP +8',
+    },
+    {
+      key: 'agi', api: 'agility', label: 'AGI', cjk: '敏捷', color: '#a8f02d',
+      effect: '每點：閃避 +0.5 · 速度 +3',
+    },
+    {
+      key: 'tec', api: 'technique', label: 'TEC', cjk: '技巧', color: '#2cdcff',
+      effect: '每點：命中 +1 · 連擊 +0.5 · 暴擊率 +1%',
+    },
+    {
+      key: 'luc', api: 'luck', label: 'LUC', cjk: '幸運', color: '#c97aff',
+      effect: '每點：幸運 +5',
+    },
+  ];
+  const STAT_KEYS = STATS.map(s => s.key);
+  const STAT_BY_KEY = Object.create(null);
+  STATS.forEach(s => { STAT_BY_KEY[s.key] = s; });
+
+  // 天賦點與能力點是兩套點數、兩支 API，不可互相換算。
+  //
+  // 每一項多帶三個欄位，都是給「點到哪裡就該收手」用的（見 talentAdvice）：
+  //   curve ＝ 曲線形狀：linear 線性、decay 幾何衰減、growth 複利成長、gated 門檻制
+  //   gain(n) ＝ 點 n 點相對「0 點」的改善幅度，一律換算成原始值的倍數
+  //             （庇佑＝省下的損失比例、鍛造＝多出來的數值比例…），
+  //             單位統一之後才比得出「下一點還值不值」
+  //   tier ＝ 這條建議的可信度，與面板公式同一套分級，不把推論講成事實
+  const TALENTS = [
+    {
+      key: 'forge', label: '鍛造', desc: '鍛造出的裝備最終數值增加為原本的(1+0.02*鍛造力)倍',
+      curve: 'linear', gain: n => 0.02 * n, tier: INFERRED,
+      caution: '線性，沒有邊際遞減也沒有天花板：第 200 點與第 1 點一樣多加 2%。',
+    },
+    {
+      key: 'mine', label: '挖礦', desc: '礦值 = 等級×2 + 挖礦，礦值決定可解鎖的掉落素材種類',
+      // 算式本身自 2.8.50 起**可驗證**（stats-*.js: miningPower: level*2 + talents.mine），
+      // 但「哪個礦值解鎖哪種素材」那張門檻表仍不在前端 → 收手點照樣算不出來。
+      curve: 'gated', gain: null, tier: UNVERIFIABLE,
+      caution: '門檻制：解鎖最後一種素材之後，多的礦值一點作用都沒有。' +
+        '算式已可驗證（前端的 miningPower = 等級×2 + 挖礦），但門檻表不在前端，' +
+        '算不出那一點——升級本身每級就送 2 點礦值，先讓等級推，別提早堆。',
+    },
+    {
+      key: 'hunt', label: '狩獵', desc: '掉落期望數量 × (1 + 狩獵×0.05)，提升所有材料掉落率與數量',
+      curve: 'linear', gain: n => 0.05 * n, tier: INFERRED,
+      caution: '線性，沒有邊際遞減也沒有天花板：每點固定再加原始期望的 5%。',
+    },
+    {
+      key: 'blessing', label: '庇佑', desc: '死亡 EXP 損失 × 0.92^庇佑（減少損失）',
+      curve: 'decay', gain: n => 1 - Math.pow(0.92, n), tier: INFERRED,
+      caution: '幾何衰減：損失已經被砍到剩一點點之後，再點也只是砍那一點點的 8%。',
+    },
+    {
+      key: 'legacy', label: '傳承', desc: '死亡熟練度損失 × 0.905^傳承（減少損失）',
+      curve: 'decay', gain: n => 1 - Math.pow(0.905, n), tier: INFERRED,
+      caution: '幾何衰減，同庇佑；而且它只在「死掉」時才有作用，不死就是 0 收益。',
+    },
+    {
+      key: 'breathing', label: '呼吸法', desc: '休息恢復量 × 1.05^呼吸法',
+      curve: 'growth', gain: n => Math.pow(1.05, n) - 1, tier: UNVERIFIABLE,
+      caution: '指數成長，公式本身不會遞減——但恢復量吃 HP／MP 上限：' +
+        '一次休息已經補滿的話，多的倍率全部溢位。基準恢復量不在前端，算不出那一點。',
+    },
+    {
+      key: 'efficiency', label: '效率', desc: '鍛造/挖礦時間 ÷ (1 + 0.02×效率)',
+      curve: 'decay', gain: n => 1 - 1 / (1 + 0.02 * n), tier: INFERRED,
+      caution: '時間是除法：前 50 點砍掉一半，再 50 點只再砍 1/6。時間也不會除到 0。',
+    },
+  ];
+  const TALENT_BY_KEY = Object.create(null);
+  TALENTS.forEach(t => { TALENT_BY_KEY[t.key] = t; });
+  const TALENT_CAP_PER_LEVEL = 3;
+
+  // dp＝顯示小數位；pct＝顯示為百分比。面板六項展開後恆為整數（等級係數已把 0.2L 的
+  // 分量折回去），其餘率值最多兩位小數，兩邊共用同一組 dp 才不會出現顯示差。
+  const DERIVED = [
+    {
+      key: 'maxHp', label: 'HP', cjk: '生命', dp: 0, pct: false, drivers: ['con', 'str', 'tou'], tier: CONFIRMED,
+      formula: 'round(100 + 1×Lv + 20×E(CON) + 15×E(STR) + 10×E(TOU))',
+      evidence: 'wa(): maxHp:Math.round(100+xa*r+20*s+15*o+10*c)',
+    },
+    {
+      key: 'maxMp', label: 'MP', cjk: '體力', dp: 0, pct: false, drivers: ['con', 'str', 'tou'], tier: CONFIRMED,
+      formula: 'round(100 − 1.6×Lv + 15×E(CON) + 10×E(STR) + 8×E(TOU))',
+      evidence: 'wa(): maxMp:Math.round(100+Sa*r+15*s+10*o+8*c)',
+    },
+    {
+      key: 'atk', label: 'ATK', cjk: '攻擊', dp: 0, pct: false, drivers: ['str'], tier: CONFIRMED,
+      formula: 'round(10 + 3×Lv + 5×E(STR))',
+      evidence: 'wa(): atk:Math.round(10+3*r+5*o)',
+    },
+    {
+      key: 'def', label: 'DEF', cjk: '防禦', dp: 0, pct: false, drivers: ['tou'], tier: CONFIRMED,
+      formula: 'round(10 + 3×Lv + 5×E(TOU))',
+      evidence: 'wa(): def:Math.round(10+3*r+5*c)',
+    },
+    {
+      key: 'luck', label: 'LUCK', cjk: '幸運', dp: 0, pct: false, drivers: ['luc'], tier: CONFIRMED,
+      formula: 'round(10 + 3×Lv + 5×E(LUC))',
+      evidence: 'wa(): luck:Math.round(10+3*r+5*d)',
+    },
+    {
+      key: 'speed', label: 'SPEED', cjk: '速度', dp: 0, pct: false, drivers: ['agi'], tier: CONFIRMED,
+      formula: 'round(10 + 0.4×Lv + 3×E(AGI))',
+      evidence: 'wa(): speed:Math.round(10+Ca*r+3*l)',
+    },
+    {
+      key: 'critRate', label: '暴擊率', dp: 1, pct: true, drivers: ['tec'], tier: CONFIRMED,
+      formula: '5 + E(TEC)',
+      evidence: 'wa(): critRate:5+u',
+    },
+    {
+      key: 'critResist', label: '抗暴率', dp: 1, pct: true, drivers: ['con'], tier: CONFIRMED,
+      formula: 'E(CON)',
+      evidence: 'wa(): critResist:s',
+    },
+    {
+      key: 'critDmg', label: '暴擊傷害', dp: 0, pct: true, drivers: [], tier: CONFIRMED,
+      formula: '150（固定）',
+      evidence: 'wa(): critDmg:150',
+    },
+    {
+      key: 'counterRate', label: '反擊率', dp: 2, pct: true, drivers: ['str'], tier: INFERRED,
+      formula: 'E(STR) × 0.1',
+      // 上限是**遊戲自己寫的 50%**，不是「機率不會超過 100%」那種推論。
+      // 2.8.50 的 stats-*.js 每點效果表：strength:{label:`反擊率`,formula:`+0.1%（上限 50%）`}
+      ceiling: 50,
+      ceilingEvidence: '每點效果表 strength:{label:`反擊率`,formula:`+0.1%（上限 50%）`}；3.0.28 更新日誌明文「反擊率新增上限」',
+      evidence: '每點效果表 strength:{label:`反擊率`,formula:`+0.1%（上限 50%）`}；基準 0 由戰報反推，前端仍無此欄位',
+    },
+    {
+      key: 'hitValue', label: '命中值', dp: 1, pct: false, drivers: ['tec'], tier: CONFIRMED,
+      formula: '40 + E(TEC)',
+      evidence: 'wa(): hitValue:40+u',
+    },
+    {
+      key: 'dodgeValue', label: '閃避值', dp: 1, pct: false, drivers: ['agi'], tier: CONFIRMED,
+      formula: '10 + E(AGI) × 0.5',
+      evidence: 'wa(): dodgeValue:10+l*.5',
+    },
+    {
+      key: 'pierceValue', label: '穿透值', dp: 1, pct: false, drivers: ['str'], tier: CONFIRMED,
+      formula: '40 + E(STR)',
+      evidence: 'wa(): pierceValue:40+o',
+    },
+    {
+      key: 'blockValue', label: '格擋值', dp: 1, pct: false, drivers: ['tou'], tier: CONFIRMED,
+      formula: '10 + E(TOU) × 0.5',
+      evidence: 'wa(): blockValue:10+c*.5',
+    },
+    {
+      key: 'consecValue', label: '連擊值', dp: 1, pct: false, drivers: ['tec'], tier: CONFIRMED,
+      formula: '20 + E(TEC) × 0.5',
+      evidence: 'wa(): consecValue:20+u*.5',
+    },
+    {
+      key: 'consecResistValue', label: '抗連擊值', dp: 1, pct: false, drivers: ['tou'], tier: CONFIRMED,
+      formula: '20 + E(TOU) × 0.5',
+      evidence: 'wa(): consecResistValue:20+c*.5',
+    },
+  ];
+  const DERIVED_BY_KEY = Object.create(null);
+  DERIVED.forEach(d => { DERIVED_BY_KEY[d.key] = d; });
+
+  // 攻守對抗的四組。伺服器怎麼把差值換成最終機率，前端沒有這段。
+  const MATCHUPS = [
+    { key: 'crit', label: '暴擊 − 抗暴', mine: 'critRate', theirs: 'critResist' },
+    { key: 'hit', label: '命中 − 閃避', mine: 'hitValue', theirs: 'dodgeValue' },
+    { key: 'pierce', label: '穿透 − 格擋', mine: 'pierceValue', theirs: 'blockValue' },
+    { key: 'consec', label: '連擊 − 抗連擊', mine: 'consecValue', theirs: 'consecResistValue' },
+  ];
+
+  function clampInt(value, min, max) {
+    const n = Number.parseInt(value, 10);
+    if (!Number.isFinite(n)) return min;
+    return Math.min(max, Math.max(min, n));
+  }
+
+  function clampNum(value, min, max) {
+    const n = Number.parseFloat(value);
+    if (!Number.isFinite(n)) return min;
+    return Math.min(max, Math.max(min, n));
+  }
+
+  function round(value, dp) {
+    const f = Math.pow(10, dp || 0);
+    return Math.round(value * f) / f;
+  }
+
+  // 沒有角色資料時的起點（獨立版直接開啟就是這一張），不是上限——真實角色一律
+  // 以伺服器回的等級為準，見 LIMIT 的說明。
+  const DEFAULT_STATE = { level: 75, total: statPointsFor(75), str: 0, con: 0, tou: 0, agi: 0, tec: 0, luc: 0 };
+
+  // 同時吃短鍵（str）與 API 長鍵（strength），舊 localStorage 與分享連結才不會失效。
+  function normalizeState(source) {
+    const raw = source && typeof source === 'object' ? source : {};
+    const out = {
+      level: clampInt(raw.level != null ? raw.level : DEFAULT_STATE.level, LIMIT.levelMin, LIMIT.levelMax),
+      total: clampInt(raw.total != null ? raw.total : DEFAULT_STATE.total, 0, LIMIT.totalMax),
+    };
+    STATS.forEach(s => {
+      const v = raw[s.key] != null ? raw[s.key] : raw[s.api];
+      out[s.key] = clampInt(v != null ? v : DEFAULT_STATE[s.key], 0, LIMIT.statMax);
+    });
+    return out;
+  }
+
+  // 遊戲角色物件 → 計算機狀態。statPoints 是「尚未配置」的點數，
+  // 故可用點數＝已配點總和 + statPoints。
+  function stateFromCharacter(character) {
+    const ch = character && typeof character === 'object' ? character : {};
+    const spent = STATS.reduce((sum, s) => sum + clampInt(ch[s.api], 0, LIMIT.statMax), 0);
+    const free = clampInt(ch.statPoints, 0, LIMIT.totalMax);
+    return normalizeState(Object.assign({}, ch, {
+      level: ch.level != null ? ch.level : 1,
+      total: spent + free,
+    }));
+  }
+
+  function effective(stat, level) {
+    return (stat || 0) + LEVEL_STAT_FACTOR * level;
+  }
+
+  function panel(state) {
+    const s = normalizeState(state);
+    const r = s.level;
+    const eStr = effective(s.str, r);
+    const eCon = effective(s.con, r);
+    const eTou = effective(s.tou, r);
+    const eAgi = effective(s.agi, r);
+    const eTec = effective(s.tec, r);
+    const eLuc = effective(s.luc, r);
+    return {
+      level: r,
+      effective: { str: eStr, con: eCon, tou: eTou, agi: eAgi, tec: eTec, luc: eLuc },
+      maxHp: Math.round(100 + HP_LEVEL_COEF * r + 20 * eCon + 15 * eStr + 10 * eTou),
+      maxMp: Math.round(100 + MP_LEVEL_COEF * r + 15 * eCon + 10 * eStr + 8 * eTou),
+      atk: Math.round(10 + 3 * r + 5 * eStr),
+      def: Math.round(10 + 3 * r + 5 * eTou),
+      luck: Math.round(10 + 3 * r + 5 * eLuc),
+      speed: Math.round(10 + SPEED_LEVEL_COEF * r + 3 * eAgi),
+      critRate: 5 + eTec,
+      critResist: eCon,
+      critDmg: 150,
+      counterRate: eStr * 0.1,
+      hitValue: 40 + eTec,
+      dodgeValue: 10 + eAgi * 0.5,
+      pierceValue: 40 + eStr,
+      blockValue: 10 + eTou * 0.5,
+      consecValue: 20 + eTec * 0.5,
+      consecResistValue: 20 + eTou * 0.5,
+    };
+  }
+
+  function spentOf(state) {
+    const s = normalizeState(state);
+    return STAT_KEYS.reduce((sum, k) => sum + s[k], 0);
+  }
+
+  function budgetOf(state) {
+    const s = normalizeState(state);
+    const spent = spentOf(s);
+    return {
+      spent,
+      remaining: s.total - spent,
+      usage: s.total > 0 ? Math.round(spent / s.total * 100) : (spent ? 100 : 0),
+      over: s.total - spent < 0,
+    };
+  }
+
+  // 每投入 1 點的完整收益：直接跑兩次 panel() 相減，連 Math.round 的階梯都算進去。
+  function marginal(state, statKey, points) {
+    const base = normalizeState(state);
+    const step = points == null ? 1 : points;
+    const next = Object.assign({}, base);
+    next[statKey] = clampInt(base[statKey] + step, 0, LIMIT.statMax);
+    return diff(panel(base), panel(next));
+  }
+
+  function diff(before, after) {
+    const out = Object.create(null);
+    DERIVED.forEach(d => { out[d.key] = after[d.key] - before[d.key]; });
+    return out;
+  }
+
+  // 目標面板值 → 最少要補的點數。公式對配點是線性的，先閉式估一次再逐步校正，
+  // 校正是為了吃掉 Math.round 的階梯，不能只信閉式解。
+  function solve(state, derivedKey, target) {
+    const meta = DERIVED_BY_KEY[derivedKey];
+    if (!meta || !meta.drivers.length) return null;
+    const statKey = meta.drivers[0];
+    const base = normalizeState(state);
+    const current = panel(base)[derivedKey];
+    if (current >= target) return { statKey, metric: meta, current, points: 0, reached: current };
+
+    const per = marginal(base, statKey, 1)[derivedKey];
+    if (!(per > 0)) return { statKey, metric: meta, current, points: Infinity, reached: current };
+
+    const room = LIMIT.statMax - base[statKey];
+    let guess = Math.min(room, Math.max(1, Math.floor((target - current) / per) - 2));
+    const at = points => {
+      const probe = Object.assign({}, base);
+      probe[statKey] = base[statKey] + points;
+      return panel(probe)[derivedKey];
+    };
+    while (guess > 1 && at(guess) >= target) guess -= 1;
+    while (guess <= room && at(guess) < target) guess += 1;
+    if (guess > room) return { statKey, metric: meta, current, points: Infinity, reached: at(room) };
+    return { statKey, metric: meta, current, points: guess, reached: at(guess) };
+  }
+
+  // 剩餘點數若全投在某一維，各面板值會變多少——純粹是 marginal() 的線性外推，
+  // 不夾帶任何「哪個比較好」的判斷。
+  function allocationOptions(state, points) {
+    const base = normalizeState(state);
+    const n = clampInt(points, 0, LIMIT.statMax);
+    if (n <= 0) return [];
+    return STATS.map(s => ({
+      stat: s,
+      points: n,
+      gains: marginal(base, s.key, n),
+    }));
+  }
+
+  // ---- 天花板：哪些點數點高了沒有意義 --------------------------------------
+  //  面板公式對配點是**線性**的（E(X) = X + 0.2×Lv，之後全是一次式），所以能力點
+  //  不會有「曲線自己彎下去」這回事。點高了失去意義只可能是這三種，分開講才不會
+  //  把推論說成事實：
+  //    ceiling ＝ 遊戲**明文寫出來**的上限（目前只有反擊率的 50%），再點就是 0 收益
+  //    matchup ＝ 攻守對抗的四組：飽和點取決於對手，伺服器怎麼把差值換成機率
+  //              前端沒有那段，**堆過頭很可能是浪費，但確切的點不可驗證**
+  //    fading  ＝ 仍在線性成長，但一點已經打不到現值的 0.1%，堆再多也是同一格數字
+  //    laggard ＝ 相對收益已經落到六維裡最好的那一維的三分之一以下，
+  //              同樣一點換個地方放明顯比較有感
+  //  【天花板只認明文，不再自己推】v3.11.0 曾用「機率不會超過 100%」去推反擊率的
+  //  天花板，算出 STR 984 點——**錯的**：2.8.50 的每點效果表白紙黑字寫著
+  //  `反擊率 +0.1%（上限 50%）`，實際是 484 點（LV 80）。推論長得再合理，也只是推論。
+  //  所以現在的規矩是：**DERIVED 上有 ceiling 欄位的才有天花板**，那個數字要有出處
+  //  （ceilingEvidence）。對抗四組一律不給——飽和點取決於對手，寧可少講也不給假上限。
+  //
+  //  【為什麼 laggard 要比較、不用絕對門檻】相對增幅（一點 ÷ 現值）本來就會隨投入
+  //  變小——把全部點數堆進任何一維，它都會掉到 0.2% 上下。用絕對門檻的話六維會
+  //  一起亮燈，等於沒說。真正回答得了「哪一維別再點」的是**同一點放哪裡比較有感**。
+  //  它比的是「相對現值的增幅」，不是戰鬥價值（幸運 1 點值多少，前端沒有那段）。
+  const FADE_RATIO = 0.001;
+  const LAG_SHARE = 1 / 3;
+
+  const MATCHUP_BY_METRIC = Object.create(null);
+  MATCHUPS.forEach(m => {
+    MATCHUP_BY_METRIC[m.mine] = m;
+    MATCHUP_BY_METRIC[m.theirs] = m;
+  });
+
+  // 有沒有天花板？只認 DERIVED 上明文寫出來的 ceiling（要有 ceilingEvidence），
+  // 而且該指標不在對抗四組裡——差值型的飽和點取決於對手，任何數字都是猜的。
+  function ceilingOf(derivedKey) {
+    const d = DERIVED_BY_KEY[derivedKey];
+    if (!d || !d.drivers.length || d.ceiling == null) return null;
+    if (MATCHUP_BY_METRIC[derivedKey]) return null;
+    return d.ceiling;
+  }
+
+  // 這一維要點到幾點，該指標才會撞到天花板。等級會先幫忙墊 0.2×Lv，
+  // 等級夠高時可能連 0 點就已經到頂 → 回 0；沒有天花板 → 回 null。
+  //
+  // 一律從「這一維 0 點」量起，兩個理由：指標對配點是一次式，從 0 起算浮點雜訊
+  // 最小（在 5000 點上取差分，每點收益會量成 0.10000000000002，一路 ceil 成差一點）；
+  // 而且答案與現在點了幾點無關——已經點過頭時回的仍是「當初到頂的那一點」。
+  function ceilingPoints(state, statKey, derivedKey) {
+    const s = normalizeState(state);
+    const cap = ceilingOf(derivedKey);
+    if (cap == null) return null;
+    const base = Object.assign({}, s);
+    base[statKey] = 0;
+    const per = marginal(base, statKey, 1)[derivedKey];
+    if (!(per > 0)) return null;
+    const need = (cap - panel(base)[derivedKey]) / per;
+    return Math.max(0, Math.ceil(round(need, 6)));
+  }
+
+  // 一維一張診斷單：它推的每個指標現在多少、一點加多少、佔現值幾成、天花板在哪。
+  function statOutlook(state, statKey) {
+    const s = normalizeState(state);
+    const p = panel(s);
+    const per = marginal(s, statKey, 1);
+    const metrics = DERIVED.filter(d => d.drivers.indexOf(statKey) >= 0).map(d => {
+      const value = p[d.key];
+      const gain = per[d.key];
+      const cap = ceilingOf(d.key);
+      return {
+        metric: d,
+        value: value,
+        gain: gain,
+        // 相對增幅：一點加多少 ÷ 現值，fading／laggard 兩條判斷都用它
+        ratio: value > 0 ? gain / value : (gain > 0 ? 1 : 0),
+        ceiling: cap,
+        ceilingAt: cap == null ? null : ceilingPoints(s, statKey, d.key),
+        capped: cap != null && value >= cap,
+        matchup: MATCHUP_BY_METRIC[d.key] || null,
+        fading: gain > 0 && value > 0 && gain / value < FADE_RATIO,
+      };
+    });
+    const live = metrics.filter(m => m.gain > 0 && !m.capped);
+    return {
+      stat: STAT_BY_KEY[statKey],
+      points: s[statKey],
+      effective: effective(s[statKey], s.level),
+      metrics: metrics,
+      // 這一維「一點最多能加現值的百分之幾」——比較用的單一數字
+      best: live.reduce((n, m) => (m.ratio > n ? m.ratio : n), 0),
+      capped: metrics.length > 0 && !live.length,          // 全部到頂：再點 0 收益
+      fading: live.length > 0 && live.every(m => m.fading), // 還在漲，但漲不出感覺
+      matchupOnly: live.length > 0 && live.every(m => m.matchup),
+      laggard: false,       // 以下兩個要六維一起看才填得起來（見 statOutlooks）
+      leader: null,         // 相對收益最好的那一維
+      leaderBest: 0,
+    };
+  }
+  // 六維一起看才有 laggard：相對收益不到最好那一維的 LAG_SHARE，就標出來，
+  // 並附上「該放哪裡」——只有一維時沒有比較對象，不亂標。
+  function statOutlooks(state) {
+    const all = STAT_KEYS.map(k => statOutlook(state, k));
+    const top = all.reduce((a, b) => (b.best > (a ? a.best : 0) ? b : a), null);
+    if (!top || !(top.best > 0)) return all;
+    all.forEach(o => {
+      if (o === top || !(o.best > 0)) return;
+      // 一點都還沒點的維度不標：這條建議是「別再點高」，不是「別點」——
+      // 相對增幅本來就在低配點時最漂亮，拿它勸人不要碰某一維是反過來的。
+      if (o.points <= 0) return;
+      if (o.best >= top.best * LAG_SHARE) return;
+      o.laggard = true;
+      o.leader = top.stat;
+      o.leaderBest = top.best;
+    });
+    return all;
+  }
+
+  // 天賦的「收手點」：下一點若只再改善原始值的 1% 以下，就當作邊際歸零。
+  // 只對 decay（幾何衰減）算得出來——linear 的每點收益是常數、growth 還會加速，
+  // 對它們回 null 才誠實。
+  const TALENT_EPSILON = 0.01;
+  function talentKnee(gain, epsilon, max) {
+    if (typeof gain !== 'function') return null;
+    const eps = epsilon == null ? TALENT_EPSILON : epsilon;
+    const top = clampInt(max == null ? 999 : max, 0, 9999);
+    for (let n = 0; n <= top; n++) {
+      if (gain(n + 1) - gain(n) < eps) return n;
+    }
+    return null;
+  }
+
+  // 天賦全表 ＋ 每項的收手點。單項上限 = 等級 × 3（實機 LV 80 的天賦上限 240 對得上）。
+  function talentAdvice(level, epsilon) {
+    const lv = clampInt(level, LIMIT.levelMin, LIMIT.levelMax);
+    const cap = TALENT_CAP_PER_LEVEL * lv;
+    const eps = epsilon == null ? TALENT_EPSILON : epsilon;
+    return {
+      level: lv,
+      cap: cap,
+      epsilon: eps,
+      rows: TALENTS.map(t => {
+        const knee = t.curve === 'decay' ? talentKnee(t.gain, eps, cap) : null;
+        return {
+          talent: t,
+          knee: knee,      // null ＝ 算不出來，或收手點還在單項上限之外（上限內都值得點）
+          kneeGain: knee != null && t.gain ? t.gain(knee) : null,
+        };
+      }),
+    };
+  }
+
+  function format(derivedKey, value) {
+    const meta = DERIVED_BY_KEY[derivedKey];
+    const dp = meta ? meta.dp : 1;
+    const v = round(value, dp);
+    return meta && meta.pct ? v + '%' : String(v);
+  }
+
+  function formatDelta(derivedKey, value) {
+    const meta = DERIVED_BY_KEY[derivedKey];
+    const dp = meta ? meta.dp : 1;
+    const v = round(value, dp);
+    if (v === 0) return '';
+    return (v > 0 ? '+' : '') + v + (meta && meta.pct ? '%' : '');
+  }
+
+  // ---- 技能 ----------------------------------------------------------------
+
+  // 技能頁只讀這幾個欄位（bundle 的 go()／So()），toolkit 的即時資料與離線快照
+  // 都正規化成同一組欄位，兩邊的渲染規則才共用得起來。
+  const SKILL_API = {
+    list: 'GET /api/skills',
+    equip: 'POST /api/skills/equip',
+    unequip: 'DELETE /api/skills/equip/{slot}',
+    availableFields: ['item_id', 'skill_name', 'weapon_name', 'desc', 'level', 'no_equip'],
+    equippedFields: ['item_id', 'skill_name', 'weapon_name'],
+    // 3.0.1 起：基本 4 格，練到 80 級（滿級）解鎖第 5 格——技能頁的原始碼明文
+    // 「第 5 個技能槽於等級 80 解鎖」（Skills chunk 的 r.length<5）。第 5 格
+    // 只在爬塔與 PvP 生效；BoB 固定 4 格，隊伍按下準備完成時它不會被帶進去。
+    // 這欄之前停在 4，是 v2.8.24 萃取報告年代的值——2026-08-29 對照 3.0.30 更正。
+    slots: 5,
+    slotsBase: 4,
+    slotsNote: '第 5 格 LV80 解鎖，僅爬塔／PvP；BoB 固定 4 格',
+  };
+
+  // 另存 HTML 只留得下當時展開／標星的 11 招；其餘 94 招 React 沒有渲染進 DOM。
+  const SKILL_SNAPSHOT = {
+    source: '技能頁另存檔（/api/skills 已渲染部分）',
+    total: 105,
+    captured: 11,
+    groups: [
+      { weapon_name: '單手劍', count: 14 },
+      { weapon_name: '短刀', count: 6 },
+      { weapon_name: '細劍', count: 8 },
+      { weapon_name: '盾牌', count: 10 },
+      { weapon_name: '弓', count: 3 },
+      { weapon_name: '太刀', count: 4 },
+      { weapon_name: '雙手斧', count: 3 },
+      { weapon_name: '雙手劍', count: 6 },
+      { weapon_name: '通用槍械', count: 12 },
+      { weapon_name: '手槍', count: 3 },
+      { weapon_name: '衝鋒槍', count: 4 },
+      { weapon_name: '輕機槍', count: 2 },
+      { weapon_name: '狙擊槍', count: 1 },
+      { weapon_name: '空手', count: 5 },
+      { weapon_name: '通用', count: 24 },
+    ],
+    skills: [
+      { skill_name: '迴旋盾', weapon_name: '單手劍', level: 3, desc: '被攻擊時有額外獨立格擋機率（被動）' },
+      { skill_name: '鋸齒波', weapon_name: '單手劍', level: 3, desc: '範圍攻擊，幾乎無法閃避' },
+      { skill_name: '逆輪', weapon_name: '單手劍', level: 3, desc: '被動：敵人進攻時以二連擊回擊' },
+      { skill_name: '雷霆天降', weapon_name: '單手劍', level: 2, desc: '跳起來將劍重重刺入地板，發出雷電波攻擊大範圍敵人，且可造成麻痺' },
+      { skill_name: '蜂鳴八度', weapon_name: '單手劍', level: 2, desc: '五下高速刺擊後加上三發全力斬擊，共八連擊的上位劍技' },
+      { skill_name: '迅速臥倒', weapon_name: '通用槍械', level: 3, desc: '被攻擊時有機率臥倒迴避，迴避後行動提前（被動）' },
+      { skill_name: '掃蕩', weapon_name: '通用槍械', level: 3, desc: '以槍體奮力一掃，攻擊大範圍的敵人' },
+      { skill_name: '消力', weapon_name: '通用', level: 3, desc: '卸勁化力，被攻擊時有額外獨立格擋機率（被動）' },
+      { skill_name: '暴風雨', weapon_name: '通用', level: 3, desc: '對雙方全體（除自己）造成無法閃避格擋的傷害，命中者行動延後，可連續施放' },
+      { skill_name: '無雙', weapon_name: '通用', level: 2, desc: '被動：每當敵人倒下，自身戰力隨之高漲' },
+      { skill_name: '世態炎涼', weapon_name: '通用', level: 3, desc: '整治全場帶火冰元素或身法輕靈者，削其攻速幸並取為己用' },
+    ],
+  };
+
+  const SKILL_RULES = [
+    {
+      id: 'skill_level_cap',
+      text: '技能升級：Lv1→Lv2 需 2 本、Lv2→Lv3 需 3 本，上限 Lv3',
+      tier: CONFIRMED,
+      evidence: 'bundle 更新紀錄 2.2.3',
+    },
+    {
+      id: 'trigger_rate',
+      text: '全域技能觸發率 40% → 50%；個別技能仍可能另有覆寫',
+      tier: INFERRED,
+      evidence: 'bundle 更新紀錄 2.7.x；覆寫值不在前端',
+    },
+    {
+      id: 'offhand_half',
+      text: '雙持／持盾時，副手武器被動技能的觸發機率與效果強度打五折',
+      tier: CONFIRMED,
+      evidence: 'bundle 更新紀錄 2.6.14',
+    },
+    {
+      id: 'skill_bonus_multiplicative',
+      text: '技能提供的命中、閃避、格擋加成改為倍率制並隨技能等級提升；倍率值不在前端',
+      tier: UNVERIFIABLE,
+      evidence: 'bundle 更新紀錄 2.8.21',
+    },
+    {
+      id: 'special_block_fixed',
+      text: '迴旋盾、十字格擋、此路不通、彈幕格擋為固定機率，不受一般命中加成影響；' +
+        '3.0.19 起的例外：「無視格擋」類技能會稍微壓低這類被動格擋的觸發機率（幅度不在前端）',
+      tier: CONFIRMED,
+      evidence: 'bundle 更新紀錄 2.8.10；例外出自更新紀錄 3.0.19',
+    },
+    {
+      id: 'skill_slots',
+      text: '技能槽基本 4 格；LV80（滿級）解鎖第 5 格，僅爬塔／PvP 生效，BoB 固定 4 格',
+      tier: CONFIRMED,
+      evidence: 'bundle 更新紀錄 3.0.1；技能頁原始碼明文「第 5 個技能槽於等級 80 解鎖」',
+    },
+  ];
+
+  // 只收「bundle 明文寫出數字」的技能公式。找不到倍率的一律不補。
+  const SKILL_FORMULAS = [
+    {
+      id: 'group_heal',
+      skill_name: '群體治癒',
+      weapon_name: '通用',
+      formula: '最大 HP × 8% + 幸運 × 0.8',
+      tier: CONFIRMED,
+      levelScaling: '皆隨技能等級成長，成長倍率不在前端',
+      evidence: 'bundle 更新紀錄 2.6.9',
+      inputs: [],
+      unit: '',
+      compute: function (p) { return p.maxHp * 0.08 + p.luck * 0.8; },
+      dp: 1,
+    },
+    {
+      id: 'holy_light',
+      skill_name: '聖光術',
+      weapon_name: '通用',
+      formula: '最大 HP × 16% + 幸運 × 0.8',
+      tier: CONFIRMED,
+      levelScaling: '皆隨技能等級成長，成長倍率不在前端',
+      evidence: 'bundle 更新紀錄 2.6.9',
+      inputs: [],
+      unit: '',
+      compute: function (p) { return p.maxHp * 0.16 + p.luck * 0.8; },
+      dp: 1,
+    },
+    {
+      id: 'generic_weapon_atk',
+      skill_name: '通用技能武器攻擊力',
+      weapon_name: '通用',
+      formula: '武器攻擊力 × 10%',
+      tier: CONFIRMED,
+      levelScaling: '',
+      evidence: 'bundle 更新紀錄 2.6.9（扣除比例 100% → 90%）',
+      inputs: [{ key: 'weaponAtk', label: '武器攻擊力', def: 1000, min: 0, max: 999999, dp: 0 }],
+      unit: '',
+      compute: function (p, v) { return v.weaponAtk * 0.1; },
+      dp: 1,
+    },
+    {
+      id: 'apocalypse',
+      skill_name: '毀天滅地',
+      weapon_name: '弓',
+      formula: '傷害倍率 = 1.5 + 蓄力層數',
+      tier: CONFIRMED,
+      levelScaling: '',
+      evidence: 'bundle 更新紀錄 2.6.6',
+      inputs: [{ key: 'charge', label: '蓄力層數', def: 0, min: 0, max: 99, dp: 0 }],
+      unit: '×',
+      compute: function (p, v) { return 1.5 + v.charge; },
+      dp: 2,
+    },
+    {
+      id: 'consec_chain',
+      skill_name: '連擊續段',
+      weapon_name: '通用',
+      formula: '第 N 段傷害倍率 = 1.1^(N−1)',
+      tier: INFERRED,
+      levelScaling: '',
+      evidence: 'bundle 更新紀錄 2.3.16（每段 +5% → +10%）；是否為連乘不在前端',
+      inputs: [{ key: 'segment', label: '段數', def: 2, min: 1, max: 20, dp: 0 }],
+      unit: '×',
+      compute: function (p, v) { return Math.pow(1.1, v.segment - 1); },
+      dp: 3,
+    },
+    {
+      id: 'storm_cost',
+      skill_name: '暴風雨／炎爆術消耗',
+      weapon_name: '通用',
+      formula: '30 MP／10 耐久',
+      tier: CONFIRMED,
+      levelScaling: '',
+      evidence: 'bundle 更新紀錄 2.6.9',
+      inputs: [],
+      unit: '',
+      compute: null,
+      dp: 0,
+    },
+  ];
+  const SKILL_FORMULA_BY_NAME = Object.create(null);
+  SKILL_FORMULAS.forEach(f => { SKILL_FORMULA_BY_NAME[f.skill_name] = f; });
+
+  function skillInputDefaults() {
+    const out = Object.create(null);
+    SKILL_FORMULAS.forEach(f => {
+      f.inputs.forEach(i => { if (out[i.key] == null) out[i.key] = i.def; });
+    });
+    return out;
+  }
+
+  // 算不出來要說出理由，不能靜靜給 0。
+  function estimateSkill(formula, panelValues, params) {
+    if (!formula || typeof formula.compute !== 'function') {
+      return { ok: false, reason: '此條目只有明文條件，沒有可計算的公式', value: null };
+    }
+    const vals = Object.create(null);
+    const missing = [];
+    formula.inputs.forEach(i => {
+      const raw = params ? params[i.key] : undefined;
+      const n = Number.parseFloat(raw);
+      if (!Number.isFinite(n)) { missing.push(i.label); return; }
+      vals[i.key] = Math.min(i.max, Math.max(i.min, n));
+    });
+    if (missing.length) {
+      return { ok: false, reason: '缺少參數：' + missing.join('、'), value: null };
+    }
+    const value = formula.compute(panelValues, vals);
+    if (!Number.isFinite(value)) {
+      return { ok: false, reason: '計算結果無效', value: null };
+    }
+    return { ok: true, reason: '', value: round(value, formula.dp) };
+  }
+
+  // /api/skills 的回應 → 統一技能模型。壞資料就丟掉那一筆，不硬補預設值。
+  function normalizeSkillList(list) {
+    if (!Array.isArray(list)) return [];
+    const out = [];
+    list.forEach(raw => {
+      if (!raw || typeof raw !== 'object') return;
+      const name = typeof raw.skill_name === 'string' ? raw.skill_name : '';
+      if (!name) return;
+      out.push({
+        item_id: raw.item_id != null ? raw.item_id : null,
+        skill_name: name,
+        weapon_name: typeof raw.weapon_name === 'string' && raw.weapon_name ? raw.weapon_name : '通用',
+        desc: typeof raw.desc === 'string' ? raw.desc : '',
+        level: clampInt(raw.level != null ? raw.level : 1, 1, 99),
+        no_equip: !!raw.no_equip,
+      });
+    });
+    return out;
+  }
+
+  function snapshotSkills() {
+    return normalizeSkillList(SKILL_SNAPSHOT.skills.map(s => Object.assign({ no_equip: false }, s)));
+  }
+
+  // bundle 的 go() 是「照原順序、相鄰同武器才併成一組」，這裡照抄同一條規則。
+  function groupSkills(skills) {
+    const groups = [];
+    skills.forEach(s => {
+      const last = groups[groups.length - 1];
+      if (last && last.weapon_name === s.weapon_name) last.skills.push(s);
+      else groups.push({ weapon_name: s.weapon_name, skills: [s] });
+    });
+    return groups;
+  }
+
+  function filterSkills(skills, query, weapon) {
+    const q = (query || '').trim().toLowerCase();
+    return skills.filter(s => {
+      if (weapon && weapon !== '__all__' && s.weapon_name !== weapon) return false;
+      if (!q) return true;
+      return s.skill_name.toLowerCase().indexOf(q) >= 0 || s.desc.toLowerCase().indexOf(q) >= 0;
+    });
+  }
+
+  // 描述裡的「被動」是前端唯一能判定主/被動的線索，判不出來就回 null。
+  function skillKind(skill) {
+    const text = (skill && skill.desc) || '';
+    if (text.indexOf('被動') >= 0) return '被動';
+    if (skill && skill.no_equip) return '被動';
+    return null;
+  }
+
+  return {
+    META, TIER_LABEL, CONFIRMED, INFERRED, UNVERIFIABLE,
+    LEVEL_STAT_FACTOR, HP_LEVEL_COEF, MP_LEVEL_COEF, SPEED_LEVEL_COEF,
+    LIMIT, KNOWN_LEVEL_CAP, atLevelCap,
+    DEFAULT_STATE, STAT_POINT_BASE, STAT_POINT_PER_LEVEL, statPointsFor,
+    STATS, STAT_KEYS, STAT_BY_KEY,
+    TALENTS, TALENT_BY_KEY, TALENT_CAP_PER_LEVEL, TALENT_EPSILON,
+    FADE_RATIO, LAG_SHARE, MATCHUP_BY_METRIC,
+    ceilingOf, ceilingPoints, statOutlook, statOutlooks, talentKnee, talentAdvice,
+    DERIVED, DERIVED_BY_KEY, MATCHUPS,
+    clampInt, clampNum, round, normalizeState, stateFromCharacter,
+    effective, panel, spentOf, budgetOf, marginal, diff, solve, allocationOptions,
+    format, formatDelta,
+    SKILL_API, SKILL_SNAPSHOT, SKILL_RULES, SKILL_FORMULAS, SKILL_FORMULA_BY_NAME,
+    skillInputDefaults, estimateSkill, normalizeSkillList, snapshotSkills,
+    groupSkills, filterSkills, skillKind,
+  };
+})();
+</script>
+<!-- GAOCALC-CORE:END -->
+
+<script>
+//  獨立版的介面層。公式、欄位名、技能模型與格式化規則一律走上面那份 GAOCALC，
+//  這裡一行數學都不自己算——與 toolkit 的「配點」分頁同一個規矩。
+//
+//  與 toolkit 版唯一的差別是**資料從哪來**：toolkit 讀 /api/auth/me 的真實角色，
+//  獨立版沒有登入，所以等級由玩家自己填，總點數用 statPointsFor(等級) 反推
+//  （4 + 6×Lv，與伺服器一致）。
+(function () {
+  'use strict';
+
+  const C = GAOCALC;
+  const nf = new Intl.NumberFormat('zh-TW');
+  const KEY = 'gao.calc.state.v1';
+
+  let state = C.normalizeState({ level: C.KNOWN_LEVEL_CAP || 75 });
+  state.total = C.statPointsFor(state.level);
+  let tab = 'alloc';
+
+  try {
+    const raw = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (raw && typeof raw === 'object') {
+      state = C.normalizeState(raw);
+      state.total = C.statPointsFor(state.level);
+    }
+  } catch (e) { /* 壞掉的存檔就當沒有 */ }
+
+  const app = document.getElementById('app');
+  document.getElementById('meta').textContent =
+    'GAME ' + C.META.game + ' · ' + C.META.symbol + ' · 等級上限 ' +
+    (C.KNOWN_LEVEL_CAP == null ? '未知' : C.KNOWN_LEVEL_CAP);
+
+  function el(tag, cls, txt) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (txt != null) n.textContent = txt;
+    return n;
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  }
+  function used() { return C.spentOf(state); }
+  function left() { return state.total - used(); }
+  function pct(ratio, dp) { return C.round(ratio * 100, dp == null ? 2 : dp) + '%'; }
+  function tagFor(tier) { return el('span', 'tag tag--' + tier, C.TIER_LABEL[tier]); }
+
+  function setLevel(v) {
+    state.level = C.clampInt(v, C.LIMIT.levelMin, C.LIMIT.levelMax);
+    state.total = C.statPointsFor(state.level);
+    // 等級掉下來時預算跟著縮，超支的從最後一維往回收
+    let over = used() - state.total;
+    for (let i = C.STAT_KEYS.length - 1; i >= 0 && over > 0; i--) {
+      const k = C.STAT_KEYS[i];
+      const cut = Math.min(state[k], over);
+      state[k] -= cut; over -= cut;
+    }
+    save(); render();
+  }
+  function setStat(k, v) {
+    const cap = state[k] + Math.max(0, left());
+    state[k] = Math.min(cap, C.clampInt(v, 0, C.LIMIT.statMax));
+    save(); render();
+  }
+
+  // ---- 配點 ---------------------------------------------------------------
+  function renderAlloc(host) {
+    const sum = el('div', 'sum');
+    [['角色總點數', state.total, false], ['已使用', used(), false],
+     ['剩餘', left(), left() < 0]].forEach(function (r) {
+      const box = el('div', 'cell');
+      if (r[2]) box.dataset.over = 'true';
+      box.appendChild(el('div', 'v', nf.format(r[1])));
+      box.appendChild(el('div', 'l', r[0]));
+      sum.appendChild(box);
+    });
+    host.appendChild(sum);
+
+    const acts = el('div', 'row');
+    const clr = el('button', null, '清空重新配置');
+    clr.addEventListener('click', function () {
+      C.STAT_KEYS.forEach(function (k) { state[k] = 0; });
+      save(); render();
+    });
+    acts.appendChild(clr);
+    host.appendChild(acts);
+
+    const outlook = Object.create(null);
+    C.statOutlooks(state).forEach(function (o) { outlook[o.stat.key] = o; });
+
+    const grid = el('div', 'grid');
+    C.STATS.forEach(function (s) {
+      const tile = el('div', 'tile');
+      tile.style.setProperty('--c', s.color);
+      tile.title = s.effect;
+      const name = el('div', 'name', s.label);
+      name.appendChild(el('span', null, s.cjk));
+      tile.appendChild(name);
+
+      const line = el('div', 'row');
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.min = '0';
+      input.max = String(C.LIMIT.statMax);
+      input.value = String(state[s.key]);
+      input.setAttribute('aria-label', s.cjk + ' 配點');
+      input.addEventListener('input', function () { setStat(s.key, input.value); });
+      line.appendChild(input);
+      line.appendChild(el('span', 'meta', '實效 ' + nf.format(C.round(C.effective(state[s.key], state.level), 1))));
+      tile.appendChild(line);
+
+      const steps = el('div', 'steps');
+      [-10, -1, 1, 10].forEach(function (n) {
+        const b = el('button', null, (n > 0 ? '+' : '−') + Math.abs(n));
+        b.disabled = n < 0 ? state[s.key] <= 0 : left() <= 0;
+        b.addEventListener('click', function () { setStat(s.key, state[s.key] + n); });
+        steps.appendChild(b);
+      });
+      tile.appendChild(steps);
+
+      const w = capNote(outlook[s.key]);
+      if (w) tile.appendChild(el('div', 'warn', w));
+      grid.appendChild(tile);
+    });
+    host.appendChild(grid);
+
+    const p = C.panel(state);
+    const res = el('div', 'rgrid');
+    C.DERIVED.forEach(function (d) {
+      const card = el('div', 'rcard');
+      card.title = d.label + ' = ' + d.formula + '（' + C.TIER_LABEL[d.tier] + '）';
+      card.appendChild(el('span', 'rv', C.format(d.key, p[d.key])));
+      card.appendChild(el('span', 'rl', d.label));
+      res.appendChild(card);
+    });
+    host.appendChild(res);
+  }
+
+  // ---- 決策：每點收益 ------------------------------------------------------
+  function renderPlan(host) {
+    const affected = C.DERIVED.filter(function (d) { return d.drivers.length; });
+    host.appendChild(el('div', 'h', '每點收益'));
+    C.STATS.forEach(function (s) {
+      const gains = C.marginal(state, s.key, 1);
+      const line = el('div', 'line');
+      const nm = el('span', 'nm', s.label);
+      nm.style.color = s.color;
+      line.appendChild(nm);
+      affected.forEach(function (d) {
+        const t = C.formatDelta(d.key, gains[d.key]);
+        if (t) line.appendChild(el('span', null, d.label + ' ' + t));
+      });
+      host.appendChild(line);
+    });
+
+    host.appendChild(el('div', 'h', '剩餘 ' + nf.format(Math.max(0, left())) + ' 點全投入'));
+    const opts = C.allocationOptions(state, Math.max(0, left()));
+    if (!opts.length) {
+      host.appendChild(el('div', 'hint', '沒有剩餘點數'));
+    } else {
+      opts.forEach(function (o) {
+        const line = el('div', 'line');
+        const nm = el('span', 'nm', o.stat.label);
+        nm.style.color = o.stat.color;
+        line.appendChild(nm);
+        affected.forEach(function (d) {
+          const t = C.formatDelta(d.key, o.gains[d.key]);
+          if (t) line.appendChild(el('span', null, d.label + ' ' + t));
+        });
+        host.appendChild(line);
+      });
+    }
+  }
+
+  // ---- 天花板 --------------------------------------------------------------
+  function capNote(o) {
+    const capped = o.metrics.filter(function (m) { return m.capped; });
+    const alive = o.metrics.filter(function (m) { return m.gain > 0 && !m.capped; });
+    // 上限值逐指標讀（反擊率是 50%，不是統一的 100%）
+    const cappedText = function () {
+      return capped.map(function (m) { return m.metric.label + ' ' + m.ceiling + '%'; }).join('、');
+    };
+    if (capped.length && !alive.length) return cappedText() + ' 已到頂，再點是 0 收益';
+    if (capped.length) {
+      return cappedText() + ' 已到頂，多的點只剩 ' +
+        alive.map(function (m) { return m.metric.label; }).join('、') + ' 在漲';
+    }
+    if (o.laggard) {
+      return '每點只加現值的 ' + pct(o.best) + '，同一點放 ' + o.leader.label +
+        ' 有 ' + pct(o.leaderBest) + '——這一維可以先停';
+    }
+    if (o.fading) return '每點只再加現值的 ' + pct(o.best) + '，堆再多也是同一格數字';
+    return '';
+  }
+
+  function renderCap(host) {
+    host.appendChild(el('div', 'h', '能力點：算得出來的天花板'));
+    host.appendChild(el('div', 'hint',
+      '面板公式對配點全部是線性的（實效 E(X) = X + 0.2×Lv），所以能力點不存在' +
+      '「越點越沒用」的曲線。會失去意義的只有三種：' +
+      '① 撞到遊戲明文寫出來的上限（目前只有反擊率的 50%）；' +
+      '② 對抗四組堆過對手——伺服器怎麼把差值換成機率前端沒有，不可驗證；' +
+      '③ 相對收益落到六維裡最好那一維的 ' + pct(C.LAG_SHARE, 0) + ' 以下——' +
+      '同一點換個地方放明顯比較有感（比的是「一點加多少 ÷ 現值」，不是戰鬥價值）。'));
+
+    C.statOutlooks(state).forEach(function (o) {
+      const line = el('div', 'line');
+      const nm = el('span', 'nm', o.stat.label);
+      nm.style.color = o.stat.color;
+      line.appendChild(nm);
+      line.appendChild(el('span', null,
+        '現在 ' + nf.format(o.points) + ' 點 · 實效 ' + nf.format(C.round(o.effective, 1))));
+      const ceils = o.metrics.filter(function (m) { return m.ceiling != null; });
+      if (ceils.length) {
+        ceils.forEach(function (m) {
+          line.appendChild(el('span', m.capped ? 'down' : 'up',
+            m.metric.label + ' 上限 ' + m.ceiling + '%：需 ' + o.stat.label + ' ' +
+            nf.format(m.ceilingAt) + ' 點' + (m.capped ? '（已到頂，再點 0 收益）' : '')));
+          if (m.metric.ceilingEvidence) {
+            line.appendChild(el('span', 'src', '上限出處 ' + m.metric.ceilingEvidence));
+          }
+        });
+      } else {
+        line.appendChild(el('span', 'flat', '沒有算得出來的天花板'));
+      }
+      if (o.best > 0) {
+        const tail = o.laggard
+          ? '（同一點放 ' + o.leader.label + ' 有 ' + pct(o.leaderBest) + '，可以先停）'
+          : o.fading ? '（堆再多也是同一格數字）' : '';
+        line.appendChild(el('span', (o.laggard || o.fading) ? 'down' : 'flat',
+          '每點最多 +' + pct(o.best) + ' 現值' + tail));
+      }
+      if (o.matchupOnly) line.appendChild(tagFor(C.UNVERIFIABLE));
+      line.appendChild(el('span', 'src', o.stat.cjk + '：' + o.stat.effect));
+      host.appendChild(line);
+    });
+
+    host.appendChild(el('div', 'h', '對抗四組：飽和點取決於對手'));
+    host.appendChild(el('div', 'hint',
+      '這四組是「我的值 − 對手的值」，不是各自的機率。所以它們沒有一個寫死的上限——' +
+      '堆到遠超對手八成是浪費，但「超過多少才浪費」要伺服器的換算式，前端沒有這段。'));
+    const p = C.panel(state);
+    C.MATCHUPS.forEach(function (m) {
+      const line = el('div', 'line');
+      line.appendChild(el('span', 'nm', m.label));
+      line.appendChild(el('span', null,
+        '我方 ' + C.DERIVED_BY_KEY[m.mine].label + ' ' + C.format(m.mine, p[m.mine]) +
+        ' · ' + C.DERIVED_BY_KEY[m.theirs].label + ' ' + C.format(m.theirs, p[m.theirs])));
+      line.appendChild(el('span', 'flat', '兩邊各自要減掉對手的另一半，對手資料前端沒有'));
+      line.appendChild(tagFor(C.UNVERIFIABLE));
+      host.appendChild(line);
+    });
+
+    host.appendChild(el('div', 'h', '天賦點：哪一項該收手'));
+    const adv = C.talentAdvice(state.level);
+    host.appendChild(el('div', 'hint',
+      '單項天賦上限 = 等級 × ' + C.TALENT_CAP_PER_LEVEL + ' = ' + nf.format(adv.cap) +
+      ' 點（LV ' + adv.level + '）。「收手點」＝ 再多點一點，只會再改善原始值的 ' +
+      pct(adv.epsilon, 2) + ' 以下。天賦點與能力點是兩套點數、兩支 API。'));
+    adv.rows.forEach(function (r) {
+      const line = el('div', 'line');
+      line.appendChild(el('span', 'nm', r.talent.label));
+      let verdict, cls = 'flat';
+      if (r.knee != null) {
+        verdict = '收手點 ' + nf.format(r.knee) + ' 點（到這裡已經拿到 ' + pct(r.kneeGain, 1) + ' 的改善）';
+        cls = 'down';
+      } else if (r.talent.curve === 'linear') {
+        verdict = '線性：沒有收手點，點多少值多少'; cls = 'up';
+      } else if (r.talent.curve === 'growth') {
+        verdict = '指數成長：公式不會遞減，但會被別的上限吃掉';
+      } else {
+        verdict = '門檻制：飽和點不在前端，算不出來';
+      }
+      line.appendChild(el('span', cls, verdict));
+      line.appendChild(tagFor(r.talent.tier));
+      line.appendChild(el('span', 'src', r.talent.desc + '｜' + r.talent.caution));
+      host.appendChild(line);
+    });
+  }
+
+  // ---- 公式 ---------------------------------------------------------------
+  function renderFormula(host) {
+    host.appendChild(el('div', 'hint',
+      'GAME ' + C.META.game + ' · ' + C.META.bundle + ' · ' + C.META.symbol));
+    const head = el('div', 'line');
+    head.appendChild(el('span', null, '實效能力 E(X) = 配點 X + 0.2 × Lv'));
+    head.appendChild(tagFor(C.CONFIRMED));
+    host.appendChild(head);
+    const pts = el('div', 'line');
+    pts.appendChild(el('span', null,
+      '能力點總額 = ' + C.STAT_POINT_BASE + ' + ' + C.STAT_POINT_PER_LEVEL + ' × Lv'));
+    pts.appendChild(tagFor(C.INFERRED));
+    pts.appendChild(el('span', 'src', '由 567 場戰報的「已配點 + statPoints」反推，131 名角色全數吻合'));
+    host.appendChild(pts);
+    C.DERIVED.forEach(function (d) {
+      const line = el('div', 'line');
+      line.appendChild(el('span', null, d.label + ' = ' + d.formula));
+      line.appendChild(tagFor(d.tier));
+      line.appendChild(el('span', 'src', d.evidence));
+      host.appendChild(line);
+    });
+  }
+
+  const TABS = [['alloc', '配點'], ['plan', '決策'], ['cap', '天花板'], ['formula', '公式']];
+
+  function render() {
+    const focus = document.activeElement;
+    const fkey = focus && focus.getAttribute ? focus.getAttribute('aria-label') : null;
+    const caret = focus && typeof focus.selectionStart === 'number' ? focus.selectionStart : null;
+
+    app.replaceChildren();
+
+    const lv = el('div', 'row');
+    lv.appendChild(el('span', 'lbl', '角色等級'));
+    const lvIn = document.createElement('input');
+    lvIn.type = 'number';
+    lvIn.min = String(C.LIMIT.levelMin);
+    lvIn.max = String(C.LIMIT.levelMax);
+    lvIn.value = String(state.level);
+    lvIn.setAttribute('aria-label', '角色等級');
+    lvIn.addEventListener('input', function () { setLevel(lvIn.value); });
+    lv.appendChild(lvIn);
+    lv.appendChild(el('span', 'lbl',
+      '總點數 ' + nf.format(state.total) + '（' + C.STAT_POINT_BASE + ' + ' +
+      C.STAT_POINT_PER_LEVEL + ' × ' + state.level + '）' +
+      (C.atLevelCap(state.level) ? ' · 已滿級' : '')));
+    app.appendChild(lv);
+
+    const bar = el('div', 'tabs');
+    TABS.forEach(function (t) {
+      const b = el('button', null, t[1]);
+      b.dataset.active = String(t[0] === tab);
+      b.setAttribute('aria-label', '分頁 ' + t[1]);
+      b.addEventListener('click', function () { tab = t[0]; render(); });
+      bar.appendChild(b);
+    });
+    app.appendChild(bar);
+
+    const host = el('div');
+    if (tab === 'alloc') renderAlloc(host);
+    else if (tab === 'plan') renderPlan(host);
+    else if (tab === 'cap') renderCap(host);
+    else renderFormula(host);
+    app.appendChild(host);
+
+    if (fkey) {
+      const next = app.querySelector('[aria-label="' + fkey + '"]');
+      if (next && !next.disabled) {
+        try { next.focus({ preventScroll: true }); } catch (e) { next.focus(); }
+        if (caret != null && typeof next.setSelectionRange === 'function') {
+          try { next.setSelectionRange(caret, caret); } catch (e) {}
+        }
+      }
+    }
+  }
+
+  render();
+  window.__GAOCALC_UI__ = { render: render, get state() { return state; } };
+})();
+</script>
+</body>
+</html>

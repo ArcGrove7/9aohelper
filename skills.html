@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>技能表 — 9aohelper</title>
+<meta name="description" content="技能一覽：單手劍、短刀、細劍各招式說明，以及刷熟關鍵技能的機制。">
+<meta name="theme-color" content="#0b0e14">
+<link rel="stylesheet" href="style.css">
+<script src="site.js" defer></script>
+</head>
+<body>
+<header class="site">
+  <div class="title">9aohelper</div>
+  <div class="subtitle">技能表 — 各武器型別的招式與刷熟關鍵技</div>
+  <nav class="site">
+    <a href="index.html">首頁</a>
+    <a href="formulas.html">公式與武器</a>
+    <a href="stats.html">配點</a>
+    <a href="zones.html">地圖圖鑑</a>
+    <a href="skills.html" aria-current="page">技能表</a>
+    <a href="materials.html">素材表</a>
+    <a href="effects.html">裝備屬性</a>
+    <a href="allocation.html">點數計算機</a>
+  </nav>
+</header>
+<main>
+<h1>技能表</h1>
+<p class="lead">依武器型別分組。技能只有裝上對應武器才能發動——掛著技能、手上拿錯武器，那一格就是廢的。</p>
+
+<h2>刷熟前先懂的三件事</h2>
+<div class="tip">
+<ul>
+<li><strong>熟練＝結算段數，不數傷害</strong>。多段、多目標的技能是刷熟主力。</li>
+<li><strong>對空鳴槍</strong>是「通用槍械」技能：任何槍（手槍／衝鋒槍／狙擊槍／輕機槍）都能用，
+    多目標計段——但手上不是槍就完全無效。</li>
+<li>部分技能 <code>profWeight</code> 為 0——放再多段也<strong>一點熟練都不長</strong>。</li>
+</ul>
+</div>
+
+<h2>技能總表（34 招，可搜尋・可篩型別）</h2>
+<p class="note">三種武器型別的技能併成一張表——<strong>打技能名或說明裡的片段就會篩</strong>（例：「四段」「追擊」「格擋」），
+也可以只按下面的型別籤。手機上每一列會攤成一張卡片。</p>
+<div class="table-wrap">
+<table class="rtable" data-search="搜尋技能名或效果（例：連擊、追擊、被動）" data-chip-col="1">
+<thead><tr><th>技能</th><th>型別</th><th>說明</th><th>ID</th></tr></thead>
+<tbody>
+<tr><td>斜斬</td><td>單手劍</td><td>斜向揮斬，造成攻擊傷害</td><td>60</td></tr>
+<tr><td>垂直扇形斬</td><td>單手劍</td><td>縱向扇形二段斬，造成傷害</td><td>319</td></tr>
+<tr><td>水平扇形斬</td><td>單手劍</td><td>橫向扇形二段攻擊</td><td>323</td></tr>
+<tr><td>迴旋盾</td><td>單手劍</td><td>被攻擊時有額外獨立格擋機率（被動）</td><td>332</td></tr>
+<tr><td>音速跳躍</td><td>單手劍</td><td>造成攻擊傷害，附帶追擊</td><td>333</td></tr>
+<tr><td>銳爪</td><td>單手劍</td><td>造成三段攻擊</td><td>334</td></tr>
+<tr><td>鋸齒波</td><td>單手劍</td><td>範圍攻擊，幾乎無法閃避</td><td>357</td></tr>
+<tr><td>垂直四方斬</td><td>單手劍</td><td>縱向連斬四段</td><td>359</td></tr>
+<tr><td>水平四方斬</td><td>單手劍</td><td>橫向連斬四段</td><td>360</td></tr>
+<tr><td>野蠻支軸</td><td>單手劍</td><td>三連擊，對速度低於自身的目標增傷</td><td>402</td></tr>
+<tr><td><strong>逆輪</strong></td><td>單手劍</td><td>被動：敵人進攻時以二連擊回擊</td><td>415</td></tr>
+<tr><td>犬咬</td><td>短刀</td><td>猛力撕咬，造成攻擊傷害</td><td>59</td></tr>
+<tr><td>蛇噬</td><td>短刀</td><td>蛇咬二連擊，混合速度造成傷害</td><td>306</td></tr>
+<tr><td>劈空斬</td><td>短刀</td><td>空中連續二劈，造成傷害</td><td>311</td></tr>
+<tr><td>穿甲刺</td><td>短刀</td><td>忽視部分目標防禦的突刺，造成傷害</td><td>321</td></tr>
+<tr><td>盲刺</td><td>短刀</td><td>混合幸運造成突刺傷害</td><td>340</td></tr>
+<tr><td>精準刺殺</td><td>短刀</td><td>造成強力攻擊，自動鎖定 HP 最少的敵人</td><td>341</td></tr>
+<tr><td>短刃</td><td>短刀</td><td>混合速度造成八段連擊</td><td>343</td></tr>
+<tr><td>迴旋斬</td><td>短刀</td><td>迴身連斬六段</td><td>351</td></tr>
+<tr><td>附魔強化</td><td>短刀</td><td>被動：裝備時常駐提升武器上的附魔效果</td><td>414</td></tr>
+<tr><td>條紋斬擊</td><td>細劍</td><td>連續斜線細劍斬，造成攻擊傷害</td><td>69</td></tr>
+<tr><td>線性攻擊</td><td>細劍</td><td>直線突刺混合速度傷害，命中後追擊</td><td>303</td></tr>
+<tr><td>傾斜突刺</td><td>細劍</td><td>斜角強力突刺，造成傷害，但命中率降低</td><td>304</td></tr>
+<tr><td>三角刺擊</td><td>細劍</td><td>三角方向三段連刺，造成傷害，命中後追擊</td><td>320</td></tr>
+<tr><td>落葉斬</td><td>細劍</td><td>揮砍攻擊，附帶追擊</td><td>327</td></tr>
+<tr><td>四重痛楚</td><td>細劍</td><td>混合攻速造成四段傷害，附帶追擊，並使敵行動延後</td><td>328</td></tr>
+<tr><td>流星</td><td>細劍</td><td>造成強力攻擊，附帶追擊</td><td>349</td></tr>
+<tr><td>平行刺擊</td><td>細劍</td><td>同時刺擊 2 個目標，附帶追擊</td><td>356</td></tr>
+<tr><td>寒霜衝擊</td><td>細劍</td><td>攜寒霜衝擊單體，造成高額傷害並必定冰凍 1 回合</td><td>399</td></tr>
+<tr><td>跳進染缸</td><td>細劍</td><td>對數名敵人造成傷害，並附加噴墨</td><td>420</td></tr>
+<tr><td>對空鳴槍</td><td>通用槍械</td><td>多目標鳴槍，一場數千段——刷熟主力；手上不是槍完全無效</td><td>—</td></tr>
+<tr><td>雷霆天降</td><td>其他</td><td>單段多目標攻擊技</td><td>—</td></tr>
+<tr><td>蜂鳴八度</td><td>其他</td><td>8 段攻擊</td><td>—</td></tr>
+<tr><td>十字格擋</td><td>其他</td><td>防禦技</td><td>—</td></tr>
+</tbody>
+</table>
+</div>
+<p class="note">刷熟視角：段數大戶是<strong>短刃（八段）、迴旋斬（六段）、垂直／水平四方斬（四段）</strong>；
+拿槍的話一律是<strong>對空鳴槍</strong>。細劍的特色是<strong>追擊鏈</strong>與控場（寒霜衝擊必凍、跳進染缸降敵命中閃避——
+噴墨機制見<a href="effects.html">裝備屬性</a>）。技能書可由王關掉落（見<a href="zones.html">地圖圖鑑</a>）。</p>
+</main>
+<footer class="site">
+9aohelper · 資料來源：遊戲前端拆包（現行版 v3.1.7，2026-09-03 同步）、官方數值表與鍛造模擬器 · 版本更新後請自行複驗
+</footer>
+</body>
+</html>

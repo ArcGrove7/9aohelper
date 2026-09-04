@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>公式與武器 — 9aohelper</title>
+<meta name="description" content="傷害公式骨架、熟練折算、完整武器型別倍率表與戰報欄位對照。">
+<meta name="theme-color" content="#0b0e14">
+<link rel="stylesheet" href="style.css">
+<script src="site.js" defer></script>
+</head>
+<body>
+<header class="site">
+  <div class="title">9aohelper</div>
+  <div class="subtitle">公式與武器 — 先公式、再數值表</div>
+  <nav class="site">
+    <a href="index.html">首頁</a>
+    <a href="formulas.html" aria-current="page">公式與武器</a>
+    <a href="stats.html">配點</a>
+    <a href="zones.html">地圖圖鑑</a>
+    <a href="skills.html">技能表</a>
+    <a href="materials.html">素材表</a>
+    <a href="effects.html">裝備屬性</a>
+    <a href="allocation.html">點數計算機</a>
+  </nav>
+</header>
+<main>
+<h1>傷害公式與熟練折算</h1>
+
+<h2>1. 傷害怎麼算（骨架）</h2>
+<pre>傷害 ∝ 有效攻擊 × 武器型別倍率 × 穿透 ÷（敵防禦・敵韌性）　＋隨機浮動（伺服器端結算）</pre>
+<div class="table-wrap">
+<table>
+<tr><th>項</th><th>是什麼</th><th>怎麼算</th></tr>
+<tr><td><strong>有效攻擊</strong></td><td>這一手真正打出去的攻擊</td><td>非武器攻擊 ＋ 該手武器攻擊 × 熟練折算比（見 §2）</td></tr>
+<tr><td><strong>型別倍率</strong></td><td>武器型別×持法的固定倍率</td><td>查 §3 表；狙擊 1.8 ⋯ 雙持衝鋒槍 0.72</td></tr>
+<tr><td>穿透</td><td>角色穿透值（pierceValue）</td><td>40 ＋ 力量（v3.1.7 拆包公式）；破甲特效另外無視部分防禦</td></tr>
+<tr><td>敵防禦／韌性</td><td>戰報 enemies[].def／tou</td><td>減傷項</td></tr>
+<tr><td>爆擊</td><td>倍率固定 ×1.5</td><td>技巧影響爆擊率、不影響倍率</td></tr>
+<tr><td>雙持</td><td>一次出手＝兩手各算一次再相加</td><td>各用自己那把的攻擊與倍率（§3 的雙持列）</td></tr>
+</table>
+</div>
+<div class="tip"><strong>一句話：</strong>挑武器順序 <strong>型別 → 熟練 → 攻擊</strong>。
+另外<strong>防具上的攻擊也進面板攻擊</strong>，挑防具記得看攻擊欄。</div>
+
+<h2>2. 熟練不夠，攻擊會被打折</h2>
+<p>每把武器有「需求熟練」，你的熟練除以它＝<strong>達成率</strong>，達成率決定武器攻擊打幾折：</p>
+<div class="table-wrap">
+<table class="rtable" data-title-col="none">
+<thead><tr><th>達成率</th><th>武器攻擊折算比</th></tr></thead>
+<tbody>
+<tr><td>≤ 6.7%</td><td>×0.20（硬地板）</td></tr>
+<tr><td>6.7%～27%</td><td>未知（沒有資料，不要外插）</td></tr>
+<tr><td><strong>27%</strong></td><td><strong>×0.99</strong>（等於回到原本威力）</td></tr><tr><td>50%</td><td>×1.08</td></tr><tr><td>100%</td><td>×1.21</td></tr><tr><td>200%</td><td>×1.34</td></tr><tr><td>300%</td><td>×1.43</td></tr><tr><td>500%</td><td>×1.54</td></tr></tbody>
+</table>
+</div>
+<p>三個重點就夠了：</p>
+<ul>
+  <li><strong>熟練太低（達成率 ≤ 6.7%）→ 武器攻擊只剩 2 成。</strong>帳面再高的神兵，練不起來就發揮不出來。</li>
+  <li><strong>達成率 27% 就回到 100% 威力</strong>——不用練到 100%。之後越練加成越平（500% 也才 1.54 倍）。</li>
+  <li><strong>6.7%～27% 之間沒有資料</strong>——那一段是空白，不要拿兩端去內插當成已知。</li>
+</ul>
+<details class="raw"><summary>展開：折算公式與細節（給想算的人）</summary>
+<pre>需求熟練 = (攻擊 + 防禦 − 重量) × 100     ← 按「那一把」算，耐久不算
+達成率   = 該型別熟練 ÷ 需求熟練
+
+折算比 =  0.20                     達成率 ≤ 6.7%     （硬地板）
+          未知                     6.7%～27%          （這段沒有資料，不要外插）
+          1.205 × 達成率^0.153     達成率 ≥ 27%</pre>
+<ul>
+  <li>商店武器走同一條曲線。它「不吃熟練」是錯覺——需求太低、一穿就過 1.0。
+      這也是低攻商店槍反而適合刷熟的原因。</li>
+  <li>防具不折：防具的攻／防直接進面板。盾牌例外（盾有自己的盾牌熟練），走武器那條折算。</li>
+  <li>同型別副手吃主手刷出來的熟練；換別型別＝自願吃 0.20 地板。</li>
+</ul>
+</details>
+
+<h2>3. 武器型別倍率</h2>
+<p>每種武器（含單持／雙持／帶盾）有一組<strong>固定倍率</strong>，六欄都是常數，不隨敵人、樓層變。
+「單)」＝單持、「雙)」＝雙持——雙持不是兩把相加，倍率整組不同。1.0 是普通。</p>
+<div class="tip">
+<strong>一句話總結：</strong>打王拿狙擊或太刀（痛）、練功拿雙短刀或雙衝鋒槍（段數多）、要肉就帶盾。
+槍還有專屬的「對空鳴槍」技能可以刷熟——但<strong>手上不是槍，那格技能就是廢的</strong>。
+</div>
+<div class="table-wrap">
+<table class="rtable" data-search="搜尋武器型別（例：狙擊、雙持、槍）">
+<thead><tr><th>型別／持法</th><th>命中</th><th>格擋值</th><th>閃避</th><th>穿透值</th><th>抗連擊值</th><th>連擊</th></tr></thead>
+<tr><td>雙手劍</td><td>1</td><td>1</td><td>0.6</td><td><strong>1.4</strong></td><td>1.3</td><td>1</td></tr>
+<tr><td>雙手斧</td><td>0.9</td><td>0.85</td><td>1</td><td><strong>1.6</strong></td><td>1</td><td>1</td></tr>
+<tr><td>太刀</td><td><strong>1.6</strong></td><td>0.85</td><td>1</td><td>1</td><td>1</td><td>0.9</td></tr>
+<tr><td>弓</td><td>1.4</td><td>1.1</td><td>1</td><td>1</td><td>1</td><td>0.9</td></tr>
+<tr><td>單)手槍</td><td>1</td><td>1</td><td>1.1</td><td>0.8</td><td>1</td><td>1.15</td></tr>
+<tr><td>雙)手槍</td><td>1</td><td>1</td><td>1.16</td><td>0.72</td><td>1</td><td>1.24</td></tr>
+<tr><td>單)衝鋒槍</td><td>0.8</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1.25</td></tr>
+<tr><td>雙)衝鋒槍</td><td><strong>0.72</strong></td><td>1</td><td>1</td><td>1</td><td>1</td><td><strong>1.41</strong></td></tr>
+<tr><td>輕機槍</td><td>0.85</td><td>1</td><td>0.9</td><td>1</td><td>1</td><td>1.25</td></tr>
+<tr><td><strong>狙擊槍</strong></td><td><strong>1.8</strong></td><td>1</td><td>1</td><td>1</td><td>0.9</td><td>0.85</td></tr>
+<tr><td>單)短刀</td><td>1</td><td>1</td><td>1</td><td>0.7</td><td>1</td><td>1.5</td></tr>
+<tr><td>雙)短刀</td><td>1</td><td>1</td><td>1</td><td>0.6</td><td>1</td><td><strong>1.88</strong></td></tr>
+<tr><td>短刀＋盾</td><td>1</td><td>1.3</td><td>0.78</td><td>0.7</td><td>1.13</td><td>1.5</td></tr>
+<tr><td>單)細劍</td><td>1.3</td><td>0.6</td><td>1.4</td><td>1</td><td>1</td><td>1</td></tr>
+<tr><td>雙)細劍</td><td>1.49</td><td>0.48</td><td><strong>1.68</strong></td><td>1</td><td>1</td><td>1</td></tr>
+<tr><td>細劍＋盾</td><td>1.3</td><td>0.78</td><td>1.09</td><td>1</td><td>1.13</td><td>1</td></tr>
+<tr><td>單)單手劍</td><td>1.25</td><td>1.15</td><td>1</td><td>0.85</td><td>1</td><td>1</td></tr>
+<tr><td>雙)單手劍</td><td>1.41</td><td>1.23</td><td>1</td><td>0.79</td><td>1</td><td>1</td></tr>
+<tr><td>單手劍＋盾</td><td>1.25</td><td>1.5</td><td>0.78</td><td>0.85</td><td>1.13</td><td>1</td></tr>
+<tr><td>單)盾</td><td>1</td><td>1.6</td><td>0.55</td><td>1</td><td>1.25</td><td>1</td></tr>
+<tr><td>雙)盾</td><td>1</td><td><strong>2.08</strong></td><td>0.43</td><td>1</td><td><strong>1.41</strong></td><td>1</td></tr>
+</table>
+</div>
+
+<h2>4. 熟練怎麼長</h2>
+<ul>
+  <li>熟練 ＝ <strong>結算段數</strong>，不數傷害；一次施放打幾個目標就是幾段。</li>
+  <li>記到<strong>主手的武器型別</strong>；盾技記盾、雙持普攻依實際出手的手記。</li>
+  <li>戰報欄位 <code>meta.profWeight</code> 為 0 的技能不長熟練。</li>
+  <li>段數靠回合數 × 敵人數量堆——秒殺的場堆不了段數，<strong>樓層的權重大於技能</strong>。</li>
+</ul>
+
+<h2>5. 讀戰報的欄位對照</h2>
+<div class="table-wrap">
+<table class="rtable" data-search="搜尋戰報欄位或關鍵字（例：atk、熟練）">
+<thead><tr><th>戰報欄位</th><th>意思</th><th>注意</th></tr></thead>
+<tr><td>party[].mainWeaponAtk／offWeaponAtk</td><td><strong>折算後</strong>武器攻擊</td><td>不要再乘折算比</td></tr>
+<tr><td>party[].atk</td><td>有效攻擊（非武器＋折算後雙手）</td><td>就是公式裡的底數</td></tr>
+<tr><td>party[].contestMult.hit</td><td>型別倍率</td><td>換武器才變</td></tr>
+<tr><td>party[].weapon.atk</td><td>帳面武器攻擊</td><td>除以 mainWeaponAtk 可反推折算比</td></tr>
+<tr><td>events[].meta.hand</td><td>main／off／both</td><td>both 的 value ＝ 兩手相加</td></tr>
+<tr><td>events[].meta.profWeight</td><td>0 ＝ 這技不長熟練</td><td></td></tr>
+</table>
+</div>
+
+</main>
+<footer class="site">
+9aohelper · 資料來源：遊戲前端拆包（現行版 v3.1.7，2026-09-03 同步）、官方數值表與鍛造模擬器 · 版本更新後請自行複驗
+</footer>
+</body>
+</html>

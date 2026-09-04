@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>地圖圖鑑 — 9aohelper</title>
+<meta name="description" content="11 張地圖的編號數法、秘境入口與王關樓層。">
+<meta name="theme-color" content="#0b0e14">
+<link rel="stylesheet" href="style.css">
+<script src="site.js" defer></script>
+</head>
+<body>
+<header class="site">
+  <div class="title">9aohelper</div>
+  <div class="subtitle">地圖圖鑑 — 編號數法、秘境與王關</div>
+  <nav class="site">
+    <a href="index.html">首頁</a>
+    <a href="formulas.html">公式與武器</a>
+    <a href="stats.html">配點</a>
+    <a href="zones.html" aria-current="page">地圖圖鑑</a>
+    <a href="skills.html">技能表</a>
+    <a href="materials.html">素材表</a>
+    <a href="effects.html">裝備屬性</a>
+    <a href="allocation.html">點數計算機</a>
+  </nav>
+</header>
+<main>
+<h1>地圖編號的數法</h1>
+<p>玩家間說「第幾張地圖」時，<strong>起始之鎮不算</strong>（它是城鎮，不能戰鬥）。官方順序配上這個數法：</p>
+<div class="table-wrap">
+<table>
+<tr><th>①</th><th>②</th><th>③</th><th>④</th><th>⑤</th><th>⑥</th><th>⑦</th><th>⑧</th><th>⑨</th><th>⑩</th><th>⑪</th></tr>
+<tr><td>大草原</td><td>猛牛園</td><td>兒童樂園</td><td>蘑菇園</td><td>圓明園</td><td>黃石</td><td>鄰家花園</td><td>青藏高原</td><td>火鳳燎原</td><td>阿波羅尼斯圓</td><td>鷹洞</td></tr>
+</table>
+</div>
+<div class="tip">
+<ul>
+<li>秘境收益是同層主圖的 <strong>1.4 倍</strong>（官方更新日誌）。</li>
+<li>死亡復活點看地圖頁：第 0 頁的圖死在起始之鎮，第 1 頁（鷹洞／耶索得）死在耶索得。</li>
+<li>換圖或死亡會把樓層歸 1；回鎮是把樓層歸零的正規手段。</li>
+</ul>
+</div>
+
+<h2>官方地圖・秘境對照（遊戲 bundle 讀出）</h2>
+<p>下表取自遊戲前端 bundle 的 zones 與 battleLocation 模組（現行 v3.1.7，逐字讀出）——
+這是官方定義的完整地圖與秘境清單，不是玩家整理的：</p>
+<div class="table-wrap">
+<table class="rtable" data-search="搜尋地圖或秘境（例：鷹洞、秘境、cave）">
+<thead><tr><th>地圖鍵</th><th>地圖名</th><th>秘境鍵</th><th>秘境官方名</th></tr></thead>
+<tr><td>starting_town</td><td>起始之鎮</td><td>—</td><td>—（城鎮，不能戰鬥）</td></tr>
+<tr><td>great_plains</td><td>大草原</td><td>secret_realm_great_plains</td><td><strong>草原秘境</strong></td></tr>
+<tr><td>bull_garden</td><td>猛牛園</td><td>secret_realm_bull_garden</td><td><strong>被詛咒的寺院</strong></td></tr>
+<tr><td>childrens_park</td><td>兒童樂園</td><td>—</td><td>—</td></tr>
+<tr><td>mushroom_garden</td><td>蘑菇園</td><td>secret_realm_mushroom_garden</td><td><strong>菇菇仙境</strong></td></tr>
+<tr><td>yuanmingyuan</td><td>圓明園</td><td>—</td><td>—</td></tr>
+<tr><td>yellowstone</td><td>黃石國家公園</td><td>secret_realm_yellowstone</td><td><strong>綠水管</strong></td></tr>
+<tr><td>neighbor_garden</td><td>鄰家花園</td><td>secret_realm_neighbor_garden</td><td><strong>屋頂</strong></td></tr>
+<tr><td>qinghai_tibet</td><td>青藏高原</td><td>—</td><td>—</td></tr>
+<tr><td>huofeng_liaoyuan</td><td>火鳳燎原</td><td>secret_realm_wei／shu／wu</td><td>秘境（魏國）／（蜀國）／（吳國）<strong>三選一</strong></td></tr>
+<tr><td>—</td><td>（火鳳燎原深處）</td><td>secret_realm_jinse_shanmai</td><td><strong>巾色山麥</strong>（秘境中的特殊岔路）</td></tr>
+<tr><td>apollonius</td><td>阿波羅尼斯圓</td><td>secret_realm_apollonius</td><td><strong>三角寒樹</strong></td></tr>
+<tr><td>eagle_cave</td><td>鷹洞</td><td>secret_realm_eagle_cave</td><td><strong>陰洞</strong></td></tr>
+<tr><td>yesod</td><td>耶索得</td><td>—</td><td>—（城鎮，不能戰鬥）</td></tr>
+</table>
+</div>
+<p>bundle 裡另外幾個結構性事實（同樣逐字讀出）：</p>
+<ul>
+  <li><strong>火鳳燎原的秘境是三選一</strong>：進入時由 realmChoices 列出魏／蜀／吳讓玩家挑，
+      巾色山麥則是秘境內的特殊岔路旗標（hasJinseBranch）。</li>
+  <li><strong>陰洞的樓層顯示是「地下 N 層」</strong>——全遊戲只有它往下數（realmDepth 模組明寫），
+      其他圖都是「NF」往上。</li>
+  <li>秘境入口在畫面上以「秘境岔路！」旗標出現，點擊才進入；一般戰鬥層沒有旗標。</li>
+</ul>
+
+<div class="warn">
+<strong>⚠ 王關樓層與秘境入口樓層不在 bundle 裡。</strong>
+前端只寫 <code>bossFloor??null</code>、<code>realmChoices:null</code>——兩者都是<strong>伺服器即時下發</strong>的，
+拆包拿不到數字。進圖後看畫面上的「王關」與「秘境岔路！」旗標即可；岔路旗標只在特定樓層出現，錯過要換圖重新落地。
+</div>
+</main>
+<footer class="site">
+9aohelper · 資料來源：遊戲前端拆包（現行版 v3.1.7，2026-09-03 同步）、官方數值表與鍛造模擬器 · 版本更新後請自行複驗
+</footer>
+</body>
+</html>

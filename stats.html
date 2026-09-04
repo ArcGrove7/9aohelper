@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>配點 — 9aohelper</title>
+<meta name="description" content="能力點到屬性的每點貢獻矩陣與配點建議：敏捷買出手、體質買生存。">
+<meta name="theme-color" content="#0b0e14">
+<link rel="stylesheet" href="style.css">
+<script src="site.js" defer></script>
+</head>
+<body>
+<header class="site">
+  <div class="title">9aohelper</div>
+  <div class="subtitle">配點 — 能力點怎麼變成屬性，以及該點什麼</div>
+  <nav class="site">
+    <a href="index.html">首頁</a>
+    <a href="formulas.html">公式與武器</a>
+    <a href="stats.html" aria-current="page">配點</a>
+    <a href="zones.html">地圖圖鑑</a>
+    <a href="skills.html">技能表</a>
+    <a href="materials.html">素材表</a>
+    <a href="effects.html">裝備屬性</a>
+    <a href="allocation.html">點數計算機</a>
+  </nav>
+</header>
+<main>
+<h1>點數該怎麼點？</h1>
+<p class="lead">升級拿到的能力點，六種能力各給什麼、值不值得點——先看卡片，想查精確數字再展開下面的完整表。</p>
+
+<div class="statcards">
+  <div class="statcard">
+    <h3>💪 力量</h3>
+    <p class="say">攻擊力與穿透值的來源，順便給一點血量。不夠力還會「超載」被扣速度。</p>
+    <div class="chips"><span>攻擊 +5</span><span>穿透值 +1</span><span>HP +15</span><span>MP +10</span><span>反擊率 +0.1%（上限 50%）</span></div>
+    <p class="rate">練功 ☆｜打王 <b>★</b>——夠用（不超載）就好</p>
+  </div>
+  <div class="statcard">
+    <h3>❤️ 體質</h3>
+    <p class="say">血量最大戶。撐不住長戰鬥，再高的輸出也沒意義。</p>
+    <div class="chips"><span>HP +20</span><span>MP +15</span><span>抗暴率 +1%</span></div>
+    <p class="rate">練功 <b>★★</b>｜打王 <b>★★★</b>——活著才有輸出</p>
+  </div>
+  <div class="statcard">
+    <h3>🛡 韌性</h3>
+    <p class="say">防禦與格擋的來源，也給一點血。跟盾牌是好搭檔。</p>
+    <div class="chips"><span>防禦 +5</span><span>HP +10</span><span>MP +8</span><span>格擋 +0.5</span><span>抗連擊 +0.5</span></div>
+    <p class="rate">練功 <b>★</b>｜打王 <b>★★</b>——坦位加分</p>
+  </div>
+  <div class="statcard">
+    <h3>⚡ 敏捷</h3>
+    <p class="say">速度＝出手次數。多出手＝多輸出＝多段數，練功打王都吃。</p>
+    <div class="chips"><span>速度 +3</span><span>閃避 +0.5</span></div>
+    <p class="rate">練功 <b>★★★</b>｜打王 <b>★★</b>——唯一能買到「行動」的能力</p>
+  </div>
+  <div class="statcard">
+    <h3>🎯 技巧</h3>
+    <p class="say">命中、連擊、爆擊率。爆擊傷害固定 1.5 倍，天花板不高。</p>
+    <div class="chips"><span>命中 +1</span><span>連擊 +0.5</span><span>爆擊率 +1%</span></div>
+    <p class="rate">練功 ☆｜打王 <b>★</b>——爆擊上限 ×1.5，天花板不高</p>
+  </div>
+  <div class="statcard">
+    <h3>🍀 幸運</h3>
+    <p class="say">加「幸運」面板值。幸運在戰鬥判定裡的作用未明。</p>
+    <div class="chips"><span>幸運 +5</span></div>
+    <p class="rate">練功 ☆｜打王 ☆——作用未明，點之前想清楚</p>
+  </div>
+</div>
+
+<div class="warn">
+<strong>常見迷思：「熟練不夠，點技巧來湊」——不成立。</strong>
+熟練從地板練到達標，傷害是 <strong>5～6 倍</strong>；技巧從 0 點到必爆只有 <strong>1.5 倍</strong>。
+先練熟練，再考慮技巧。
+</div>
+
+<details class="raw"><summary>展開：能力點完整數值表（每點貢獻矩陣）</summary>
+<div class="table-wrap">
+<table>
+<tr><th>能力</th><th>HP</th><th>MP</th><th>攻擊力</th><th>防禦力</th><th>速度</th><th>命中</th><th>格擋值</th><th>閃避</th><th>穿透值</th><th>抗連擊值</th><th>連擊</th><th>爆擊率</th><th>反擊率</th><th>抗暴率</th><th>幸運</th></tr>
+<tr><td><strong>力量</strong></td><td>15</td><td>10</td><td><strong>5</strong></td><td></td><td></td><td></td><td></td><td></td><td><strong>1</strong></td><td></td><td></td><td></td><td>0.1%*</td><td></td><td></td></tr>
+<tr><td><strong>體質</strong></td><td><strong>20</strong></td><td>15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>1%</td><td></td></tr>
+<tr><td><strong>韌性</strong></td><td>10</td><td>8</td><td></td><td><strong>5</strong></td><td></td><td></td><td>0.5</td><td></td><td></td><td>0.5</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>敏捷</strong></td><td></td><td></td><td></td><td></td><td><strong>3</strong></td><td></td><td></td><td>0.5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>技巧</strong></td><td></td><td></td><td></td><td></td><td></td><td>1</td><td></td><td></td><td></td><td>0.5</td><td>1%</td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>幸運</strong></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>5</td></tr>
+</table>
+</div>
+<ul>
+  <li>* 反擊率上限 50%（官方明寫）。</li>
+  <li>爆擊傷害倍率固定 150%，技巧只影響爆擊率、不影響倍率。</li>
+</ul>
+</details>
+
+<h2>官方衍生公式（v3.1.7 拆包，stats 模組逐字讀出）</h2>
+<p>能力進公式前先加等級修正：<strong>有效能力 ＝ 能力點 ＋ 0.2 × 等級</strong>。以下皆用有效能力：</p>
+<div class="table-wrap">
+<table>
+<tr><th>屬性</th><th>公式</th><th>屬性</th><th>公式</th></tr>
+<tr><td>最大 HP</td><td>100 ＋ 1×等級 ＋ 20×體 ＋ 15×力 ＋ 10×韌</td><td>命中值</td><td>40 ＋ 技</td></tr>
+<tr><td>最大 MP</td><td>100 − 1.6×等級 ＋ 15×體 ＋ 10×力 ＋ 8×韌</td><td>閃避值</td><td>10 ＋ 0.5×敏</td></tr>
+<tr><td>攻擊力</td><td>10 ＋ 3×等級 ＋ 5×力</td><td><strong>穿透值</strong></td><td><strong>40 ＋ 力</strong></td></tr>
+<tr><td>防禦力</td><td>10 ＋ 3×等級 ＋ 5×韌</td><td>格擋值</td><td>10 ＋ 0.5×韌</td></tr>
+<tr><td>幸運</td><td>10 ＋ 3×等級 ＋ 5×運</td><td>連擊值</td><td>20 ＋ 0.5×技</td></tr>
+<tr><td>速度</td><td>10 ＋ 0.4×等級 ＋ 3×敏</td><td>抗連擊值</td><td>20 ＋ 0.5×韌</td></tr>
+<tr><td>爆擊率</td><td>5 ＋ 技</td><td>抗暴值</td><td>體</td></tr>
+<tr><td>爆擊傷害</td><td><strong>150%（固定）</strong></td><td>挖礦力</td><td>2×等級 ＋ 挖礦天賦</td></tr>
+</table>
+</div>
+
+<h2>天賦：死掉賠多少的保險</h2>
+<p>死亡會損失經驗與熟練，兩項天賦各自把損失打折（值在角色的 talents 欄位，沒有那個鍵就是 0）：</p>
+<pre>庇佑（blessing）：死亡 EXP 損失 × 0.92^值
+傳承（legacy）  ：死亡熟練損失 × 0.905^值</pre>
+<p>這條是指數衰減，點高了以後死亡幾乎不虧：例如傳承 70 的死亡熟練損失只剩約 0.09%。
+所以<strong>天賦有點的角色在深層打到死是划算的</strong>——刷到的熟練遠大於死一次的損失。
+反過來，<strong>兩項皆 0 的角色死一次是全額賠</strong>，不該站在會死的樓層；
+生產系角色（鍛造／挖礦天賦）本來就不該站進戰列。</p>
+</main>
+<footer class="site">
+9aohelper · 資料來源：遊戲前端拆包（現行版 v3.1.7，2026-09-03 同步）、官方數值表與鍛造模擬器 · 版本更新後請自行複驗
+</footer>
+</body>
+</html>

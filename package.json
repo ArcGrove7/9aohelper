@@ -1,0 +1,10 @@
+{
+  "name": "9aohelper",
+  "private": true,
+  "scripts": {
+    "test": "node tests/test-site-ux.js"
+  },
+  "devDependencies": {
+    "jsdom": "^30.0.1"
+  }
+}

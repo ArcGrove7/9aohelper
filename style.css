@@ -1,0 +1,522 @@
+/* 9aohelper 共用樣式——視覺配置取自腳本（點數計算機 ALLOCATION / GunartonlineHelper 工具箱）的深色霓虹風 */
+:root {
+  --bg: #0b0e14;
+  --bg2: #12161f;
+  --card: #12161f;
+  --ink: #eef1f6;
+  --txt2: #c3cad6;
+  --muted: #8b95a3;
+  --accent: #2cdcff;
+  --accent-hi: #7ee8ff;
+  --accent-2: #a8f02d;
+  --down: #ff5566;
+  --warnc: #ffc933;
+  --line: #ffffff17;
+  --edge: #ffffff29;
+  --warn-bg: #1a1610;
+  --warn-line: #ffc93344;
+  --code-bg: #0d1118;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--txt2);
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  line-height: 1.75;
+}
+header.site {
+  border-bottom: 2px solid var(--accent);
+  background: var(--card);
+  padding: 1.1rem 1.2rem 0.9rem;
+}
+header.site .title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  font-family: var(--mono);
+  color: var(--accent-hi);
+}
+header.site .subtitle {
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-top: 0.15rem;
+  font-family: var(--mono);
+}
+nav.site {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.9rem;
+  margin-top: 0.7rem;
+  font-size: 0.95rem;
+}
+nav.site a {
+  color: var(--accent);
+  text-decoration: none;
+  padding: 0.1rem 0.2rem;
+  border-bottom: 2px solid transparent;
+}
+nav.site a[aria-current="page"] {
+  font-weight: 700;
+  border-bottom-color: var(--accent);
+}
+nav.site a:hover { border-bottom-color: var(--accent); }
+main {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.2rem 4rem;
+}
+h1 { font-size: 1.4rem; color: var(--ink); border-bottom: 1px solid var(--edge); padding-bottom: 0.4rem; }
+h2 { font-size: 1.05rem; margin-top: 2.2rem; color: var(--accent);
+     font-family: var(--mono); letter-spacing: 0.07em;
+     border-bottom: 1px solid var(--line); padding-bottom: 0.35rem; }
+h3 { font-size: 1rem; margin-top: 1.6rem; color: var(--ink); }
+p.lead { font-size: 1.02rem; color: var(--muted); }
+a { color: var(--accent); }
+code, pre {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  background: var(--code-bg);
+  border-radius: 4px;
+}
+code { padding: 0.1em 0.35em; font-size: 0.9em; }
+pre {
+  padding: 0.8rem 1rem;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.table-wrap { overflow-x: auto; margin: 1rem 0; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.92rem;
+  background: var(--card);
+}
+th, td {
+  border: 1px solid var(--line);
+  padding: 0.45rem 0.7rem;
+  text-align: left;
+  vertical-align: top;
+}
+th { background: var(--code-bg); color: var(--muted); font-family: var(--mono); font-size: 0.82rem; letter-spacing: 0.05em; white-space: nowrap; }
+.warn {
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-line);
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  padding: 0.7rem 1rem;
+  margin: 1.2rem 0;
+}
+.tip {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent-2);
+  border-radius: 6px;
+  padding: 0.7rem 1rem;
+  margin: 1.2rem 0;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+  margin: 1.2rem 0;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1rem 1.1rem;
+}
+.card h3 { margin: 0 0 0.4rem; font-size: 0.95rem; color: var(--accent-hi); }
+.card p { margin: 0.3rem 0; font-size: 0.92rem; }
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 0.05rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  color: var(--muted);
+  margin-left: 0.3rem;
+  white-space: nowrap;
+}
+footer.site {
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 1.2rem;
+}
+
+/* ===== 圖表（排行條圖與曲線） ===== */
+.chart {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1rem 1.1rem 0.8rem;
+  margin: 1.2rem 0;
+}
+.chart h3 { margin: 0 0 0.2rem; color: var(--accent-hi); font-size: 1rem; font-family: var(--mono); letter-spacing: 0.04em; }
+.chart .blurb { margin: 0 0 0.8rem; color: var(--muted); font-size: 0.88rem; }
+.chart .axis { position: relative; height: 1.1rem; margin: 0 4.6rem 0.2rem 7.2rem; }
+.chart .axis span {
+  position: absolute; transform: translateX(-50%);
+  font-size: 0.72rem; color: var(--muted); white-space: nowrap;
+}
+.brow { display: flex; align-items: center; gap: 0.5rem; margin: 3px 0; }
+.brow .bl { flex: 0 0 6.7rem; font-size: 0.85rem; text-align: right;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.brow .bt { position: relative; flex: 1; height: 14px; }
+.brow .bar { position: absolute; top: 1px; bottom: 1px; border-radius: 3px; }
+.brow .bar.up { background: var(--accent); }
+.brow .bar.down { background: transparent; border: 1.5px solid var(--muted); }
+.brow .bline { position: absolute; top: -2px; bottom: -2px; width: 1px;
+  background: var(--line); }
+.brow .bv { flex: 0 0 4rem; font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+.chart .note { margin: 0.7rem 0 0.2rem; font-size: 0.85rem; color: var(--muted); }
+svg.curve { width: 100%; height: auto; display: block; margin: 0.4rem 0; }
+svg.curve .grid line { stroke: var(--line); stroke-width: 1; }
+svg.curve .grid text, svg.curve .xlab { fill: var(--muted); font-size: 12px; }
+svg.curve .xlab { text-anchor: middle; }
+svg.curve .zone-un { fill: var(--code-bg); }
+svg.curve .floor { stroke: var(--muted); stroke-width: 2.5; stroke-linecap: round; }
+svg.curve .ref { stroke: var(--line); stroke-dasharray: 4 4; }
+svg.curve .line { stroke: var(--accent); stroke-width: 2.5; fill: none; stroke-linecap: round; }
+svg.curve .dot { fill: var(--accent); }
+svg.curve .anno { fill: var(--ink); font-size: 13px; font-weight: 700; }
+svg.curve .anno.muted { fill: var(--muted); font-weight: 400; }
+details.raw { margin: 1rem 0; }
+details.raw summary {
+  cursor: pointer; color: var(--accent); font-size: 0.9rem;
+  padding: 0.4rem 0; user-select: none;
+}
+.statcards { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem; margin: 1.2rem 0; }
+.statcard { background: var(--card); border: 1px solid var(--line);
+  border-radius: 8px; padding: 0.9rem 1rem; }
+.statcard h3 { margin: 0; font-size: 0.95rem; color: var(--accent-hi); }
+.statcard .say { margin: 0.3rem 0 0.5rem; font-size: 0.9rem; }
+.statcard .chips { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.5rem; }
+.statcard .chips span { font-size: 0.78rem; padding: 0.1rem 0.5rem;
+  background: var(--code-bg); border-radius: 99px; white-space: nowrap; }
+.statcard .rate { font-size: 0.85rem; color: var(--muted); }
+.statcard .rate b { color: var(--ink); }
+.matbar { display: flex; align-items: center; gap: 0.6rem; margin: 0.6rem 0; }
+.matbar input {
+  flex: 1; max-width: 22rem; padding: 0.45rem 0.7rem;
+  border: 1px solid var(--line); border-radius: 6px;
+  background: var(--card); color: var(--ink); font-size: 0.95rem;
+}
+.mattbl { max-height: 26rem; overflow-y: auto; }
+.mattbl thead th { position: sticky; top: 0; cursor: pointer; user-select: none; }
+p.note { font-size: 0.85rem; color: var(--muted); }
+.qladder { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.8rem 0; }
+.qladder span {
+  padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.85rem;
+  background: var(--code-bg); border: 1px solid var(--line); white-space: nowrap;
+}
+.qladder span b { color: var(--accent); }
+
+
+main strong { color: var(--ink); }
+.warn { color: var(--txt2); }
+.warn strong { color: var(--warnc); }
+.tip strong, .card strong, .statcard strong { color: var(--accent-hi); }
+a:hover { color: var(--accent-hi); }
+.mattbl thead th { background: #12172a; }
+
+/* ============================================================
+   手機 UX（2026-09-03）——原本整份樣式表沒有任何 @media，
+   手機上導覽會擠成好幾行、表格只能左右拖、控制項小到按不準。
+   下面這一整段就是在補這三件事，桌機的版面刻意不動。
+   ============================================================ */
+
+/* 1) 導覽列：固定在頂端，橫向可滑，每一格都有 44px 的觸控高度 */
+header.site {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  padding-top: max(0.9rem, env(safe-area-inset-top));
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+  backdrop-filter: blur(8px);
+}
+nav.site {
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+nav.site::-webkit-scrollbar { display: none; }
+nav.site a {
+  white-space: nowrap;
+  scroll-snap-align: start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;          /* 44px：手指按得到 */
+  padding: 0.1rem 0.35rem;
+}
+
+/* 2) 表格工具列：搜尋框、篩選籤、計數 */
+.tbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.8rem 0 0.5rem;
+  padding: 0.6rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.tbar .row { display: flex; align-items: center; gap: 0.5rem; width: 100%; }
+.tbar input[type="search"] {
+  flex: 1;
+  min-width: 0;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  background: var(--code-bg);
+  color: var(--ink);
+  font-size: 16px;              /* 低於 16px iOS 會自動放大整頁 */
+  font-family: inherit;
+}
+.tbar input[type="search"]:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.tbar select {
+  min-height: 2.75rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  background: var(--code-bg);
+  color: var(--ink);
+  font-size: 16px;
+  font-family: inherit;
+}
+.tbar .hint { font-size: 0.78rem; color: var(--muted); width: 100%; margin: 0; }
+.chips {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 0.35rem;
+  width: 100%;
+  padding-bottom: 0.15rem;
+  scrollbar-width: none;
+}
+.chips::-webkit-scrollbar { display: none; }
+.chips.wrap { flex-wrap: wrap; overflow: visible; }
+.chip {
+  flex: 0 0 auto;
+  min-height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.75rem;
+  border: 1px solid var(--edge);
+  border-radius: 99px;
+  background: var(--code-bg);
+  color: var(--txt2);
+  font-size: 0.86rem;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+}
+.chip[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #07131a;
+  font-weight: 700;
+}
+.chip.reset { color: var(--muted); }
+.tbar .count { font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
+.tbar .count b { color: var(--accent-hi); }
+.empty-hit {
+  margin: 0.8rem 0;
+  padding: 1rem;
+  border: 1px dashed var(--edge);
+  border-radius: 10px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* 素材／特效的小標籤 */
+.el {
+  display: inline-block;
+  padding: 0.05rem 0.45rem;
+  margin: 0.1rem 0.2rem 0.1rem 0;
+  border-radius: 99px;
+  font-size: 0.78rem;
+  background: #1a2433;
+  border: 1px solid var(--edge);
+  white-space: nowrap;
+}
+.el.bad { background: #2a1620; border-color: #ff556655; color: #ff9aa6; }
+.el b { color: var(--accent-hi); font-variant-numeric: tabular-nums; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* 回到頂端 */
+#totop {
+  position: fixed;
+  right: max(0.9rem, env(safe-area-inset-right));
+  bottom: max(0.9rem, env(safe-area-inset-bottom));
+  z-index: 40;
+  width: 2.9rem;
+  height: 2.9rem;
+  border-radius: 50%;
+  border: 1px solid var(--edge);
+  background: color-mix(in srgb, var(--card) 88%, transparent);
+  backdrop-filter: blur(6px);
+  color: var(--accent);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: none;
+}
+#totop.show { display: block; }
+
+/* 3) 窄螢幕：表格改成卡片，一列一張，不必左右拖 */
+@media (max-width: 46rem) {
+  body { line-height: 1.7; }
+  main { padding: 1.1rem 0.85rem 4.5rem; }
+  h1 { font-size: 1.25rem; }
+  h2 { margin-top: 1.8rem; }
+  p.lead { font-size: 0.98rem; }
+  main ul, main ol { padding-left: 1.25rem; }   /* 手機上預設 40px 縮排太吃寬度 */
+  .cards { grid-template-columns: 1fr; gap: 0.75rem; }
+  .card { padding: 0.85rem 0.9rem; }
+  header.site { padding: 0.8rem 0.85rem 0.5rem; }
+  header.site .title { font-size: 1.1rem; }
+  nav.site { margin-top: 0.4rem; gap: 0 0.7rem; }
+  .table-wrap { margin: 0.8rem -0.15rem; }
+  .qladder span { font-size: 0.8rem; }
+  pre { font-size: 0.8rem; padding: 0.7rem 0.8rem; }
+
+  table.rtable, table.rtable tbody, table.rtable tr, table.rtable td { display: block; width: 100%; }
+  table.rtable thead { display: none; }
+  table.rtable tr {
+    border: 1px solid var(--edge);
+    border-radius: 10px;
+    margin: 0 0 0.6rem;
+    padding: 0.55rem 0.7rem;
+    background: var(--card);
+  }
+  table.rtable td {
+    border: 0;
+    /* 欄名一格、值一格，值整份包在 <span class="v"> 裡。
+       兩條路都試過而且都壞：
+       · 直接 flex：td 裡的 <strong> 會各自變成 flex item，一段話被切成好幾直行
+       · 懸掛縮排（負 text-indent）：值是 inline-block 小標籤時會疊到欄名上
+         （2026-09-03 手機實測，素材表特效欄）
+       包一層 span 之後兩個都不會發生：值永遠只是「一個」flex item。 */
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.15rem 0;
+    font-size: 0.92rem;
+  }
+  table.rtable td::before {
+    content: attr(data-label);
+    flex: 0 0 3.6rem;
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-family: var(--mono);
+  }
+  table.rtable td > .v { flex: 1 1 auto; min-width: 0; }
+  table.rtable td.title {
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.25rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--line);
+  }
+  table.rtable td.title::before { content: none; }
+  table.rtable td:empty { display: none; }
+  /* 數字欄在卡片裡排成一行流水，不然一張卡要佔掉半個螢幕 */
+  table.rtable td.num {
+    display: inline-flex;
+    width: auto;
+    gap: 0.3rem;
+    margin-right: 0.9rem;
+  }
+  table.rtable td.num > .v { flex: 0 0 auto; }
+  table.rtable td.num::before { flex: 0 0 auto; }
+  /* 卡片模式下不再需要固定高度捲動區 */
+  .mattbl { max-height: none; overflow: visible; }
+}
+
+@media (min-width: 46.01rem) {
+  .chips { flex-wrap: wrap; overflow: visible; }
+}
+
+/* ===== 裝備類型卡片（2026-09-03，人下的令：一次看一件，不要攤開來比） ===== */
+.eqcard {
+  background: var(--card);
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+  padding: 1rem 1.1rem 1.1rem;
+  margin: 0.6rem 0 1rem;
+}
+.eqcard .eqdesc {
+  margin: 0 0 0.7rem;
+  color: var(--ink);
+  font-size: 1rem;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.7rem;
+}
+.eqcard .eqmeta { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.8rem; }
+.eqcard .eqmeta span {
+  padding: 0.2rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--code-bg);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.eqcard .eqmeta .tag {
+  color: var(--accent-hi);
+  font-family: var(--mono);
+  border-color: var(--edge);
+}
+.eqstats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+.eqstat {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--code-bg);
+}
+.eqstat .l { font-size: 0.9rem; color: var(--txt2); }
+.eqstat .l i { font-style: normal; font-size: 0.72rem; color: var(--muted); font-family: var(--mono); }
+.eqstat .v { font-size: 1.2rem; font-weight: 700; font-family: var(--mono); color: var(--ink); }
+/* 四維各給一個顏色，掃一眼就知道在看哪一項 */
+.eqstat[data-k="a"]  { border-left: 3px solid var(--down); }
+.eqstat[data-k="df"] { border-left: 3px solid var(--accent); }
+.eqstat[data-k="l"]  { border-left: 3px solid var(--warnc); }
+.eqstat[data-k="u"]  { border-left: 3px solid var(--accent-2); }
+.eqstat.top .v { color: var(--accent-hi); }
+.eqstat .mark {
+  position: absolute;
+  top: -0.55rem;
+  right: 0.6rem;
+  padding: 0 0.4rem;
+  border-radius: 99px;
+  background: var(--accent);
+  color: #07131a;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+@media (max-width: 46rem) {
+  .eqstats { grid-template-columns: 1fr; gap: 0.5rem; }
+  .eqcard { padding: 0.85rem 0.9rem 0.95rem; }
+}

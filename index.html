@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>9aohelper</title>
+<meta name="description" content="傷害公式、熟練折算、武器型別、配點、素材與鍛造計算機。資料取自遊戲拆包與官方數值表。">
+<meta name="theme-color" content="#0b0e14">
+<link rel="stylesheet" href="style.css">
+<script src="site.js" defer></script>
+</head>
+<body>
+<header class="site">
+  <div class="title">9aohelper</div>
+  <div class="subtitle">拆包資料與客觀公式的查表站</div>
+  <nav class="site">
+    <a href="index.html" aria-current="page">首頁</a>
+    <a href="formulas.html">公式與武器</a>
+    <a href="stats.html">配點</a>
+    <a href="zones.html">地圖圖鑑</a>
+    <a href="skills.html">技能表</a>
+    <a href="materials.html">素材表</a>
+    <a href="effects.html">裝備屬性</a>
+    <a href="allocation.html">點數計算機</a>
+  </nav>
+</header>
+<main>
+<h1>這個站在講什麼</h1>
+<p class="lead">
+這裡的資料來自<strong>遊戲前端拆包、官方數值表與鍛造模擬器</strong>——
+數值表、係數與公式照原樣呈現，機制未明的地方會直說「未知」，不放猜的。
+</p>
+
+<h2>如果只記五件事</h2>
+<div class="cards">
+  <div class="card">
+    <h3>1. 挑武器順序：型別 → 熟練 → 攻擊</h3>
+    <p>每種武器×持法有一組固定倍率（狙擊命中 1.8、雙持衝鋒槍 0.72），
+    倍率是傷害的乘項——選型別比堆攻擊力優先。</p>
+  </div>
+  <div class="card">
+    <h3>2. 熟練練到達成率 27% 就滿效</h3>
+    <p>武器攻擊照「達成率」打折：太低只剩 2 成，<strong>27% 就回到 100% 威力</strong>——
+    之後越練加成越平，不必執著練到 100%。</p>
+  </div>
+  <div class="card">
+    <h3>3. 盔甲耐久歸零＝防禦瞬間消失</h3>
+    <p>耐久歸零的裝備會被<strong>自動卸下</strong>，防禦當場蒸發。
+    長程爬塔前先看耐久，半路也能修——修理不限所在區域。</p>
+  </div>
+  <div class="card">
+    <h3>4. 刷熟看樓層，不看技能</h3>
+    <p>熟練＝結算段數，段數靠回合數 × 敵人數量堆。
+    淺層一兩回合就秒殺，段數堆不起來——<strong>樓層的權重大於技能</strong>。</p>
+  </div>
+  <div class="card">
+    <h3>5. 「邪惡力量」是雙面刃</h3>
+    <p>官方特效定義：增傷，但<strong>穿戴者每回合被侵蝕扣血</strong>，
+    打不死／邪惡系還會反噬成治癒對方。長時間掛機前先濾掉它。</p>
+  </div>
+</div>
+
+<h2>怎麼查</h2>
+<div class="tip">表格上方都有一條搜尋列：<strong>打片段就會篩，不必輸入完整名稱</strong>
+（例如素材表打「水晶」「毒」，技能表打「追擊」）。旁邊那排籤可以複選當篩選器，
+按「清除條件」還原。<strong>手機上表格會攤成一列一張卡片</strong>，不必左右拖。</div>
+
+<h2>站內導覽</h2>
+<ul>
+  <li><a href="formulas.html">公式與武器</a>——傷害公式、熟練折算、武器型別倍率表（可搜尋）、戰報欄位對照。</li>
+  <li><a href="stats.html">配點</a>——能力點到屬性的伺服器公式、刷熟與打硬仗兩套配點建議。</li>
+  <li><a href="zones.html">地圖圖鑑</a>——11 張地圖的編號數法、秘境入口與王關樓層。</li>
+  <li><a href="skills.html">技能表</a>——34 招併成一張可搜尋的表，可按武器型別篩。</li>
+  <li><a href="materials.html">素材表</a>——241 種素材的攻・防・幸・重・耐與<strong>鍛造特效</strong>，可打關鍵字、按標籤／特效籤篩。</li>
+  <li><a href="effects.html">裝備屬性</a>——挑一件裝備看它的四維係數、品質倍率，與 31 種特效機制對照（可搜尋）。</li>
+  <li><a href="allocation.html">點數計算機</a>——離線點數配置計算機（單檔工具，開新分頁使用）。</li>
+</ul>
+</main>
+<footer class="site">
+9aohelper · 資料來源：遊戲前端拆包（現行版 v3.1.7，2026-09-03 同步）、官方數值表與鍛造模擬器 · 版本更新後請自行複驗
+</footer>
+</body>
+</html>
