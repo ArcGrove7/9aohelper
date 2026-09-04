@@ -77,15 +77,20 @@
 折算比　 ＝ ×0.20（達成率 ≤ 6.7%）｜0.20～0.99 之間（6.7%～27%，此區間無公式）
 　　　　　｜1.205 × 達成率^0.153（達成率 ≥ 27%）
 輸出指標 ＝ 武器攻擊 × 折算比 × 該型別的命中倍率</pre>
-<ul>
-  <li>輸出指標是<strong>比例值</strong>，拿來比兩把武器的相對強弱；
-      敵方防禦、技能倍率、特效與爆擊不在裡面。</li>
-  <li>非武器攻擊（配點、防具）兩邊相同，比較時互相抵銷，所以不用填。</li>
-  <li>特效另外看：兩把的特效在<a href="effects.html">裝備圖鑑</a>逐條查機制——
-      尤其<a href="detail.html?t=effect&id=%E9%82%AA%E6%83%A1%E5%8A%9B%E9%87%8F">邪惡力量</a>是雙面刃，數字再高也要想清楚。</li>
-  <li>各型別的完整倍率（格擋、閃避、穿透、抗連擊、連擊）在
-      <a href="formulas.html">公式與武器</a>。</li>
-</ul>
+<div class="points">
+  <div class="point"><span class="pn">%</span><span>
+    <span class="pt">輸出指標是比例值</span>
+    <span class="pd">拿來比相對強弱；敵方防禦、技能倍率、特效與爆擊不在裡面。</span></span></div>
+  <div class="point"><span class="pn">＝</span><span>
+    <span class="pt">非武器攻擊不用填</span>
+    <span class="pd">配點與防具的攻擊兩邊相同，比較時互相抵銷。</span></span></div>
+  <div class="point warn-b"><span class="pn">!</span><span>
+    <span class="pt">特效另外看</span>
+    <span class="pd">在<a href="effects.html">裝備圖鑑</a>逐條查；<a href="detail.html?t=effect&id=%E9%82%AA%E6%83%A1%E5%8A%9B%E9%87%8F">邪惡力量</a>是雙面刃，數字再高也要想清楚。</span></span></div>
+  <div class="point"><span class="pn">×</span><span>
+    <span class="pt">完整倍率在公式與武器</span>
+    <span class="pd">格擋、閃避、穿透、抗連擊、連擊五欄都在<a href="formulas.html">那張表</a>。</span></span></div>
+</div>
 <script>
 /* 武器比較器：型別倍率取自 data/db.js 的 wmult（公式頁同一份）。
    6.7%～27% 的折算比沒有公式——這一段照實顯示區間，不內插。 */

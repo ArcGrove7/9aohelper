@@ -702,3 +702,46 @@ html.readable table.rtable td.num {
 html.readable table.rtable td.num > .v { flex: 0 0 auto; }
 html.readable table.rtable td.num::before { flex: 0 0 auto; }
 html.readable .mattbl { max-height: none; overflow: visible; }
+
+/* ============================================================
+   逐點卡片（2026-09-05）——攻略文字不再用長段落與長列表：
+   一個重點一張卡：粗體結論一行＋補充最多兩行，掃過去就懂。
+   ============================================================ */
+.points {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 0.8rem;
+  margin: 1rem 0;
+}
+.point {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  padding: 0.75rem 0.95rem;
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+}
+.point .pn {
+  flex: 0 0 auto;
+  width: 1.7rem; height: 1.7rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: var(--code-bg);
+  border: 1px solid var(--edge);
+  color: var(--accent-hi);
+  font: 700 0.95rem var(--mono);
+  margin-top: 0.1rem;
+}
+.point .pt {
+  display: block;
+  color: var(--ink);
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+.point .pd { display: block; font-size: 0.92em; color: var(--txt2); }
+.point .pd .unknown, .point .pd code { font-size: 0.95em; }
+.point.warn-b { border-left-color: var(--warnc); }
+.point.good-b { border-left-color: var(--accent-2); }
+html.readable .point .pd { font-size: 1em; }

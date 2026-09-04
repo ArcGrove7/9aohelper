@@ -753,6 +753,23 @@ async function main() {
       dom3.window.document.getElementById('areadable').getAttribute('aria-pressed') === 'true');
     dom3.window.close();
   }
+
+  // -------------------------------------------------------------------------
+  console.log('⑲ 攻略文字逐點卡片化：一個重點一張卡，粗體結論＋短補充');
+  {
+    for (const [p, min] of [['index.html', 5], ['formulas.html', 7], ['zones.html', 6],
+                            ['compare.html', 4], ['stats.html', 3], ['effects.html', 3]]) {
+      const html = fs.readFileSync(path.join(SITE, p), 'utf8');
+      const count = (html.match(/class="point[ "]/g) || []).length;
+      ok(p + ' 的攻略重點是逐點卡片（≥ ' + min + ' 張）', count >= min);
+    }
+    const dom = await load('index.html');
+    const pts = [...dom.window.document.querySelectorAll('.point')];
+    ok('首頁五件事＝五張卡，每張都有結論行與補充行',
+      pts.length === 5 && pts.every((p) =>
+        p.querySelector('.pt') && p.querySelector('.pd') && p.querySelector('.pn')));
+    dom.window.close();
+  }
 }
 
 main().then(() => {

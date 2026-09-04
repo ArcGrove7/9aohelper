@@ -63,12 +63,17 @@
 <tr><td><strong>27%</strong></td><td><strong>×0.99</strong>（等於回到原本威力）</td></tr><tr><td>50%</td><td>×1.08</td></tr><tr><td>100%</td><td>×1.21</td></tr><tr><td>200%</td><td>×1.34</td></tr><tr><td>300%</td><td>×1.43</td></tr><tr><td>500%</td><td>×1.54</td></tr></tbody>
 </table>
 </div>
-<p>三個重點就夠了：</p>
-<ul>
-  <li><strong>熟練太低（達成率 ≤ 6.7%）→ 武器攻擊只剩 2 成。</strong>帳面再高的神兵，練不起來就發揮不出來。</li>
-  <li><strong>達成率 27% 就回到 100% 威力</strong>——不用練到 100%。之後越練加成越平（500% 也才 1.54 倍）。</li>
-  <li><strong>6.7%～27% 之間沒有資料</strong>——那一段是空白，不要拿兩端去內插當成已知。</li>
-</ul>
+<div class="points">
+  <div class="point warn-b"><span class="pn">!</span><span>
+    <span class="pt">達成率 ≤ 6.7% → 武器攻擊只剩 2 成</span>
+    <span class="pd">帳面再高的神兵，練不起來就發揮不出來。</span></span></div>
+  <div class="point good-b"><span class="pn">✓</span><span>
+    <span class="pt">27% 就回到 100% 威力</span>
+    <span class="pd">不用練到 100%；之後越練越平，500% 也才 1.54 倍。</span></span></div>
+  <div class="point"><span class="pn">?</span><span>
+    <span class="pt">6.7%～27% 之間沒有資料</span>
+    <span class="pd">這段是空白，不要拿兩端內插當成已知。</span></span></div>
+</div>
 <details class="raw"><summary>展開：折算公式與細節（給想算的人）</summary>
 <pre>需求熟練 = (攻擊 + 防禦 − 重量) × 100     ← 按「那一把」算，耐久不算
 達成率   = 該型別熟練 ÷ 需求熟練
@@ -119,12 +124,20 @@
 </div>
 
 <h2>4. 熟練怎麼長</h2>
-<ul>
-  <li>熟練 ＝ <strong>結算段數</strong>，不數傷害；一次施放打幾個目標就是幾段。</li>
-  <li>記到<strong>主手的武器型別</strong>；盾技記盾、雙持普攻依實際出手的手記。</li>
-  <li>戰報欄位 <code>meta.profWeight</code> 為 0 的技能不長熟練。</li>
-  <li>段數靠回合數 × 敵人數量堆——秒殺的場堆不了段數，<strong>樓層的權重大於技能</strong>。</li>
-</ul>
+<div class="points">
+  <div class="point"><span class="pn">1</span><span>
+    <span class="pt">熟練＝結算段數，不數傷害</span>
+    <span class="pd">一次施放打幾個目標就是幾段。</span></span></div>
+  <div class="point"><span class="pn">2</span><span>
+    <span class="pt">記到主手的武器型別</span>
+    <span class="pd">盾技記盾；雙持普攻依實際出手的那隻手記。</span></span></div>
+  <div class="point"><span class="pn">3</span><span>
+    <span class="pt">有些技能不長熟練</span>
+    <span class="pd">技能的熟練權重為 0 時，放再多段也一點都不長。</span></span></div>
+  <div class="point"><span class="pn">4</span><span>
+    <span class="pt">樓層的權重大於技能</span>
+    <span class="pd">段數靠回合數 × 敵人數量堆；秒殺的場堆不了段數。</span></span></div>
+</div>
 
 </main>
 <footer class="site">
