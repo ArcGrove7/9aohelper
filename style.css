@@ -5,7 +5,7 @@
   --card: #12161f;
   --ink: #eef1f6;
   --txt2: #c3cad6;
-  --muted: #8b95a3;
+  --muted: #9aa5b4;
   --accent: #2cdcff;
   --accent-hi: #7ee8ff;
   --accent-2: #a8f02d;
@@ -17,6 +17,42 @@
   --warn-line: #ffc93344;
   --code-bg: #0d1118;
   --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  /* ---- 語意色（2026-09-04 設計精修）----
+     原本這些顏色是散在各處硬寫的十六進位值，同一個「淺色底」在四個地方
+     各寫一次，改配色時一定會漏掉一個。集中成有語意名字的 token，
+     增強對比（prefers-contrast）也只要覆寫這一層就好。 */
+  --surface-head: #12172a;    /* 黏頂表頭 */
+  --tint-neutral: #1a2433;    /* 中性小標籤底 */
+  --tint-accent: #10222b;     /* 主色系淺底（選中的檢視鈕） */
+  --tint-lime:   #16210f;     /* 次色系淺底（領域／易讀模式） */
+  --tint-danger: #2a1620;     /* 負面標籤底 */
+  --edge-lime:   #a8f02d55;
+  --edge-danger: #ff556655;
+  --ink-danger:  #ff9aa6;
+  --on-accent:   #07131a;     /* 壓在 --accent 上的字：11.5:1 */
+  --row-alt:     #ffffff07;
+  --row-hover:   #2cdcff14;
+  --scrim:       #000000b3;
+  --shadow-pop:  0 8px 24px #0009;
+  --focus:       var(--accent-hi);
+
+  /* ---- 字級階梯 ----
+     原本全站有四十幾個各自為政的 font-size（0.72/0.75/0.78/0.8/0.82…），
+     階梯不明顯，資訊層級就看不出來。收斂成七階。 */
+  --fs-micro:   0.75rem;
+  --fs-caption: 0.82rem;
+  --fs-small:   0.88rem;
+  --fs-body:    1rem;
+  --fs-h3:      1.1rem;
+  --fs-h2:      1.25rem;
+  --fs-h1:      1.55rem;
+
+  /* ---- 觸控目標 ----
+     指南：行動裝置 44x44、桌機 28x28 是下限。 */
+  --hit: 2.75rem;
+  --hit-desktop: 1.75rem;
+
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -72,11 +108,11 @@ main {
   margin: 0 auto;
   padding: 1.5rem clamp(1.2rem, 2.5vw, 2.5rem) 4rem;
 }
-h1 { font-size: 1.4rem; color: var(--ink); border-bottom: 1px solid var(--edge); padding-bottom: 0.4rem; }
-h2 { font-size: 1.05rem; margin-top: 2.2rem; color: var(--accent);
+h1 { font-size: var(--fs-h1); color: var(--ink); border-bottom: 1px solid var(--edge); padding-bottom: 0.4rem; }
+h2 { font-size: var(--fs-h2); margin-top: 2.2rem; color: var(--accent);
      font-family: var(--mono); letter-spacing: 0.07em;
      border-bottom: 1px solid var(--line); padding-bottom: 0.35rem; }
-h3 { font-size: 1rem; margin-top: 1.6rem; color: var(--ink); }
+h3 { font-size: var(--fs-h3); margin-top: 1.6rem; color: var(--ink); }
 p.lead { font-size: 1.02rem; color: var(--muted); }
 a { color: var(--accent); }
 code, pre {
@@ -228,7 +264,7 @@ main strong { color: var(--ink); }
 .warn strong { color: var(--warnc); }
 .tip strong, .card strong, .statcard strong { color: var(--accent-hi); }
 a:hover { color: var(--accent-hi); }
-.mattbl thead th { background: #12172a; }
+.mattbl thead th { background: var(--surface-head); }
 
 /* ============================================================
    手機 UX（2026-09-03）——原本整份樣式表沒有任何 @media，
@@ -284,7 +320,7 @@ nav.site a {
   border-radius: 8px;
   background: var(--code-bg);
   color: var(--ink);
-  font-size: 16px;              /* 低於 16px iOS 會自動放大整頁 */
+  font-size: max(1rem, 16px);   /* 跟著使用者字級縮放；保底 16px，低於就會被 iOS 放大整頁 */
   font-family: inherit;
 }
 .tbar input[type="search"]:focus {
@@ -298,7 +334,7 @@ nav.site a {
   border-radius: 8px;
   background: var(--code-bg);
   color: var(--ink);
-  font-size: 16px;
+  font-size: max(1rem, 16px);
   font-family: inherit;
 }
 .tbar .hint { font-size: 0.78rem; color: var(--muted); width: 100%; margin: 0; }
@@ -332,7 +368,7 @@ nav.site a {
 .chip[aria-pressed="true"] {
   background: var(--accent);
   border-color: var(--accent);
-  color: #07131a;
+  color: var(--on-accent);
   font-weight: 700;
 }
 .chip.reset { color: var(--muted); }
@@ -355,11 +391,11 @@ nav.site a {
   margin: 0.1rem 0.2rem 0.1rem 0;
   border-radius: 99px;
   font-size: 0.78rem;
-  background: #1a2433;
+  background: var(--tint-neutral);
   border: 1px solid var(--edge);
   white-space: nowrap;
 }
-.el.bad { background: #2a1620; border-color: #ff556655; color: #ff9aa6; }
+.el.bad { background: var(--tint-danger); border-color: var(--edge-danger); color: var(--ink-danger); }
 .el b { color: var(--accent-hi); font-variant-numeric: tabular-nums; }
 td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
 
@@ -516,7 +552,7 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
   padding: 0 0.4rem;
   border-radius: 99px;
   background: var(--accent);
-  color: #07131a;
+  color: var(--on-accent);
   font-size: 0.68rem;
   font-weight: 700;
 }
@@ -536,15 +572,15 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .hero p.lead { max-width: 34rem; margin: 0.4rem auto; }
 .gsearch { position: relative; max-width: 30rem; margin: 1.1rem auto 0.4rem; text-align: left; }
 .gsearch input {
-  width: 100%; padding: 0.65rem 0.95rem; font-size: 16px;
+  width: 100%; padding: 0.65rem 0.95rem; font-size: max(1rem, 16px);
   background: var(--card); color: var(--ink);
   border: 1px solid var(--edge); border-radius: 8px;
 }
-.gsearch input:focus { outline: none; border-color: var(--accent); }
+.gsearch input:focus-visible { border-color: var(--accent); }
 .gsearch .hits {
   position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 30;
   background: var(--bg2); border: 1px solid var(--edge); border-radius: 8px;
-  max-height: 19rem; overflow-y: auto; box-shadow: 0 8px 24px #0009;
+  max-height: 19rem; overflow-y: auto; box-shadow: var(--shadow-pop);
 }
 .gsearch .hits a {
   display: flex; align-items: baseline; gap: 0.6rem;
@@ -613,7 +649,7 @@ a.catcard .cn { font-size: 0.75rem; color: var(--muted); font-family: var(--mono
 }
 #soverlay {
   position: fixed; inset: 0; z-index: 60;
-  background: #000a; backdrop-filter: blur(2px);
+  background: var(--scrim); backdrop-filter: blur(2px);
   padding: 10vh 1rem 0;
 }
 #soverlay .spanel { max-width: 34rem; margin: 0 auto; }
@@ -641,12 +677,12 @@ a.dlink:hover { text-decoration: underline; }
 }
 #areadable:hover { border-color: var(--accent-2); color: var(--ink); }
 #areadable[aria-pressed="true"] {
-  border-color: var(--accent-2); color: var(--accent-2); background: #16210f;
+  border-color: var(--accent-2); color: var(--accent-2); background: var(--tint-lime);
 }
 
 /* 逐行閱讀輔助（常駐）：表格斑馬紋＋滑過高亮，眼睛不會跳行 */
-table tbody tr:nth-child(even) { background: #ffffff07; }
-table tbody tr:hover { background: #2cdcff14; }
+table tbody tr:nth-child(even) { background: var(--row-alt); }
+table tbody tr:hover { background: var(--row-hover); }
 
 /* ---- 易讀模式：字級與間距 ---- */
 html.readable body { font-size: 1.15rem; line-height: 2.05; letter-spacing: 0.04em; }
@@ -779,7 +815,7 @@ html.readable .point .pd { font-size: 1em; }
   padding: 0.12rem 0.5rem; border-radius: 6px; white-space: nowrap;
   border: 1px solid var(--edge); color: var(--txt2); background: var(--code-bg);
 }
-.ecard .raceb { color: var(--accent-2); border-color: #a8f02d44; }
+.ecard .raceb { color: var(--accent-2); border-color: var(--edge-lime); }
 .ecard .esec {
   margin: 0.65rem 0 0.35rem; text-align: center;
   font: 700 0.75rem var(--mono); letter-spacing: 0.1em; color: var(--muted);
@@ -797,7 +833,7 @@ html.readable .point .pd { font-size: 1em; }
 .ecard .echips a { color: var(--accent); }
 .ecard .echips a:hover { border-color: var(--accent); }
 .ecard .echips .stat b { color: var(--ink); font-family: var(--mono); font-weight: 700; }
-.ecard .echips .realm { color: var(--accent-2); border-color: #a8f02d55; background: #16210f; }
+.ecard .echips .realm { color: var(--accent-2); border-color: var(--edge-lime); background: var(--tint-lime); }
 .ecard .echips .dim { color: var(--muted); }
 .ecard .emeta { margin-top: 0.6rem; font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
 .vbtn {
@@ -807,7 +843,7 @@ html.readable .point .pd { font-size: 1em; }
   min-height: 2.2rem;
 }
 .vbtn:hover { border-color: var(--accent); color: var(--ink); }
-.vbtn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-hi); background: #10222b; }
+.vbtn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-hi); background: var(--tint-accent); }
 .tbar .row select {
   background: var(--code-bg); color: var(--txt2);
   border: 1px solid var(--edge); border-radius: 7px;
@@ -863,3 +899,151 @@ html.readable .ecard { font-size: 1.02em; }
 .zmystery h3 { margin: 0; font-size: 1rem; color: var(--muted); }
 .zmystery .zhead { display: flex; align-items: center; gap: 0.6rem; }
 .zmystery .zdesc { margin: 0.5rem 0 0; font-size: 0.88rem; }
+
+/* ============================================================
+   設計精修（2026-09-04）——依 Apple Human Interface Guidelines
+   （accessibility / color / typography / layout / dark-mode / materials）
+   逐條對照本站後補的五件事。放在檔案最後，是為了穩定覆蓋前面的舊規則。
+
+   1. 鍵盤焦點：整站原本只有表格搜尋框看得到焦點框，其他連結、籤、
+      按鈕全部沒有——鍵盤使用者不知道游標在哪。
+   2. 觸控目標：籤與小按鈕多半只有 33～36px，低於行動裝置 44x44 的下限。
+   3. 系統偏好：減少動態、減少透明、增強對比三個設定原本完全沒接。
+   4. 跳至主內容：頁首黏在最上方且有九個導覽連結，每頁都要 Tab 九次才進內文。
+   5. 不要只用顏色表意：輪播指示點原本只差在顏色。
+   ============================================================ */
+
+/* ---- 1) 鍵盤焦點：一套環，整站通用 ----
+   用 :focus-visible，滑鼠點擊不會冒出焦點框，只有鍵盤操作才顯示。
+   :where() 讓這條規則的權重為 0，元件自己要改隨時蓋得掉。 */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+/* 表格排序表頭、卡片、籤：焦點環要壓在黏頂表頭與相鄰列之上 */
+.chip:focus-visible, .vbtn:focus-visible, a.catcard:focus-visible,
+.mattbl thead th:focus-visible, .wnav:focus-visible, #hsearch:focus-visible,
+#areadable:focus-visible, #totop:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  position: relative;
+  z-index: 1;
+}
+.gsearch input:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+/* ---- 4) 跳至主內容 ----
+   平常收在畫面外，Tab 第一下才滑出來。 */
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -4rem;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--hit);
+  padding: 0 1rem;
+  border-radius: 0 0 10px 10px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+.skip-link:focus { top: 0; color: var(--on-accent); }
+
+/* ---- 2) 觸控目標 ----
+   觸控裝置上把所有可點的小東西撐到 44px，並把彼此的間距拉開一點，
+   免得手指按到隔壁那一顆。桌機維持原本緊湊的排版（下限 28px）。 */
+@media (pointer: coarse) {
+  .chip, .vbtn, #hsearch, #areadable, .tbar select, .tbar .row select,
+  .ecard .echips > *, .qladder span {
+    min-height: var(--hit);
+  }
+  .wnav { width: var(--hit); height: var(--hit); }
+  details.raw summary {
+    display: flex;
+    align-items: center;
+    min-height: var(--hit);
+  }
+  .chips { gap: 0.5rem; }
+  .ecard .echips { gap: 0.45rem; }
+  .tbar { gap: 0.6rem; padding: 0.7rem; }
+  .eqcard .eqmeta { gap: 0.5rem; }
+}
+@media (pointer: fine) {
+  .ecard .echips > *, .qladder span { min-height: var(--hit-desktop); }
+}
+
+/* ---- 3a) 減少動態 ----
+   有人開這個設定是因為動畫會讓他頭暈。回到頂端的平滑捲動、
+   籤的滑動吸附、跳至主內容的滑出，全部改成瞬間完成。 */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  nav.site, .chips { scroll-snap-type: none; }
+}
+
+/* ---- 3b) 減少透明 ----
+   毛玻璃（backdrop-filter）在這個設定下換成實心底，
+   捲動時的文字才不會跟底下的內容糊在一起。 */
+@media (prefers-reduced-transparency: reduce) {
+  header.site { background: var(--card); backdrop-filter: none; }
+  #totop { background: var(--card); backdrop-filter: none; }
+  #soverlay { background: #000000ee; backdrop-filter: none; }
+}
+
+/* ---- 3c) 增強對比 ----
+   只覆寫 token 這一層：次要文字往上提、所有分隔線變明顯、
+   焦點環加粗，其餘版面完全不動。 */
+@media (prefers-contrast: more) {
+  :root {
+    --muted: #c3cad6;       /* 對 --card 由 7.2:1 提到 11.6:1 */
+    --txt2: #e2e7ee;
+    --line: #ffffff3d;
+    --edge: #ffffff66;
+    --row-alt: #ffffff12;
+    --row-hover: #2cdcff26;
+  }
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline-width: 3px;
+  }
+  nav.site a[aria-current="page"] { background: var(--tint-accent); }
+  .chip[aria-pressed="true"] { outline: 1px solid var(--ink); }
+  table tbody tr:hover { outline: 1px solid var(--accent); }
+}
+
+/* ---- 5) 不要只用顏色表意 ----
+   世界地圖輪播的指示點原本只差顏色（灰／青），色覺障礙看不出在第幾頁；
+   現在目前這一頁的點同時比較長、比較厚。 */
+.wdot { transition: width 0.15s ease; }
+.wdot.on { width: 2.4rem; height: 0.3rem; }
+
+/* ---- 版面：hero 的層級 ----
+   首頁大標原本 1.6rem，跟內文 h1 幾乎一樣大，「主打入口」的份量出不來。 */
+.hero h1 { font-size: 1.9rem; letter-spacing: 0.01em; }
+@media (max-width: 46rem) {
+  .hero h1 { font-size: 1.5rem; }
+}
+
+/* ---- 版面：搜尋結果與空狀態的字級收斂到階梯上 ---- */
+.gsearch .hits .hc, .gsearch .hits .hmore { font-size: var(--fs-micro); }
+.tbar .hint, .badge { font-size: var(--fs-micro); }
+
+/* ---- 版面：窄螢幕的搜尋列 ----
+   同一行原本要塞下「搜尋框＋計數＋兩個檢視鈕＋排序選單」，
+   390px 寬的手機上搜尋框會被擠成一個按不進去的小方塊——
+   而搜尋才是這一頁最主要的操作。改成搜尋框自己佔一整行，其餘往下折。 */
+@media (max-width: 46rem) {
+  .tbar .row { flex-wrap: wrap; row-gap: 0.5rem; }
+  .tbar .row input[type="search"] { flex: 1 1 100%; }
+  .tbar .row select { flex: 1 1 auto; min-width: 0; }
+}

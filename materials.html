@@ -17,6 +17,7 @@
 <script src="data/search-index.js" defer></script>
 </head>
 <body>
+<a class="skip-link" href="#main">跳至主內容</a>
 <header class="site">
   <a class="title" href="index.html">9aohelper</a>
   <nav class="site">
@@ -31,7 +32,7 @@
     <a href="updates.html">版本情報</a>
   </nav>
 </header>
-<main>
+<main id="main" tabindex="-1">
 <h1>素材屬性一覽</h1>
 <h2>素材基值（241 種）</h2>
 <p class="note">打幾個字就篩，<strong>不必輸入完整名稱</strong>——名稱、標籤、特效都吃。
@@ -191,7 +192,9 @@ const M=[["巴洛古的指甲",35.5,12,0,5.75,10,"生物·銳利","詛咒:2|邪�
     empty.hidden=list.length!==0;
     document.querySelectorAll('#mtab thead th').forEach(h=>{
       h.textContent=h.textContent.replace(/ [▾▴]$/,'');
-      if(+h.dataset.k===sk)h.textContent+=desc?' ▾':' ▴';
+      // 排序狀態不能只靠那個小三角形：同步寫進 aria-sort，讀螢幕的人才聽得到
+      if(+h.dataset.k===sk){h.textContent+=desc?' ▾':' ▴';h.setAttribute('aria-sort',desc?'descending':'ascending');}
+      else h.removeAttribute('aria-sort');
     });
     sortSel.value=String(sk);
     dirBtn.textContent=desc?'▾ 由大到小':'▴ 由小到大';
@@ -205,12 +208,19 @@ const M=[["巴洛古的指甲",35.5,12,0,5.75,10,"生物·銳利","詛咒:2|邪�
     document.querySelectorAll('#mtags .chip,#mels .chip').forEach(b=>b.setAttribute('aria-pressed','false'));
     sk=1;desc=true;render();
   });
-  document.querySelectorAll('#mtab thead th').forEach(h=>h.addEventListener('click',function(){
+  document.querySelectorAll('#mtab thead th').forEach(h=>{
     const k=+h.dataset.k;
     if(k===6||k===7)return;                 // 標籤／特效不排序，用上面的籤篩
-    if(k===sk)desc=!desc; else {sk=k;desc=true;}
-    render();
-  }));
+    // 表頭原本只吃滑鼠點擊：補上鍵盤路徑（Tab 進得來、Enter／空白鍵可按）
+    h.tabIndex=0;
+    h.setAttribute('role','button');
+    h.setAttribute('aria-label',h.textContent.replace(/ [▾▴]$/,'')+'（依此排序）');
+    const sort=function(){ if(k===sk)desc=!desc; else {sk=k;desc=true;} render(); };
+    h.addEventListener('click',sort);
+    h.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();sort();}
+    });
+  });
   render();
 })();
 </script>

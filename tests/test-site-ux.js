@@ -179,8 +179,8 @@ async function main() {
     ok('導覽列固定在頂端且橫向可滑', /header\.site \{[^}]*position: sticky/.test(css) &&
       /nav\.site \{[^}]*overflow-x: auto/.test(css));
     ok('導覽每一格至少 44px（min-height: 2.75rem）', /nav\.site a \{[^}]*min-height: 2\.75rem/.test(css));
-    ok('搜尋框 16px，避免 iOS 一點就整頁放大',
-      /input\[type="search"\] \{[^}]*font-size: 16px/.test(css));
+    ok('搜尋框保底 16px 且跟著使用者字級縮放，避免 iOS 一點就整頁放大',
+      /input\[type="search"\] \{[^}]*font-size: max\(1rem, 16px\)/.test(css));
     ok('窄螢幕表格攤成卡片（table.rtable 逐格 display:block）',
       css.includes('table.rtable td::before') && css.includes('content: attr(data-label)'));
     ok('卡片模式不再用負 text-indent（那是文字重疊的元凶）',
@@ -845,6 +845,63 @@ async function main() {
     ok('再按 › 繞回起始之鎮領域', !panels[0].hidden && panels[1].hidden);
     d.getElementById('wprev').click();
     ok('按 ‹ 也能往回繞', panels[0].hidden && !panels[1].hidden);
+    dom.window.close();
+  }
+
+  // -------------------------------------------------------------------------
+  console.log('㉒ 無障礙精修（依 Apple HIG 對照）：鍵盤、觸控目標、系統偏好');
+  {
+    const css = fs.readFileSync(path.join(SITE, 'style.css'), 'utf8');
+    const js = fs.readFileSync(path.join(SITE, 'site.js'), 'utf8');
+
+    const pages = ['index.html', 'zones.html', 'enemies.html', 'skills.html',
+      'materials.html', 'effects.html', 'formulas.html', 'allocation.html',
+      'updates.html', 'detail.html'];
+    ok('每一頁都有「跳至主內容」，而且指到真的存在的 main',
+      pages.every((f) => {
+        const h = fs.readFileSync(path.join(SITE, f), 'utf8');
+        const m = h.match(/<a class="skip-link" href="#([\w-]+)"/);
+        return m && h.includes('<main id="' + m[1] + '"');
+      }));
+
+    ok('整站有一套鍵盤焦點環（:focus-visible）',
+      /:focus-visible \{[^}]*outline: 2px solid var\(--focus\)/.test(css));
+    ok('搜尋框聚焦不再把焦點環砍掉（原本是 outline: none）',
+      !/\.gsearch input:focus \{[^}]*outline: none/.test(css));
+
+    ok('觸控裝置上籤與小按鈕撐到 44px',
+      /@media \(pointer: coarse\)/.test(css) &&
+      /--hit: 2\.75rem/.test(css));
+    ok('接了「減少動態」', /@media \(prefers-reduced-motion: reduce\)/.test(css));
+    ok('接了「減少透明」', /@media \(prefers-reduced-transparency: reduce\)/.test(css));
+    ok('接了「增強對比」', /@media \(prefers-contrast: more\)/.test(css));
+
+    ok('顏色不再硬寫在元件裡（語意 token 一次定義）',
+      /--tint-lime:/.test(css) && !/background: #16210f/.test(css));
+    ok('輪播指示點不是只差顏色（目前這一頁比較長比較厚）',
+      /\.wdot\.on \{ width: 2\.4rem; height: 0\.3rem; \}/.test(css));
+
+    ok('全站搜尋覆蓋層是 aria-modal，且 Tab 不會跑出去',
+      js.includes("setAttribute('aria-modal', 'true')") &&
+      js.includes("e.key !== 'Tab'"));
+    ok('關掉覆蓋層後焦點回到原本的元素',
+      js.includes('restoreTo') && js.includes('restoreTo.focus()'));
+    ok('回到頂端尊重「減少動態」',
+      js.includes("matchMedia('(prefers-reduced-motion: reduce)')"));
+
+    const dom = await load('materials.html');
+    const d = dom.window.document, w = dom.window;
+    const th = d.querySelectorAll('#mtab thead th')[2];   // 防
+    ok('可排序的表頭 Tab 進得來（有 tabindex 與 role）',
+      th.tabIndex === 0 && th.getAttribute('role') === 'button');
+    th.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    ok('Enter 就能排序，狀態同步寫進 aria-sort',
+      th.getAttribute('aria-sort') === 'descending' &&
+      Number(d.querySelector('#mtab tbody tr').children[2].textContent) > 20);
+    th.dispatchEvent(new w.KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+    ok('空白鍵切換升降冪', th.getAttribute('aria-sort') === 'ascending');
+    ok('標籤／特效欄不排序，也就不會假裝成按鈕',
+      d.querySelectorAll('#mtab thead th')[6].getAttribute('role') === null);
     dom.window.close();
   }
 }

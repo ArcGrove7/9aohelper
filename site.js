@@ -337,11 +337,14 @@
     btn.setAttribute('aria-label', '全站搜尋（Ctrl+K）');
     head.appendChild(btn);
     let overlay = null;
+    let restoreTo = null;                 // 關掉覆蓋層後，焦點要回到原本那個元素
     function open() {
+      restoreTo = document.activeElement;
       if (!overlay) {
         overlay = document.createElement('div');
         overlay.id = 'soverlay';
         overlay.setAttribute('role', 'dialog');
+        overlay.setAttribute('aria-modal', 'true');
         overlay.setAttribute('aria-label', '全站搜尋');
         overlay.innerHTML = '<div class="spanel gsearch">'
           + '<input type="search" id="soq" autocomplete="off" '
@@ -350,8 +353,17 @@
         document.body.appendChild(overlay);
         wireSearch(overlay.querySelector('#soq'), overlay.querySelector('#sohits'));
         overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
-        overlay.querySelector('#soq').addEventListener('keydown', (e) => {
-          if (e.key === 'Escape') close();
+        /* 覆蓋層是 dialog：Esc 在裡面任何地方都要能關，Tab 不能跑到後面那一頁去
+           （不然鍵盤使用者按著按著就迷路在看不見的頁面上）。 */
+        overlay.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') { close(); return; }
+          if (e.key !== 'Tab') return;
+          const focusable = overlay.querySelectorAll('input, a[href], button');
+          if (!focusable.length) return;
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
         });
       }
       overlay.hidden = false;
@@ -360,7 +372,10 @@
       overlay.querySelector('#sohits').hidden = true;
       inp.focus();
     }
-    function close() { overlay.hidden = true; }
+    function close() {
+      overlay.hidden = true;
+      if (restoreTo && restoreTo.focus) restoreTo.focus();
+    }
     btn.addEventListener('click', open);
     addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
@@ -399,7 +414,11 @@
     b.textContent = '↑';
     b.title = '回到頂端';
     b.setAttribute('aria-label', '回到頂端');
-    b.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    b.addEventListener('click', () => {
+      // 開了「減少動態」的人不要平滑捲動，直接到頂
+      const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: still ? 'auto' : 'smooth' });
+    });
     document.body.append(b);
     const sync = () => b.classList.toggle('show', window.scrollY > 600);
     addEventListener('scroll', sync, { passive: true });
