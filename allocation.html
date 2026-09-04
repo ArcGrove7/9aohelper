@@ -338,7 +338,7 @@ const GAOCALC = (function () {
       // 2.8.50 的 stats-*.js 每點效果表：strength:{label:`反擊率`,formula:`+0.1%（上限 50%）`}
       ceiling: 50,
       ceilingEvidence: '每點效果表 strength:{label:`反擊率`,formula:`+0.1%（上限 50%）`}；3.0.28 更新日誌明文「反擊率新增上限」',
-      evidence: '每點效果表 strength:{label:`反擊率`,formula:`+0.1%（上限 50%）`}；基準 0 由戰報反推，前端仍無此欄位',
+      evidence: '每點 +0.1%，上限 50%',
     },
     {
       key: 'hitValue', label: '命中值', dp: 1, pct: false, drivers: ['tec'], tier: CONFIRMED,
@@ -757,38 +757,38 @@ const GAOCALC = (function () {
       id: 'skill_level_cap',
       text: '技能升級：Lv1→Lv2 需 2 本、Lv2→Lv3 需 3 本，上限 Lv3',
       tier: CONFIRMED,
-      evidence: 'bundle 更新紀錄 2.2.3',
+      evidence: '更新紀錄 2.2.3',
     },
     {
       id: 'trigger_rate',
       text: '全域技能觸發率 40% → 50%；個別技能仍可能另有覆寫',
       tier: INFERRED,
-      evidence: 'bundle 更新紀錄 2.7.x；覆寫值不在前端',
+      evidence: '更新紀錄 2.7.x；覆寫值不在前端',
     },
     {
       id: 'offhand_half',
       text: '雙持／持盾時，副手武器被動技能的觸發機率與效果強度打五折',
       tier: CONFIRMED,
-      evidence: 'bundle 更新紀錄 2.6.14',
+      evidence: '更新紀錄 2.6.14',
     },
     {
       id: 'skill_bonus_multiplicative',
       text: '技能提供的命中、閃避、格擋加成改為倍率制並隨技能等級提升；倍率值不在前端',
       tier: UNVERIFIABLE,
-      evidence: 'bundle 更新紀錄 2.8.21',
+      evidence: '更新紀錄 2.8.21',
     },
     {
       id: 'special_block_fixed',
       text: '迴旋盾、十字格擋、此路不通、彈幕格擋為固定機率，不受一般命中加成影響；' +
         '3.0.19 起的例外：「無視格擋」類技能會稍微壓低這類被動格擋的觸發機率（幅度不在前端）',
       tier: CONFIRMED,
-      evidence: 'bundle 更新紀錄 2.8.10；例外出自更新紀錄 3.0.19',
+      evidence: '更新紀錄 2.8.10；例外出自更新紀錄 3.0.19',
     },
     {
       id: 'skill_slots',
       text: '技能槽基本 4 格；LV80（滿級）解鎖第 5 格，僅爬塔／PvP 生效，BoB 固定 4 格',
       tier: CONFIRMED,
-      evidence: 'bundle 更新紀錄 3.0.1；技能頁原始碼明文「第 5 個技能槽於等級 80 解鎖」',
+      evidence: '更新紀錄 3.0.1；技能頁原始碼明文「第 5 個技能槽於等級 80 解鎖」',
     },
   ];
 
@@ -801,7 +801,7 @@ const GAOCALC = (function () {
       formula: '最大 HP × 8% + 幸運 × 0.8',
       tier: CONFIRMED,
       levelScaling: '皆隨技能等級成長，成長倍率不在前端',
-      evidence: 'bundle 更新紀錄 2.6.9',
+      evidence: '更新紀錄 2.6.9',
       inputs: [],
       unit: '',
       compute: function (p) { return p.maxHp * 0.08 + p.luck * 0.8; },
@@ -814,7 +814,7 @@ const GAOCALC = (function () {
       formula: '最大 HP × 16% + 幸運 × 0.8',
       tier: CONFIRMED,
       levelScaling: '皆隨技能等級成長，成長倍率不在前端',
-      evidence: 'bundle 更新紀錄 2.6.9',
+      evidence: '更新紀錄 2.6.9',
       inputs: [],
       unit: '',
       compute: function (p) { return p.maxHp * 0.16 + p.luck * 0.8; },
@@ -827,7 +827,7 @@ const GAOCALC = (function () {
       formula: '武器攻擊力 × 10%',
       tier: CONFIRMED,
       levelScaling: '',
-      evidence: 'bundle 更新紀錄 2.6.9（扣除比例 100% → 90%）',
+      evidence: '更新紀錄 2.6.9（扣除比例 100% → 90%）',
       inputs: [{ key: 'weaponAtk', label: '武器攻擊力', def: 1000, min: 0, max: 999999, dp: 0 }],
       unit: '',
       compute: function (p, v) { return v.weaponAtk * 0.1; },
@@ -840,7 +840,7 @@ const GAOCALC = (function () {
       formula: '傷害倍率 = 1.5 + 蓄力層數',
       tier: CONFIRMED,
       levelScaling: '',
-      evidence: 'bundle 更新紀錄 2.6.6',
+      evidence: '更新紀錄 2.6.6',
       inputs: [{ key: 'charge', label: '蓄力層數', def: 0, min: 0, max: 99, dp: 0 }],
       unit: '×',
       compute: function (p, v) { return 1.5 + v.charge; },
@@ -853,7 +853,7 @@ const GAOCALC = (function () {
       formula: '第 N 段傷害倍率 = 1.1^(N−1)',
       tier: INFERRED,
       levelScaling: '',
-      evidence: 'bundle 更新紀錄 2.3.16（每段 +5% → +10%）；是否為連乘不在前端',
+      evidence: '更新紀錄 2.3.16（每段 +5% → +10%）；是否為連乘不在前端',
       inputs: [{ key: 'segment', label: '段數', def: 2, min: 1, max: 20, dp: 0 }],
       unit: '×',
       compute: function (p, v) { return Math.pow(1.1, v.segment - 1); },
@@ -866,7 +866,7 @@ const GAOCALC = (function () {
       formula: '30 MP／10 耐久',
       tier: CONFIRMED,
       levelScaling: '',
-      evidence: 'bundle 更新紀錄 2.6.9',
+      evidence: '更新紀錄 2.6.9',
       inputs: [],
       unit: '',
       compute: null,
@@ -1261,7 +1261,7 @@ const GAOCALC = (function () {
   // ---- 公式 ---------------------------------------------------------------
   function renderFormula(host) {
     host.appendChild(el('div', 'hint',
-      'GAME ' + C.META.game + ' · ' + C.META.bundle + ' · ' + C.META.symbol));
+      '遊戲版本 ' + C.META.game));
     const head = el('div', 'line');
     head.appendChild(el('span', null, '實效能力 E(X) = 配點 X + 0.2 × Lv'));
     head.appendChild(tagFor(C.CONFIRMED));
@@ -1270,7 +1270,6 @@ const GAOCALC = (function () {
     pts.appendChild(el('span', null,
       '能力點總額 = ' + C.STAT_POINT_BASE + ' + ' + C.STAT_POINT_PER_LEVEL + ' × Lv'));
     pts.appendChild(tagFor(C.INFERRED));
-    pts.appendChild(el('span', 'src', '由 567 場戰報的「已配點 + statPoints」反推，131 名角色全數吻合'));
     host.appendChild(pts);
     C.DERIVED.forEach(function (d) {
       const line = el('div', 'line');

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>9aohelper</title>
-<meta name="description" content="圖鑑與攻略查表站：地圖、技能、素材、裝備特效圖鑑，傷害公式、熟練折算、配點與點數計算機。資料取自遊戲拆包與官方數值表。">
+<meta name="description" content="圖鑑與攻略查表站：地圖、技能、素材、裝備特效圖鑑，傷害公式、熟練折算、配點與點數計算機。">
 <meta name="theme-color" content="#0b0e14">
 <link rel="stylesheet" href="style.css">
 <script src="site.js" defer></script>
@@ -28,8 +28,8 @@
 <main>
 <div class="hero">
   <h1>查資料，不用翻攻略文</h1>
-  <p class="lead">地圖、技能、素材、裝備特效的<strong>圖鑑</strong>，加上公式與配點的<strong>攻略</strong>——
-  資料來自遊戲前端拆包、官方數值表與鍛造模擬器，機制未明的地方直說「未知」，不放猜的。</p>
+  <p class="lead">地圖、技能、素材、裝備特效的<strong>圖鑑</strong>，加上公式與配點的<strong>攻略</strong>。
+  機制未明的地方直說「未知」，不放猜的。</p>
   <div class="gsearch">
     <input id="gq" type="search" placeholder="全站搜尋：素材、技能、特效、地圖、更新…（打片段就好）"
            aria-label="全站搜尋" autocomplete="off">
@@ -103,19 +103,9 @@
 （例如素材表打「水晶」「毒」，技能表打「追擊」，版本情報打「格擋」）。旁邊那排籤可以複選當篩選器，
 按「清除條件」還原。<strong>手機上表格會攤成一列一張卡片</strong>，不必左右拖。
 首頁最上面那條是<strong>全站搜尋</strong>——素材、技能、特效、地圖、裝備打片段直接跳到那一頁。</div>
-
-<h2>資料怎麼來的</h2>
-<div class="cards">
-  <div class="card"><h3>📦 遊戲前端拆包</h3>
-    <p>公式、地圖、特效、更新日誌逐字取自遊戲 bundle（現行 v3.1.8），標「拆包」等級。</p></div>
-  <div class="card"><h3>📋 官方數值表</h3>
-    <p>素材與裝備係數沿用官方數值表與鍛造模擬器的原始數字，不加工。</p></div>
-  <div class="card"><h3>❓ 未知就寫未知</h3>
-    <p>伺服器端才有的數字（王關樓層、秘境入口層）與機制未明的特效，一律直說，不外插。</p></div>
-</div>
 </main>
 <footer class="site">
-9aohelper · 資料來源：遊戲前端拆包（現行版 v3.1.8，2026-09-04 同步）、官方數值表與鍛造模擬器 · 版本更新後請自行複驗
+9aohelper · 遊戲版本 v3.1.8 · 2026-09-04 更新
 </footer>
 </body>
 </html>

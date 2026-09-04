@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>地圖圖鑑 — 9aohelper</title>
-<meta name="description" content="13 張地圖的官方描述、編號數法、秘境對照與王關機制，資料逐字取自遊戲前端拆包。">
+<meta name="description" content="13 張地圖的描述、編號數法、秘境對照與王關機制。">
 <meta name="theme-color" content="#0b0e14">
 <link rel="stylesheet" href="style.css">
 <script src="site.js" defer></script>
@@ -26,8 +26,7 @@
 </header>
 <main>
 <h1>地圖圖鑑</h1>
-<p class="lead">全部 13 張地圖（11 張戰鬥圖＋2 座城鎮）。
-卡片上的圖示與描述<strong>逐字取自遊戲前端拆包</strong>（v3.1.8 的 TowerHall 模組），不是玩家轉述。</p>
+<p class="lead">全部 13 張地圖：11 張戰鬥圖＋2 座城鎮。</p>
 
 <h2>編號數法</h2>
 <p>玩家間說「第幾張地圖」時，<strong>起始之鎮不算</strong>（它是城鎮，不能戰鬥）。官方順序配上這個數法：</p>
@@ -141,9 +140,8 @@
 </ul>
 </div>
 
-<h2>官方地圖・秘境對照（遊戲 bundle 讀出）</h2>
-<p>下表取自遊戲前端 bundle 的 zones、battleLocation 與 TowerHall 模組（現行 v3.1.8，逐字讀出）——
-這是官方定義的完整地圖與秘境清單，不是玩家整理的：</p>
+<h2>地圖・秘境對照表</h2>
+<p>完整的地圖與秘境對照，附系統鍵名（跨表查資料時用得到）：</p>
 <div class="table-wrap">
 <table class="rtable" data-search="搜尋地圖或秘境（例：鷹洞、秘境、cave）">
 <thead><tr><th>地圖鍵</th><th>地圖名</th><th>秘境鍵</th><th>秘境官方名</th></tr></thead>
@@ -163,23 +161,21 @@
 <tr><td>yesod</td><td>耶索得</td><td>—</td><td>—（城鎮，不能戰鬥）</td></tr>
 </table>
 </div>
-<p>bundle 裡另外幾個結構性事實（同樣逐字讀出）：</p>
+<p>幾個要知道的機制：</p>
 <ul>
-  <li><strong>火鳳燎原的秘境是三選一</strong>：進入時由 realmChoices 列出魏／蜀／吳讓玩家挑，
-      巾色山麥則是秘境內的特殊岔路旗標（hasJinseBranch）。</li>
-  <li><strong>陰洞的樓層顯示是「地下 N 層」</strong>——全遊戲只有它往下數（realmDepth 模組明寫），
-      其他圖都是「NF」往上。</li>
+  <li><strong>火鳳燎原的秘境是三選一</strong>：進入時從魏／蜀／吳三國挑一個，
+      巾色山麥則是三國秘境深處的特殊岔路。</li>
+  <li><strong>陰洞的樓層是「地下 N 層」</strong>——全遊戲只有它往下數，其他圖都是「NF」往上。</li>
   <li>秘境入口在畫面上以「秘境岔路！」旗標出現，點擊才進入；一般戰鬥層沒有旗標。</li>
 </ul>
 
 <div class="warn">
-<strong>⚠ 王關樓層與秘境入口樓層不在 bundle 裡。</strong>
-前端只寫 <code>bossFloor??null</code>、<code>realmChoices:null</code>——兩者都是<strong>伺服器即時下發</strong>的，
-拆包拿不到數字。進圖後看畫面上的「王關」與「秘境岔路！」旗標即可；岔路旗標只在特定樓層出現，錯過要換圖重新落地。
+<strong>⚠ 王關樓層與秘境入口樓層每張圖不同，且不固定。</strong>
+進圖後看畫面上的「王關」與「秘境岔路！」旗標即可；岔路旗標只在特定樓層出現，錯過要換圖重新落地。
 </div>
 </main>
 <footer class="site">
-9aohelper · 資料來源：遊戲前端拆包（現行版 v3.1.8，2026-09-04 同步）、官方數值表與鍛造模擬器 · 版本更新後請自行複驗
+9aohelper · 遊戲版本 v3.1.8 · 2026-09-04 更新
 </footer>
 </body>
 </html>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>裝備屬性 — 9aohelper</title>
-<meta name="description" content="裝備屬性：15 種裝備類型的鍛造係數、品質倍率階梯，與 31 種特效（附魔）的真實機制對照。">
+<meta name="description" content="裝備圖鑑：15 種裝備類型的鍛造係數、品質倍率階梯，與 31 種特效（附魔）的機制對照。">
 <meta name="theme-color" content="#0b0e14">
 <link rel="stylesheet" href="style.css">
 <script src="site.js" defer></script>
@@ -50,7 +50,7 @@
 
 <h2>特效（附魔）機制對照</h2>
 <p>掛在武器／彈藥上的攻擊性特效隨攻擊發動；掛在防具上的防禦／回復特效常駐。
-下表整理自遊戲前端拆包（官方附魔對照表、戰報渲染器）與官方更新日誌；31 個鍵名與中文名已逐字對上 v3.1.8 的 elements 模組。機制未明的直接標「未明」。</p>
+機制未明的直接標「未明」。</p>
 
 <h3>特效總表（31 種，可搜尋・可篩分類）</h3>
 <p class="note">三類併成一張表——<strong>打片段就會篩</strong>（例：「毒」「機率」「回合」），不必記得完整名稱或鍵名。
@@ -77,7 +77,7 @@
 <tr><td><strong>邪惡力量</strong></td><td>攻擊</td><td>雙面刃：傷害加成，但<strong>穿戴者每回合被侵蝕扣血</strong>；攻擊不死／邪惡系會<strong>反噬成治癒對方</strong>。見下方警告</td><td><code>evil_power</code></td></tr>
 <tr><td>酚</td><td>攻擊</td><td>未明。戰報 DOT 只有燃燒／中毒／腸胃炎三種，酚可能是疊腸胃炎的來源</td><td><code>phenol</code></td></tr>
 <tr><td>減傷</td><td>防禦</td><td><strong>受到物理／技能傷害 −N%</strong>，獨立於防禦的乘項；<strong>對毒 DOT 無效</strong>（精確百分比映射未明）</td><td><code>dmg_reduction</code></td></tr>
-<tr><td>防彈</td><td>防禦</td><td>受<strong>子彈攻擊</strong>時再減 N%——戰報渲染器原文即「（防彈減傷 N%）」</td><td><code>bulletproof</code></td></tr>
+<tr><td>防彈</td><td>防禦</td><td>受<strong>子彈攻擊</strong>時再減 N%，戰報會寫「（防彈減傷 N%）」</td><td><code>bulletproof</code></td></tr>
 <tr><td>反應子彈</td><td>防禦</td><td><strong>機率把射來的子彈整發砍掉</strong>。光劍＝帶反應子彈 50 的單手劍</td><td><code>bullet_parry</code></td></tr>
 <tr><td>守護</td><td>防禦</td><td><strong>機率整發免傷</strong>；官方明言觸發率有上限</td><td><code>guardian</code></td></tr>
 <tr><td>格擋</td><td>防禦</td><td>提升<strong>格擋率</strong>（會被破甲、命中加成削弱）</td><td><code>block_element</code></td></tr>
@@ -111,7 +111,7 @@
   <li>消耗品清單裡沒有解毒——解毒只能靠裝備。</li>
 </ul>
 
-<h3>傷害結算順序（由官方更新日誌拼出）</h3>
+<h3>傷害結算順序</h3>
 <pre>命中判定（精準／噴墨／命中 buff；同時削對手格擋率）
 → 閃避（迴避）／格擋（會被破甲・穿透削弱）／守護・反應子彈（機率整發無效）
 → 防禦力吸收（被破甲削弱）
@@ -180,7 +180,7 @@ const EQ=[{"n":"短刀","d":"連擊迅捷，但難以破甲","slot":"武器","ha
 })();
 </script>
 <footer class="site">
-9aohelper · 資料來源：遊戲前端拆包（現行版 v3.1.8，2026-09-04 同步）、官方數值表與鍛造模擬器 · 版本更新後請自行複驗
+9aohelper · 遊戲版本 v3.1.8 · 2026-09-04 更新
 </footer>
 </body>
 </html>
