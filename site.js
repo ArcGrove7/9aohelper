@@ -126,22 +126,29 @@
     render();
   }
 
-  /* ---- 4) 全站搜尋（首頁 hero；索引在 data/search-index.js） ---- */
-  function attachGlobalSearch() {
-    const input = document.getElementById('gq');
-    const box = document.getElementById('ghits');
-    if (!input || !box) return;
+  /* ---- 4) 全站搜尋（索引在 data/search-index.js；結果依型別分組排序） ----
+     wireSearch 把「輸入框＋結果匣」接上索引：首頁 hero 用一組，
+     每一頁的頁首搜尋覆蓋層再用一組。名稱命中的排在關鍵字命中之前。 */
+  const CAT_ORDER = ['頁面', '地圖', '秘境', '素材', '特效', '技能', '裝備', '武器倍率', '版本線'];
+  const catRank = (c) => {
+    for (let i = 0; i < CAT_ORDER.length; i++) if (c.indexOf(CAT_ORDER[i]) === 0) return i;
+    return CAT_ORDER.length;
+  };
+  function wireSearch(input, box) {
     let sel = -1;
     function render() {
       const idx = window.SEARCH_INDEX || [];
       const q = norm(input.value);
       sel = -1;
       if (!q) { box.hidden = true; box.innerHTML = ''; return; }
-      const hits = [];
+      const byName = [], byKey = [];
       for (const [n, c, u, k] of idx) {
-        if (norm(n).includes(q) || norm(k).includes(q) || norm(c).includes(q)) hits.push([n, c, u]);
-        if (hits.length > 60) break;
+        if (norm(n).includes(q)) byName.push([n, c, u]);
+        else if (norm(k).includes(q) || norm(c).includes(q)) byKey.push([n, c, u]);
+        if (byName.length + byKey.length > 80) break;
       }
+      const hits = byName.concat(byKey);
+      hits.sort((a, b) => catRank(a[1]) - catRank(b[1]));
       const top = hits.slice(0, 12);
       box.innerHTML = top.map(([n, c, u]) =>
         '<a href="' + u + '"><span class="hn">' + n + '</span><span class="hc">' + c + '</span></a>').join('')
@@ -169,6 +176,76 @@
     });
     input.addEventListener('focus', () => { if (input.value) render(); });
   }
+  function attachGlobalSearch() {
+    const input = document.getElementById('gq');
+    const box = document.getElementById('ghits');
+    if (input && box) wireSearch(input, box);
+  }
+
+  /* ---- 5) 頁首搜尋：每一頁右上角的搜尋鈕＋覆蓋層，Ctrl／Cmd＋K 也開得了 ---- */
+  function headerSearch() {
+    const head = document.querySelector('header.site');
+    if (!head) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'hsearch';
+    btn.innerHTML = '🔍 搜尋<kbd>Ctrl K</kbd>';
+    btn.setAttribute('aria-label', '全站搜尋（Ctrl+K）');
+    head.appendChild(btn);
+    let overlay = null;
+    function open() {
+      if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'soverlay';
+        overlay.setAttribute('role', 'dialog');
+        overlay.setAttribute('aria-label', '全站搜尋');
+        overlay.innerHTML = '<div class="spanel gsearch">'
+          + '<input type="search" id="soq" autocomplete="off" '
+          + 'placeholder="全站搜尋：素材、技能、特效、地圖、更新…" aria-label="全站搜尋">'
+          + '<div class="hits" id="sohits" hidden></div></div>';
+        document.body.appendChild(overlay);
+        wireSearch(overlay.querySelector('#soq'), overlay.querySelector('#sohits'));
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+        overlay.querySelector('#soq').addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') close();
+        });
+      }
+      overlay.hidden = false;
+      const inp = overlay.querySelector('#soq');
+      inp.value = '';
+      overlay.querySelector('#sohits').hidden = true;
+      inp.focus();
+    }
+    function close() { overlay.hidden = true; }
+    btn.addEventListener('click', open);
+    addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        open();
+      }
+    });
+  }
+
+  /* ---- 6) 表格搜尋與網址同步：?q=片段 進頁自動篩，改了字網址跟著改 ----
+     這讓「篩好的表」可以直接分享；跨頁連結（例如詳情頁的「在版本情報搜尋」）
+     也是走這一條。 */
+  function urlQuery() {
+    const inp = document.querySelector('.tbar input[type="search"]') || document.getElementById('mq');
+    if (!inp) return;
+    const q = new URLSearchParams(location.search).get('q');
+    if (q) {
+      inp.value = q;
+      inp.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    inp.addEventListener('input', () => {
+      try {
+        const u = new URL(location.href);
+        if (inp.value) u.searchParams.set('q', inp.value);
+        else u.searchParams.delete('q');
+        history.replaceState(null, '', u);
+      } catch (e) { /* 環境不支援就算了，篩選本身照常 */ }
+    });
+  }
 
   /* ---- 3) 回到頂端 ---- */
   function backToTop() {
@@ -189,6 +266,8 @@
     document.querySelectorAll('table.rtable').forEach(labelCells);
     document.querySelectorAll('table[data-search]').forEach(attachSearch);
     attachGlobalSearch();
+    headerSearch();
+    urlQuery();
     const cur = document.querySelector('nav.site a[aria-current="page"]');
     if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: 'nearest', inline: 'center' });
     backToTop();

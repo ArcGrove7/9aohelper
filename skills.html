@@ -6,8 +6,15 @@
 <title>技能表 — 9aohelper</title>
 <meta name="description" content="技能一覽：單手劍、短刀、細劍各招式說明，以及刷熟關鍵技能的機制。">
 <meta name="theme-color" content="#0b0e14">
+<link rel="canonical" href="https://9aohelper.pages.dev/skills">
+<meta property="og:site_name" content="9aohelper">
+<meta property="og:title" content="技能圖鑑 — 9aohelper">
+<meta property="og:description" content="技能一覽：單手劍、短刀、細劍各招式說明，以及刷熟關鍵技能的機制。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://9aohelper.pages.dev/skills">
 <link rel="stylesheet" href="style.css">
 <script src="site.js" defer></script>
+<script src="data/search-index.js" defer></script>
 </head>
 <body>
 <header class="site">
@@ -33,40 +40,40 @@
 <table class="rtable" data-search="搜尋技能名或效果（例：連擊、追擊、被動）" data-chip-col="1">
 <thead><tr><th>技能</th><th>型別</th><th>說明</th><th>ID</th></tr></thead>
 <tbody>
-<tr><td>斜斬</td><td>單手劍</td><td>斜向揮斬，造成攻擊傷害</td><td>60</td></tr>
-<tr><td>垂直扇形斬</td><td>單手劍</td><td>縱向扇形二段斬，造成傷害</td><td>319</td></tr>
-<tr><td>水平扇形斬</td><td>單手劍</td><td>橫向扇形二段攻擊</td><td>323</td></tr>
-<tr><td>迴旋盾</td><td>單手劍</td><td>被攻擊時有額外獨立格擋機率（被動）</td><td>332</td></tr>
-<tr><td>音速跳躍</td><td>單手劍</td><td>造成攻擊傷害，附帶追擊</td><td>333</td></tr>
-<tr><td>銳爪</td><td>單手劍</td><td>造成三段攻擊</td><td>334</td></tr>
-<tr><td>鋸齒波</td><td>單手劍</td><td>範圍攻擊，幾乎無法閃避</td><td>357</td></tr>
-<tr><td>垂直四方斬</td><td>單手劍</td><td>縱向連斬四段</td><td>359</td></tr>
-<tr><td>水平四方斬</td><td>單手劍</td><td>橫向連斬四段</td><td>360</td></tr>
-<tr><td>野蠻支軸</td><td>單手劍</td><td>三連擊，對速度低於自身的目標增傷</td><td>402</td></tr>
-<tr><td><strong>逆輪</strong></td><td>單手劍</td><td>被動：敵人進攻時以二連擊回擊</td><td>415</td></tr>
-<tr><td>犬咬</td><td>短刀</td><td>猛力撕咬，造成攻擊傷害</td><td>59</td></tr>
-<tr><td>蛇噬</td><td>短刀</td><td>蛇咬二連擊，混合速度造成傷害</td><td>306</td></tr>
-<tr><td>劈空斬</td><td>短刀</td><td>空中連續二劈，造成傷害</td><td>311</td></tr>
-<tr><td>穿甲刺</td><td>短刀</td><td>忽視部分目標防禦的突刺，造成傷害</td><td>321</td></tr>
-<tr><td>盲刺</td><td>短刀</td><td>混合幸運造成突刺傷害</td><td>340</td></tr>
-<tr><td>精準刺殺</td><td>短刀</td><td>造成強力攻擊，自動鎖定 HP 最少的敵人</td><td>341</td></tr>
-<tr><td>短刃</td><td>短刀</td><td>混合速度造成八段連擊</td><td>343</td></tr>
-<tr><td>迴旋斬</td><td>短刀</td><td>迴身連斬六段</td><td>351</td></tr>
-<tr><td>附魔強化</td><td>短刀</td><td>被動：裝備時常駐提升武器上的附魔效果</td><td>414</td></tr>
-<tr><td>條紋斬擊</td><td>細劍</td><td>連續斜線細劍斬，造成攻擊傷害</td><td>69</td></tr>
-<tr><td>線性攻擊</td><td>細劍</td><td>直線突刺混合速度傷害，命中後追擊</td><td>303</td></tr>
-<tr><td>傾斜突刺</td><td>細劍</td><td>斜角強力突刺，造成傷害，但命中率降低</td><td>304</td></tr>
-<tr><td>三角刺擊</td><td>細劍</td><td>三角方向三段連刺，造成傷害，命中後追擊</td><td>320</td></tr>
-<tr><td>落葉斬</td><td>細劍</td><td>揮砍攻擊，附帶追擊</td><td>327</td></tr>
-<tr><td>四重痛楚</td><td>細劍</td><td>混合攻速造成四段傷害，附帶追擊，並使敵行動延後</td><td>328</td></tr>
-<tr><td>流星</td><td>細劍</td><td>造成強力攻擊，附帶追擊</td><td>349</td></tr>
-<tr><td>平行刺擊</td><td>細劍</td><td>同時刺擊 2 個目標，附帶追擊</td><td>356</td></tr>
-<tr><td>寒霜衝擊</td><td>細劍</td><td>攜寒霜衝擊單體，造成高額傷害並必定冰凍 1 回合</td><td>399</td></tr>
-<tr><td>跳進染缸</td><td>細劍</td><td>對數名敵人造成傷害，並附加噴墨</td><td>420</td></tr>
-<tr><td>對空鳴槍</td><td>通用槍械</td><td>多目標鳴槍，一場數千段——刷熟主力；手上不是槍完全無效</td><td>—</td></tr>
-<tr><td>雷霆天降</td><td>其他</td><td>單段多目標攻擊技</td><td>—</td></tr>
-<tr><td>蜂鳴八度</td><td>其他</td><td>8 段攻擊</td><td>—</td></tr>
-<tr><td>十字格擋</td><td>其他</td><td>防禦技</td><td>—</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=斜斬">斜斬</a></td><td>單手劍</td><td>斜向揮斬，造成攻擊傷害</td><td>60</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=垂直扇形斬">垂直扇形斬</a></td><td>單手劍</td><td>縱向扇形二段斬，造成傷害</td><td>319</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=水平扇形斬">水平扇形斬</a></td><td>單手劍</td><td>橫向扇形二段攻擊</td><td>323</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=迴旋盾">迴旋盾</a></td><td>單手劍</td><td>被攻擊時有額外獨立格擋機率（被動）</td><td>332</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=音速跳躍">音速跳躍</a></td><td>單手劍</td><td>造成攻擊傷害，附帶追擊</td><td>333</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=銳爪">銳爪</a></td><td>單手劍</td><td>造成三段攻擊</td><td>334</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=鋸齒波">鋸齒波</a></td><td>單手劍</td><td>範圍攻擊，幾乎無法閃避</td><td>357</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=垂直四方斬">垂直四方斬</a></td><td>單手劍</td><td>縱向連斬四段</td><td>359</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=水平四方斬">水平四方斬</a></td><td>單手劍</td><td>橫向連斬四段</td><td>360</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=野蠻支軸">野蠻支軸</a></td><td>單手劍</td><td>三連擊，對速度低於自身的目標增傷</td><td>402</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=逆輪"><strong>逆輪</strong></a></td><td>單手劍</td><td>被動：敵人進攻時以二連擊回擊</td><td>415</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=犬咬">犬咬</a></td><td>短刀</td><td>猛力撕咬，造成攻擊傷害</td><td>59</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=蛇噬">蛇噬</a></td><td>短刀</td><td>蛇咬二連擊，混合速度造成傷害</td><td>306</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=劈空斬">劈空斬</a></td><td>短刀</td><td>空中連續二劈，造成傷害</td><td>311</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=穿甲刺">穿甲刺</a></td><td>短刀</td><td>忽視部分目標防禦的突刺，造成傷害</td><td>321</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=盲刺">盲刺</a></td><td>短刀</td><td>混合幸運造成突刺傷害</td><td>340</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=精準刺殺">精準刺殺</a></td><td>短刀</td><td>造成強力攻擊，自動鎖定 HP 最少的敵人</td><td>341</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=短刃">短刃</a></td><td>短刀</td><td>混合速度造成八段連擊</td><td>343</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=迴旋斬">迴旋斬</a></td><td>短刀</td><td>迴身連斬六段</td><td>351</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=附魔強化">附魔強化</a></td><td>短刀</td><td>被動：裝備時常駐提升武器上的附魔效果</td><td>414</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=條紋斬擊">條紋斬擊</a></td><td>細劍</td><td>連續斜線細劍斬，造成攻擊傷害</td><td>69</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=線性攻擊">線性攻擊</a></td><td>細劍</td><td>直線突刺混合速度傷害，命中後追擊</td><td>303</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=傾斜突刺">傾斜突刺</a></td><td>細劍</td><td>斜角強力突刺，造成傷害，但命中率降低</td><td>304</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=三角刺擊">三角刺擊</a></td><td>細劍</td><td>三角方向三段連刺，造成傷害，命中後追擊</td><td>320</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=落葉斬">落葉斬</a></td><td>細劍</td><td>揮砍攻擊，附帶追擊</td><td>327</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=四重痛楚">四重痛楚</a></td><td>細劍</td><td>混合攻速造成四段傷害，附帶追擊，並使敵行動延後</td><td>328</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=流星">流星</a></td><td>細劍</td><td>造成強力攻擊，附帶追擊</td><td>349</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=平行刺擊">平行刺擊</a></td><td>細劍</td><td>同時刺擊 2 個目標，附帶追擊</td><td>356</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=寒霜衝擊">寒霜衝擊</a></td><td>細劍</td><td>攜寒霜衝擊單體，造成高額傷害並必定冰凍 1 回合</td><td>399</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=跳進染缸">跳進染缸</a></td><td>細劍</td><td>對數名敵人造成傷害，並附加噴墨</td><td>420</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=對空鳴槍">對空鳴槍</a></td><td>通用槍械</td><td>多目標鳴槍，一場數千段——刷熟主力；手上不是槍完全無效</td><td>—</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=雷霆天降">雷霆天降</a></td><td>其他</td><td>單段多目標攻擊技</td><td>—</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=蜂鳴八度">蜂鳴八度</a></td><td>其他</td><td>8 段攻擊</td><td>—</td></tr>
+<tr><td><a class="dlink" href="detail.html?t=skill&amp;id=十字格擋">十字格擋</a></td><td>其他</td><td>防禦技</td><td>—</td></tr>
 </tbody>
 </table>
 </div>

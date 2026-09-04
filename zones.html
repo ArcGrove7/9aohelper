@@ -6,8 +6,15 @@
 <title>地圖圖鑑 — 9aohelper</title>
 <meta name="description" content="13 張地圖的描述、編號數法、秘境對照與王關機制。">
 <meta name="theme-color" content="#0b0e14">
+<link rel="canonical" href="https://9aohelper.pages.dev/zones">
+<meta property="og:site_name" content="9aohelper">
+<meta property="og:title" content="地圖圖鑑 — 9aohelper">
+<meta property="og:description" content="13 張地圖的描述、編號數法、秘境對照與王關機制。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://9aohelper.pages.dev/zones">
 <link rel="stylesheet" href="style.css">
 <script src="site.js" defer></script>
+<script src="data/search-index.js" defer></script>
 </head>
 <body>
 <header class="site">
@@ -38,91 +45,91 @@
 <div class="zonecards">
   <div class="zcard town">
     <div class="zhead"><span class="zicon">🏘️</span>
-      <h3>起始之鎮<span class="zkey">starting_town</span></h3>
+      <h3><a class="dlink" href="detail.html?t=zone&amp;id=starting_town">起始之鎮</a><span class="zkey">starting_town</span></h3>
       <span class="znum">城鎮</span></div>
     <p class="zdesc">安全的起點，無法在此戰鬥。</p>
     <div class="zmeta"><span>補血・修理・鍛造・挖礦・商店</span></div>
   </div>
   <div class="zcard">
     <div class="zhead"><span class="zicon">🌾</span>
-      <h3>大草原<span class="zkey">great_plains</span></h3>
+      <h3><a class="dlink" href="detail.html?t=zone&amp;id=great_plains">大草原</a><span class="zkey">great_plains</span></h3>
       <span class="znum">①</span></div>
     <p class="zdesc">廣闊的草原，怪物出沒。</p>
     <div class="zmeta"><span class="zr">秘境：草原秘境</span></div>
   </div>
   <div class="zcard">
     <div class="zhead"><span class="zicon">🐂</span>
-      <h3>猛牛園<span class="zkey">bull_garden</span></h3>
+      <h3><a class="dlink" href="detail.html?t=zone&amp;id=bull_garden">猛牛園</a><span class="zkey">bull_garden</span></h3>
       <span class="znum">②</span></div>
     <p class="zdesc">猛牛橫行的危險地帶。</p>
     <div class="zmeta"><span class="zr">秘境：被詛咒的寺院</span></div>
   </div>
   <div class="zcard">
     <div class="zhead"><span class="zicon">🎡</span>
-      <h3>兒童樂園<span class="zkey">childrens_park</span></h3>
+      <h3><a class="dlink" href="detail.html?t=zone&amp;id=childrens_park">兒童樂園</a><span class="zkey">childrens_park</span></h3>
       <span class="znum">③</span></div>
     <p class="zdesc">歡樂背後暗藏危機的遊樂場。</p>
     <div class="zmeta"><span>無秘境</span></div>
   </div>
   <div class="zcard">
     <div class="zhead"><span class="zicon">🍄</span>
-      <h3>蘑菇園<span class="zkey">mushroom_garden</span></h3>
+      <h3><a class="dlink" href="detail.html?t=zone&amp;id=mushroom_garden">蘑菇園</a><span class="zkey">mushroom_garden</span></h3>
       <span class="znum">④</span></div>
     <p class="zdesc">色彩繽紛的蘑菇叢林，詭異而美麗。</p>
     <div class="zmeta"><span class="zr">秘境：菇菇仙境</span></div>
   </div>
   <div class="zcard">
     <div class="zhead"><span class="zicon">🏯</span>
-      <h3>圓明園<span class="zkey">yuanmingyuan</span></h3>
+      <h3><a class="dlink" href="detail.html?t=zone&amp;id=yuanmingyuan">圓明園</a><span class="zkey">yuanmingyuan</span></h3>
       <span class="znum">⑤</span></div>
     <p class="zdesc">昔日輝煌的廢墟，危機四伏。</p>
     <div class="zmeta"><span>無秘境</span></div>
   </div>
   <div class="zcard">
     <div class="zhead"><span class="zicon">🌋</span>
-      <h3>黃石國家公園<span class="zkey">yellowstone</span></h3>
+      <h3><a class="dlink" href="detail.html?t=zone&amp;id=yellowstone">黃石國家公園</a><span class="zkey">yellowstone</span></h3>
       <span class="znum">⑥</span></div>
     <p class="zdesc">美國第一個國家公園，北美最大的活火山系統之一，是自然愛好者的天堂。</p>
     <div class="zmeta"><span class="zr">秘境：綠水管</span></div>
   </div>
   <div class="zcard">
     <div class="zhead"><span class="zicon">🌻</span>
-      <h3>鄰家花園<span class="zkey">neighbor_garden</span></h3>
+      <h3><a class="dlink" href="detail.html?t=zone&amp;id=neighbor_garden">鄰家花園</a><span class="zkey">neighbor_garden</span></h3>
       <span class="znum">⑦</span></div>
     <p class="zdesc">寧靜的鄰家花園，植物們正嚴陣以待。</p>
     <div class="zmeta"><span class="zr">秘境：屋頂</span></div>
   </div>
   <div class="zcard">
     <div class="zhead"><span class="zicon">🏔️</span>
-      <h3>青藏高原<span class="zkey">qinghai_tibet</span></h3>
+      <h3><a class="dlink" href="detail.html?t=zone&amp;id=qinghai_tibet">青藏高原</a><span class="zkey">qinghai_tibet</span></h3>
       <span class="znum">⑧</span></div>
     <p class="zdesc">世界最高的高原，有「世界屋脊」和「第三極」之稱。</p>
     <div class="zmeta"><span>無秘境</span></div>
   </div>
   <div class="zcard">
     <div class="zhead"><span class="zicon">🔥</span>
-      <h3>火鳳燎原<span class="zkey">huofeng_liaoyuan</span></h3>
+      <h3><a class="dlink" href="detail.html?t=zone&amp;id=huofeng_liaoyuan">火鳳燎原</a><span class="zkey">huofeng_liaoyuan</span></h3>
       <span class="znum">⑨</span></div>
     <p class="zdesc">烽火連天的亂世，群雄割據，三國豪傑盡出。</p>
     <div class="zmeta"><span class="zr">秘境：三國秘境（魏／蜀／吳三選一）</span><span>深處岔路 → 巾色山麥</span></div>
   </div>
   <div class="zcard">
     <div class="zhead"><span class="zicon">📐</span>
-      <h3>阿波羅尼斯圓<span class="zkey">apollonius</span></h3>
+      <h3><a class="dlink" href="detail.html?t=zone&amp;id=apollonius">阿波羅尼斯圓</a><span class="zkey">apollonius</span></h3>
       <span class="znum">⑩</span></div>
     <p class="zdesc">定比之圓，尺規與定理交織的異境。</p>
     <div class="zmeta"><span class="zr">秘境：三角寒樹</span></div>
   </div>
   <div class="zcard">
     <div class="zhead"><span class="zicon">🦅</span>
-      <h3>鷹洞<span class="zkey">eagle_cave</span></h3>
+      <h3><a class="dlink" href="detail.html?t=zone&amp;id=eagle_cave">鷹洞</a><span class="zkey">eagle_cave</span></h3>
       <span class="znum">⑪</span></div>
     <p class="zdesc">猛禽盤旋的峭壁洞窟，深處傳來格鬥家的低吼。</p>
     <div class="zmeta"><span class="zr">秘境：陰洞</span><span>陰洞樓層是「地下 N 層」往下數</span><span>地圖第 1 頁</span></div>
   </div>
   <div class="zcard town">
     <div class="zhead"><span class="zicon">🏛️</span>
-      <h3>耶索得<span class="zkey">yesod</span></h3>
+      <h3><a class="dlink" href="detail.html?t=zone&amp;id=yesod">耶索得</a><span class="zkey">yesod</span></h3>
       <span class="znum">城鎮</span></div>
     <p class="zdesc">第二座城鎮，無法在此戰鬥。</p>
     <div class="zmeta"><span>地圖第 1 頁</span></div>

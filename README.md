@@ -35,16 +35,43 @@
 
 ## 開發
 
-站本身零組建。只有兩個輔助工序：
+站本身零組建。輔助工序有三個：
 
-- **鎖定測試**（手機 UX、搜尋篩選、圖鑑改版，共 104 項）：
+- **鎖定測試**（手機 UX、搜尋篩選、詳情頁與關聯、計算機，共 160 項）：
 
       npm install
       npm test
 
-- **全站搜尋索引**：改了任何圖鑑內容後重跑一次，產物（`data/search-index.js`）進版控：
+- **實體庫**：五類實體（素材／特效／技能／裝備類型／地圖）與雙向關聯、
+  版本紀錄命中，全部由 `tools/build-db.js` 從各圖鑑頁抽出來生成
+  `data/db.js`——反向關聯不在頁面各自維護，一律在這裡生成，
+  並做完整性檢查（id 唯一、引用必須存在），壞了整個 build 會失敗：
+
+      node tools/build-db.js
+
+- **全站搜尋索引**：實體條目從 `data/db.js` 讀、連到 `detail.html` 詳情頁：
 
       node tools/build-search-index.js
+
+改了任何圖鑑內容後，兩支都重跑一次，產物進版控。
+
+## 資料怎麼加
+
+1. **來源只有一個**：各圖鑑列表頁（`materials.html` 的 `M`、`effects.html`
+   的表格與 `EQ`、`skills.html`／`zones.html` 的列表）。改資料改這裡。
+2. 重跑 `node tools/build-db.js && node tools/build-search-index.js`——
+   詳情頁、反向關聯、搜尋條目全部自動跟上；引用打錯字 build 直接失敗。
+3. `npm test` 全綠再提交。數量有變（素材不是 241 種了）就同步改測試的數字。
+4. 版本標記：頁尾與 `tools/build-db.js` 開頭的 `GAME_VERSION` 一起改。
+5. 沒有可靠來源的欄位一律留白／寫「尚無可靠資料」——詳情頁會照實顯示，
+   不要為了版面好看補值。
+
+## 網址
+
+列表頁：`/materials`、`/effects`、`/skills`、`/zones`、`/formulas`、`/stats`、
+`/allocation`、`/updates`（`?q=片段` 進頁自動篩，網址隨輸入同步，可直接分享）。
+詳情頁：`/detail?t=material|effect|skill|eqtype|zone&id=名稱`。
+舊網址全部不變，只加不改。
 
 ## 內容規矩（人下的令，沿自 2026-09-03；加新內容前先讀）
 

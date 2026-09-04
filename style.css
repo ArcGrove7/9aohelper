@@ -593,3 +593,32 @@ a.catcard .cn { font-size: 0.75rem; color: var(--muted); font-family: var(--mono
 .zcard .zmeta .zr { color: var(--accent-2); }
 .zcard.town { border-style: dashed; }
 .zcard.town .zdesc, .zcard.town h3 { color: var(--muted); }
+
+/* ---- 頁首搜尋鈕與覆蓋層（每一頁；Ctrl/Cmd+K） ---- */
+#hsearch {
+  flex: 0 0 auto; margin-left: 0.2rem;
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: var(--code-bg); color: var(--muted);
+  border: 1px solid var(--edge); border-radius: 99px;
+  padding: 0.3rem 0.75rem; font-size: 0.85rem; cursor: pointer;
+  min-height: 2.1rem; white-space: nowrap;
+}
+#hsearch:hover { border-color: var(--accent); color: var(--ink); }
+#hsearch kbd {
+  font: 0.72rem var(--mono); color: var(--muted);
+  border: 1px solid var(--line); border-radius: 4px; padding: 0 0.3rem;
+}
+#soverlay {
+  position: fixed; inset: 0; z-index: 60;
+  background: #000a; backdrop-filter: blur(2px);
+  padding: 10vh 1rem 0;
+}
+#soverlay .spanel { max-width: 34rem; margin: 0 auto; }
+@media (max-width: 46rem) {
+  #hsearch kbd { display: none; }
+  #hsearch { padding: 0.3rem 0.6rem; }
+  #soverlay { padding-top: max(0.8rem, env(safe-area-inset-top)); }
+}
+/* 詳情頁連結樣式沿用一般連結；列表裡連到詳情頁的名稱不畫底線 */
+a.dlink { text-decoration: none; }
+a.dlink:hover { text-decoration: underline; }

@@ -11,13 +11,17 @@ function ok(name, cond) {
   if (cond) { pass++; console.log('  ✓ ' + name); }
   else { fail++; console.log('  ✗ ' + name); }
 }
-function load(page) {
+function load(page, query, pre) {
   // jsdom 建構完成時文件還在 loading，site.js 的 DOMContentLoaded 監聽要等它跑完，
   // 所以這裡回 Promise，等 load 事件後才把 site.js 注入並交出 dom。
   return new Promise((resolve) => {
     const dom = new JSDOM(fs.readFileSync(path.join(SITE, page), 'utf8'), {
       runScripts: 'dangerously',
-      url: 'https://example.invalid/' + page,
+      url: 'https://example.invalid/' + page + (query || ''),
+      beforeParse(window) {
+        (pre || []).forEach((f) =>
+          window.eval(fs.readFileSync(path.join(SITE, f), 'utf8')));
+      },
     });
     dom.window.addEventListener('load', () => {
       const s = dom.window.document.createElement('script');   // <script src> jsdom 不抓，手動注入
@@ -314,14 +318,14 @@ async function main() {
     const gq = d3.getElementById('gq'), hits = d3.getElementById('ghits');
     ok('首頁有全站搜尋框', !!gq && !!hits);
     type(gq, '秘銀', w3);
-    ok('打「秘銀」→ 命中素材，連去素材圖鑑',
-      !hits.hidden && [...hits.querySelectorAll('a')].some((a) => a.href.includes('materials.html')));
+    ok('打「秘銀」→ 命中素材，連去素材詳情頁',
+      !hits.hidden && [...hits.querySelectorAll('a')].some((a) => a.href.includes('detail.html?t=material')));
     type(gq, '陰洞', w3);
-    ok('打「陰洞」→ 命中秘境，連去地圖圖鑑',
-      [...hits.querySelectorAll('a')].some((a) => a.href.includes('zones.html')));
+    ok('打「陰洞」→ 命中秘境，連去地圖詳情頁',
+      [...hits.querySelectorAll('a')].some((a) => a.href.includes('detail.html?t=zone')));
     type(gq, '對空鳴槍', w3);
-    ok('打「對空鳴槍」→ 命中技能，連去技能圖鑑',
-      [...hits.querySelectorAll('a')].some((a) => a.href.includes('skills.html')));
+    ok('打「對空鳴槍」→ 命中技能，連去技能詳情頁',
+      [...hits.querySelectorAll('a')].some((a) => a.href.includes('detail.html?t=skill')));
     type(gq, '', w3);
     ok('清空後結果收起來', hits.hidden === true);
     dom3.window.close();
@@ -353,7 +357,8 @@ async function main() {
       ok(p + ' 站名是連回首頁的連結',
         head.querySelector('a.title')?.getAttribute('href') === 'index.html' &&
         head.querySelector('a.title').textContent === '9aohelper');
-      ok(p + ' 頁首直接子元素只有「站名＋導覽」兩件', head.children.length === 2);
+      ok(p + ' 頁首是「站名＋導覽＋搜尋鈕」一行三件',
+        head.children.length === 3 && head.querySelector('#hsearch'));
       dom.window.close();
     }
   }
@@ -416,6 +421,97 @@ async function main() {
       d.body.textContent.includes('還沒有儲存的配置'));
     ok('localStorage 也清掉了', JSON.parse(w.localStorage.getItem('gao.calc.builds.v1')).length === 0);
     dom.window.close();
+  }
+
+  // -------------------------------------------------------------------------
+  console.log('⑭ 資料圖譜：實體庫、詳情頁、雙向關聯、網址篩選、Ctrl+K');
+  {
+    // 實體庫完整性（data/db.js 由 tools/build-db.js 產生）
+    const DB = (() => {
+      const window = {};
+      eval(fs.readFileSync(path.join(SITE, 'data', 'db.js'), 'utf8'));
+      return window.DB;
+    })();
+    ok('五類實體數量對（241/31/34/15/13）',
+      DB.materials.length === 241 && DB.effects.length === 31 &&
+      DB.skills.length === 34 && DB.eqtypes.length === 15 && DB.zones.length === 13);
+    const effById = Object.fromEntries(DB.effects.map((e) => [e.id, e]));
+    const matById = Object.fromEntries(DB.materials.map((m) => [m.id, m]));
+    ok('素材→特效的每一筆引用都存在，且特效端反向列得到它',
+      DB.materials.every((m) => m.effects.every((f) =>
+        effById[f.e] && effById[f.e].materials.includes(m.id))));
+    ok('特效→素材的每一筆反向引用都存在，且素材端真的帶它',
+      DB.effects.every((e) => e.materials.every((mn) =>
+        matById[mn] && matById[mn].effects.some((f) => f.e === e.id))));
+    for (const list of [DB.materials, DB.effects, DB.skills, DB.eqtypes, DB.zones]) {
+      const ids = list.map((x) => x.id);
+      if (new Set(ids).size !== ids.length) { ok('id 唯一', false); }
+    }
+    ok('每類實體 id 皆唯一', true);
+
+    // 詳情頁：素材 → 特效 → 素材 走得回來
+    const dm = await load('detail.html', '?t=material&id=' + encodeURIComponent('巴洛古的指甲'), ['data/db.js']);
+    const dd = dm.window.document;
+    ok('素材詳情頁：名稱、五維、標籤都在',
+      dd.querySelector('h1').textContent === '巴洛古的指甲' &&
+      dd.body.textContent.includes('35.5') && dd.body.textContent.includes('銳利'));
+    ok('特效渲染成可點的實體連結（詛咒→特效詳情頁）',
+      [...dd.querySelectorAll('a')].some((a) =>
+        a.href.includes('detail.html?t=effect') && a.textContent.includes('詛咒')));
+    ok('沒有資料的欄位寫「尚無可靠資料」，不補值',
+      dd.body.textContent.includes('取得來源') && dd.body.textContent.includes('尚無可靠資料'));
+    dm.window.close();
+
+    const de = await load('detail.html', '?t=effect&id=' + encodeURIComponent('邪惡力量'), ['data/db.js']);
+    const ed = de.window.document;
+    ok('特效詳情頁：反向列出帶它的素材（巴洛古的指甲在內）',
+      [...ed.querySelectorAll('a')].some((a) =>
+        a.href.includes('detail.html?t=material') && a.textContent === '巴洛古的指甲'));
+    ok('特效詳情頁：附版本紀錄', ed.body.textContent.includes('版本紀錄') &&
+      ed.querySelectorAll('table tbody tr').length > 0);
+    de.window.close();
+
+    const dz = await load('detail.html', '?t=zone&id=eagle_cave', ['data/db.js']);
+    ok('地圖詳情頁：官方描述與秘境都在',
+      dz.window.document.body.textContent.includes('猛禽盤旋的峭壁洞窟') &&
+      dz.window.document.body.textContent.includes('陰洞'));
+    dz.window.close();
+
+    const dx = await load('detail.html', '?t=material&id=不存在的東西', ['data/db.js']);
+    ok('查不到的 id 顯示「找不到這一筆」與各圖鑑入口',
+      dx.window.document.body.textContent.includes('找不到這一筆'));
+    dx.window.close();
+
+    // 網址帶 ?q=：進頁自動篩，分享網址還原得了
+    const du = await load('updates.html', '?q=%E6%A0%BC%E6%93%8B');
+    const ud = du.window.document;
+    const uRows = [...ud.querySelectorAll('table[data-search] tbody tr')];
+    const uVis = uRows.filter((tr) => !tr.hidden).length;
+    ok('updates.html?q=格擋 → 進頁就篩好', uVis > 0 && uVis < uRows.length);
+    du.window.close();
+    const dmm = await load('materials.html', '?q=%E7%A7%98%E9%8A%80');
+    ok('materials.html?q=秘銀 → 素材表也吃網址篩選',
+      [...dmm.window.document.querySelectorAll('#mtab tbody tr')].length === 1);
+    dmm.window.close();
+
+    // Ctrl+K：任何頁都開得了全站搜尋
+    const dk = await load('zones.html', '', ['data/search-index.js']);
+    const kd = dk.window.document, kw = dk.window;
+    ok('頁首有搜尋鈕', !!kd.getElementById('hsearch'));
+    kw.dispatchEvent(new kw.KeyboardEvent('keydown', { key: 'k', ctrlKey: true }));
+    const ov = kd.getElementById('soverlay');
+    ok('Ctrl+K 打開覆蓋層', !!ov && !ov.hidden);
+    const soq = kd.getElementById('soq');
+    type(soq, '短刃', kw);
+    ok('覆蓋層搜尋命中技能，連到詳情頁',
+      [...kd.querySelectorAll('#sohits a')].some((a) => a.href.includes('detail.html?t=skill')));
+    dk.window.close();
+
+    // 列表 → 詳情：各列表頁的名稱是實體連結
+    const dl = await load('skills.html');
+    ok('技能表名稱連到詳情頁',
+      [...dl.window.document.querySelectorAll('table a.dlink')].length === 34);
+    dl.window.close();
   }
 }
 

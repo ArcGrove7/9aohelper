@@ -6,8 +6,15 @@
 <title>素材表 — 9aohelper</title>
 <meta name="description" content="鍛造素材表：241 種素材的攻・防・幸・重・耐、標籤與鍛造特效，支援關鍵字搜尋與標籤／特效篩選；含標籤加成規則與堆疊衰減曲線。">
 <meta name="theme-color" content="#0b0e14">
+<link rel="canonical" href="https://9aohelper.pages.dev/materials">
+<meta property="og:site_name" content="9aohelper">
+<meta property="og:title" content="素材圖鑑 — 9aohelper">
+<meta property="og:description" content="鍛造素材表：241 種素材的攻・防・幸・重・耐、標籤與鍛造特效，支援關鍵字搜尋與標籤／特效篩選；含標籤加成規則與堆疊衰減曲線。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://9aohelper.pages.dev/materials">
 <link rel="stylesheet" href="style.css">
 <script src="site.js" defer></script>
+<script src="data/search-index.js" defer></script>
 </head>
 <body>
 <header class="site">
@@ -171,7 +178,7 @@ const M=[["巴洛古的指甲",35.5,12,0,5.75,10,"生物·銳利","詛咒:2|邪�
     // 兩個 flex item，否則特效那種小標籤會疊到欄名上（2026-09-03 手機實測）。
     const cell=(cls,label,html)=>'<td'+(cls?' class="'+cls+'"':'')+' data-label="'+label+'"><span class="v">'+html+'</span></td>';
     tb.innerHTML=list.map(o=>{const r=o.r;return '<tr>'
-      +cell('title','名稱',r[0])
+      +cell('title','名稱','<a class="dlink" href="detail.html?t=material&id='+encodeURIComponent(r[0])+'">'+r[0]+'</a>')
       +cell('num','攻',r[1])
       +cell('num','防',r[2])
       +cell('num','幸',r[3])

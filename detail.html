@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>圖鑑 — 9aohelper</title>
+<meta name="description" content="素材、特效、技能、裝備類型與地圖的單頁圖鑑：數值、關聯與版本紀錄。">
+<meta name="theme-color" content="#0b0e14">
+<link rel="canonical" href="https://9aohelper.pages.dev/detail">
+<meta property="og:site_name" content="9aohelper">
+<meta property="og:title" content="圖鑑 — 9aohelper">
+<meta property="og:description" content="素材、特效、技能、裝備類型與地圖的單頁圖鑑：數值、關聯與版本紀錄。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://9aohelper.pages.dev/detail">
+<link rel="stylesheet" href="style.css">
+<script src="site.js" defer></script>
+<script src="data/search-index.js" defer></script>
+<script src="data/db.js"></script>
+<style>
+  .dhead { display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap; }
+  .dhead h1 { border-bottom: none; margin-bottom: 0.2rem; }
+  .dtype { font-size: 0.8rem; color: var(--accent); border: 1px solid var(--line);
+           border-radius: 99px; padding: 0.1rem 0.6rem; white-space: nowrap; }
+  .dver { font-size: 0.78rem; color: var(--muted); font-family: var(--mono); }
+  .kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+        gap: 0.6rem; margin: 1rem 0; }
+  .kv .cell { background: var(--card); border: 1px solid var(--line); border-radius: 8px;
+              padding: 0.55rem 0.8rem; }
+  .kv .cell .v { font: 650 1.05rem var(--mono); color: var(--ink); display: block; }
+  .kv .cell .l { font-size: 0.75rem; color: var(--muted); }
+  .chips.dchips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.5rem 0 1rem; }
+  .dchips a, .dchips span {
+    font-size: 0.85rem; padding: 0.2rem 0.65rem; border-radius: 99px;
+    background: var(--code-bg); border: 1px solid var(--line);
+    text-decoration: none; white-space: nowrap; min-height: 2rem;
+    display: inline-flex; align-items: center;
+  }
+  .dchips a:hover { border-color: var(--accent); }
+  .dlist { list-style: none; padding: 0; margin: 0.5rem 0; }
+  .dlist li { border-bottom: 1px solid var(--line); padding: 0.4rem 0.1rem; }
+  .dlist a { text-decoration: none; }
+  .unknown { color: var(--muted); }
+  .dnf { margin: 2rem 0; }
+</style>
+</head>
+<body>
+<header class="site">
+  <a class="title" href="index.html">9aohelper</a>
+  <nav class="site">
+    <a href="index.html">首頁</a>
+    <a href="zones.html">地圖圖鑑</a>
+    <a href="skills.html">技能圖鑑</a>
+    <a href="materials.html">素材圖鑑</a>
+    <a href="effects.html">裝備圖鑑</a>
+    <a href="formulas.html">公式與武器</a>
+    <a href="stats.html">配點攻略</a>
+    <a href="allocation.html">點數計算機</a>
+    <a href="updates.html">版本情報</a>
+  </nav>
+</header>
+<main id="dmain">
+<noscript><p>這一頁需要 JavaScript 才能顯示內容；完整清單在各圖鑑分頁。</p></noscript>
+</main>
+<script>
+/* 單一實體詳情頁：detail.html?t=型別&id=名稱。
+   資料與關聯全部來自 data/db.js（tools/build-db.js 產生），這裡只負責呈現；
+   沒有資料的欄位一律寫「尚無可靠資料」，不補值。 */
+(function () {
+  'use strict';
+  const qs = new URLSearchParams(location.search);
+  const t = qs.get('t') || '';
+  const id = qs.get('id') || '';
+  const main = document.getElementById('dmain');
+  const DB = window.DB || {};
+  const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const link = (type, key, text) =>
+    '<a href="detail.html?t=' + type + '&id=' + encodeURIComponent(key) + '">' + esc(text == null ? key : text) + '</a>';
+  const listLink = (page, q, text) =>
+    '<a href="' + page + (q ? '?q=' + encodeURIComponent(q) : '') + '">' + esc(text) + '</a>';
+  const num = (v) => v == null ? '<span class="unknown">—</span>' : esc(v);
+
+  const TYPES = {
+    material: { label: '素材', list: 'materials', page: 'materials.html' },
+    effect:   { label: '特效', list: 'effects',   page: 'effects.html' },
+    skill:    { label: '技能', list: 'skills',    page: 'skills.html' },
+    eqtype:   { label: '裝備類型', list: 'eqtypes', page: 'effects.html' },
+    zone:     { label: '地圖', list: 'zones',     page: 'zones.html' },
+  };
+
+  function head(name, typeLabel) {
+    return '<div class="dhead"><h1>' + esc(name) + '</h1>'
+      + '<span class="dtype">' + typeLabel + '</span>'
+      + '<span class="dver">v' + esc(DB.version || '?') + '</span></div>';
+  }
+  function kv(pairs) {
+    return '<div class="kv">' + pairs.map((p) =>
+      '<div class="cell"><span class="v">' + p[1] + '</span><span class="l">' + p[0] + '</span></div>'
+    ).join('') + '</div>';
+  }
+  function updBlock(e, searchKey) {
+    let h = '<h2>版本紀錄</h2>';
+    if (e.upd && e.upd.length) {
+      h += '<div class="table-wrap"><table class="rtable" data-title-col="none">'
+        + '<thead><tr><th>版本</th><th>日期</th><th>類型</th><th>內容</th></tr></thead><tbody>'
+        + e.upd.map((u) => '<tr><td>' + esc(u.v) + '</td><td>' + esc(u.date) + '</td><td>'
+          + esc(u.type) + '</td><td>' + esc(u.text) + '</td></tr>').join('')
+        + '</tbody></table></div>';
+      h += '<p class="note">' + listLink('updates.html', searchKey, '在版本情報搜尋「' + searchKey + '」→') + '</p>';
+    } else {
+      h += '<p class="unknown">更新日誌沒有提到它。</p>';
+    }
+    return h;
+  }
+  const unknownBlock = (title) =>
+    '<h2>' + title + '</h2><p class="unknown">尚無可靠資料。</p>';
+
+  function renderMaterial(m) {
+    let h = head(m.id, '素材');
+    h += kv([['攻擊', num(m.atk)], ['防禦', num(m.def)], ['幸運', num(m.luck)],
+             ['重量', num(m.wt)], ['耐久', num(m.dur)]]);
+    h += '<h2>標籤</h2><div class="chips dchips">'
+      + (m.tags.length ? m.tags.map((tg) =>
+          '<a href="materials.html?q=' + encodeURIComponent(tg) + '">' + esc(tg) + '</a>').join('')
+        : '<span class="unknown">無</span>') + '</div>';
+    h += '<h2>特效</h2>';
+    h += m.effects.length
+      ? '<div class="chips dchips">' + m.effects.map((f) =>
+          link('effect', f.e, f.e + ' ' + f.v)).join('') + '</div>'
+      : '<p class="unknown">這種素材不帶特效。</p>';
+    h += unknownBlock('取得來源');
+    h += updBlock(m, m.id);
+    h += '<p class="note">' + listLink('materials.html', m.id, '在素材圖鑑檢視 →') + '</p>';
+    return h;
+  }
+
+  function renderEffect(e) {
+    let h = head(e.id, '特效・' + e.cat);
+    h += kv([['分類', esc(e.cat)], ['鍵名', '<code>' + esc(e.key) + '</code>']]);
+    h += '<h2>機制</h2><p>' + esc(e.mech) + '</p>';
+    h += '<h2>帶這個特效的素材（' + e.materials.length + '）</h2>';
+    h += e.materials.length
+      ? '<div class="chips dchips">' + e.materials.map((mn) => link('material', mn)).join('') + '</div>'
+      : '<p class="unknown">目前的素材表裡沒有素材帶它——它可能只出現在裝備或敵人身上。</p>';
+    h += updBlock(e, e.id);
+    h += '<p class="note">' + listLink('effects.html', e.id, '在裝備圖鑑檢視 →') + '</p>';
+    return h;
+  }
+
+  function renderSkill(s) {
+    let h = head(s.id, '技能・' + s.type);
+    h += kv([['武器型別', esc(s.type)], ['技能 ID', s.gid == null ? '<span class="unknown">—</span>' : esc(s.gid)]]);
+    h += '<h2>效果</h2><p>' + esc(s.desc) + '</p>';
+    const same = DB.skills.filter((x) => x.type === s.type && x.id !== s.id);
+    h += '<h2>同型別的其他技能（' + same.length + '）</h2><div class="chips dchips">'
+      + same.map((x) => link('skill', x.id)).join('') + '</div>';
+    h += updBlock(s, s.id);
+    h += '<p class="note">' + listLink('skills.html', s.id, '在技能圖鑑檢視 →') + '</p>';
+    return h;
+  }
+
+  function renderEqtype(e) {
+    let h = head(e.id, '裝備・' + e.slot);
+    h += '<p>' + esc(e.desc) + '</p>';
+    h += kv([['攻擊係數', esc(e.a) + 'x'], ['防禦係數', esc(e.df) + 'x'],
+             ['幸運係數', esc(e.l) + 'x'], ['耐久係數', esc(e.u) + 'x'],
+             ['素材需求', esc(e.q) + ' 個']]);
+    h += kv([['部位', esc(e.slot)], ['持法', esc(e.hand)], ['tag', '<code>' + esc(e.tag) + '</code>']]);
+    h += updBlock(e, e.id);
+    h += '<p class="note">' + listLink('effects.html', '', '完整係數與品質倍率在裝備圖鑑 →')
+      + '　' + listLink('formulas.html', '', '戰鬥中的型別倍率在公式與武器 →') + '</p>';
+    return h;
+  }
+
+  function renderZone(z) {
+    let h = head(z.n, z.town ? '城鎮' : '地圖 ' + z.num);
+    h += '<p>' + esc(z.desc) + '</p>';
+    h += '<h2>秘境</h2>';
+    h += z.realm
+      ? '<div class="chips dchips"><span>' + esc(z.realm) + '</span></div>'
+      : '<p class="unknown">' + (z.town ? '城鎮沒有秘境。' : '這張圖沒有秘境。') + '</p>';
+    if (z.meta.length) {
+      h += '<h2>備註</h2><ul>' + z.meta.map((m) => '<li>' + esc(m) + '</li>').join('') + '</ul>';
+    }
+    h += unknownBlock('敵人與掉落');
+    h += updBlock(z, z.n);
+    h += '<p class="note">' + listLink('zones.html', '', '在地圖圖鑑檢視 →') + '</p>';
+    return h;
+  }
+
+  const conf = TYPES[t];
+  const entity = conf && (DB[conf.list] || []).find((x) => x.id === id);
+  if (!entity) {
+    main.innerHTML = '<div class="dnf"><h1>找不到這一筆</h1>'
+      + '<p>它可能改了名字，或還沒有建檔。從各圖鑑分頁找找看：</p>'
+      + '<div class="chips dchips">'
+      + Object.values(TYPES).map((c) => '<a href="' + c.page + '">' + c.label + '圖鑑</a>')
+        .filter((v, i, a) => a.indexOf(v) === i).join('')
+      + '</div></div>';
+    return;
+  }
+  document.title = (t === 'zone' ? entity.n : entity.id) + ' — ' + conf.label + ' — 9aohelper';
+  const canon = document.createElement('link');
+  canon.rel = 'canonical';
+  canon.href = 'https://9aohelper.pages.dev/detail?t=' + t + '&id=' + encodeURIComponent(id);
+  document.head.appendChild(canon);
+  main.innerHTML =
+    t === 'material' ? renderMaterial(entity)
+    : t === 'effect' ? renderEffect(entity)
+    : t === 'skill' ? renderSkill(entity)
+    : t === 'eqtype' ? renderEqtype(entity)
+    : renderZone(entity);
+})();
+</script>
+<footer class="site">
+9aohelper · 遊戲版本 v3.1.8 · 2026-09-05 更新
+</footer>
+</body>
+</html>
