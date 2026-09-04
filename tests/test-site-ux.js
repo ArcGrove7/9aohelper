@@ -344,7 +344,8 @@ async function main() {
     ok('header.site 是 flex 橫排', /header\.site \{[^}]*display: flex/.test(css));
     ok('導覽不換行（flex-wrap: nowrap），塞不下就橫滑', css.includes('flex-wrap: nowrap'));
     for (const p of ['index.html', 'formulas.html', 'stats.html', 'zones.html',
-                     'skills.html', 'materials.html', 'effects.html', 'updates.html']) {
+                     'skills.html', 'materials.html', 'effects.html', 'updates.html',
+                     'allocation.html']) {
       const dom = await load(p);
       const d = dom.window.document;
       const head = d.querySelector('header.site');
@@ -355,6 +356,66 @@ async function main() {
       ok(p + ' 頁首直接子元素只有「站名＋導覽」兩件', head.children.length === 2);
       dom.window.close();
     }
+  }
+
+  // -------------------------------------------------------------------------
+  console.log('⑬ 點數計算機：建議配點（PVE／PVP）與配置的增刪查改');
+  {
+    const dom = await load('allocation.html');
+    const d = dom.window.document, w = dom.window;
+    const click = (label) => {
+      const b = [...d.querySelectorAll('button')].find((x) => x.textContent === label ||
+        x.getAttribute('aria-label') === label);
+      b.click();
+      return b;
+    };
+    const statVal = (cjk) =>
+      Number(d.querySelector('input[aria-label="' + cjk + ' 配點"]').value);
+    const leftVal = () => {
+      const cells = [...d.querySelectorAll('.cell')];
+      const c = cells.find((x) => x.textContent.includes('剩餘'));
+      return Number(c.querySelector('.v').textContent.replace(/,/g, ''));
+    };
+
+    // 建議配點
+    const presets = [...d.querySelectorAll('button')].filter((b) =>
+      (b.getAttribute('aria-label') || '').startsWith('套用'));
+    ok('三套建議配方（PVE 練功／PVE 打王／PVP 切磋）都有「套用」', presets.length === 3);
+    click('套用 PVE・練功');
+    ok('套用「PVE・練功」→ 總點數鋪滿（剩餘 0）', leftVal() === 0);
+    ok('練功配方以敏捷為大宗', statVal('敏捷') > statVal('體質') &&
+      statVal('體質') > statVal('韌性') && statVal('幸運') === 0);
+    click('套用 PVP・切磋');
+    ok('套用「PVP・切磋」→ 技巧有份量、仍然鋪滿', leftVal() === 0 && statVal('技巧') > 0);
+
+    // 增：存一筆
+    const nameIn = d.querySelector('input[aria-label="配置名稱"]');
+    nameIn.value = '切磋用';
+    nameIn.dispatchEvent(new w.Event('input', { bubbles: true }));
+    click('儲存新配置');
+    let sel = d.querySelector('select[aria-label="已存配置"]');
+    ok('儲存後出現在配置清單', sel && sel.options.length === 1 &&
+      sel.options[0].textContent.includes('切磋用'));
+
+    // 改：改點數後覆蓋更新
+    click('套用 PVE・打王');
+    click('覆蓋更新配置');
+    const saved = JSON.parse(w.localStorage.getItem('gao.calc.builds.v1'));
+    ok('覆蓋更新把目前的點數寫回那一筆', saved.length === 1 && saved[0].con === statVal('體質'));
+
+    // 查：清空再載入
+    click('清空重新配置');
+    ok('清空後體質歸零', statVal('體質') === 0);
+    click('載入配置');
+    ok('載入把存的配置放回來', statVal('體質') === saved[0].con && leftVal() === 0);
+
+    // 刪
+    click('刪除配置');
+    ok('刪除後清單消失、回到空狀態提示',
+      !d.querySelector('select[aria-label="已存配置"]') &&
+      d.body.textContent.includes('還沒有儲存的配置'));
+    ok('localStorage 也清掉了', JSON.parse(w.localStorage.getItem('gao.calc.builds.v1')).length === 0);
+    dom.window.close();
   }
 }
 

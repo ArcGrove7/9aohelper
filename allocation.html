@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>點數計算機 — 9aohelper</title>
+<meta name="theme-color" content="#0b0e14">
+<link rel="stylesheet" href="style.css">
+<script src="site.js" defer></script>
 <style>
   :root {
     --bg: #0b0e14; --bg2: #12161f; --line: #ffffff17; --edge: #ffffff29;
@@ -14,13 +17,8 @@
     --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC",
             "Microsoft JhengHei UI", "PingFang TC", sans-serif;
   }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--bg); color: var(--txt2); font-family: var(--sans); }
-  body { padding: 16px 14px calc(28px + env(safe-area-inset-bottom, 0px)); font-size: 13px; line-height: 1.6; }
-  .wrap { max-width: 900px; margin: 0 auto; }
-
-  h1 { margin: 0 0 2px; font-size: 15px; letter-spacing: .08em; color: var(--accent-hi); font-family: var(--mono); }
-  .sub { margin: 0 0 14px; font-size: 11px; color: var(--txt3); font-family: var(--mono); }
+  #app { font-size: 13px; line-height: 1.6; color: var(--txt2); }
+  #app .bname { width: 12.5rem; text-align: left; font-weight: 400; }
 
   .h { margin: 16px 0 7px; font-size: 11.5px; letter-spacing: .09em; color: var(--txt3);
        font-family: var(--mono); border-bottom: 1px solid var(--line); padding-bottom: 5px; }
@@ -80,12 +78,24 @@
 </style>
 </head>
 <body>
-<div class="wrap">
-  <p style="margin:0 0 10px;font-size:12px"><a href="index.html" style="color:var(--accent)">← 回 9aohelper</a></p>
-  <h1>點數計算機 · ALLOCATION</h1>
-  <p class="sub" id="meta"></p>
+<header class="site">
+  <a class="title" href="index.html">9aohelper</a>
+  <nav class="site">
+    <a href="index.html">首頁</a>
+    <a href="zones.html">地圖圖鑑</a>
+    <a href="skills.html">技能圖鑑</a>
+    <a href="materials.html">素材圖鑑</a>
+    <a href="effects.html">裝備圖鑑</a>
+    <a href="formulas.html">公式與武器</a>
+    <a href="stats.html">配點攻略</a>
+    <a href="allocation.html" aria-current="page">點數計算機</a>
+    <a href="updates.html">版本情報</a>
+  </nav>
+</header>
+<main>
+  <h1>點數計算機</h1>
   <div id="app"></div>
-</div>
+</main>
 
 <!-- GAOCALC-CORE:BEGIN  ← build.ps1 把 src/36-calccore.js 原樣寫進這兩個標記之間 -->
 <script>
@@ -1007,9 +1017,6 @@ const GAOCALC = (function () {
   } catch (e) { /* 壞掉的存檔就當沒有 */ }
 
   const app = document.getElementById('app');
-  document.getElementById('meta').textContent =
-    'GAME ' + C.META.game + ' · ' + C.META.symbol + ' · 等級上限 ' +
-    (C.KNOWN_LEVEL_CAP == null ? '未知' : C.KNOWN_LEVEL_CAP);
 
   function el(tag, cls, txt) {
     const n = document.createElement(tag);
@@ -1043,6 +1050,156 @@ const GAOCALC = (function () {
     save(); render();
   }
 
+  // ---- 我的配置：增刪查改（存在瀏覽器裡） ---------------------------------
+  const BKEY = 'gao.calc.builds.v1';
+  let selBuild = '';
+  let nameDraft = '';
+  function builds() {
+    try {
+      const a = JSON.parse(localStorage.getItem(BKEY) || '[]');
+      return Array.isArray(a) ? a : [];
+    } catch (e) { return []; }
+  }
+  function saveBuilds(list) {
+    try { localStorage.setItem(BKEY, JSON.stringify(list)); } catch (e) {}
+  }
+  function snapshotBuild(name, id) {
+    const b = { id: id || 'b' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+                name: name, level: state.level };
+    C.STAT_KEYS.forEach(function (k) { b[k] = state[k]; });
+    return b;
+  }
+  function applyStats(source) {
+    C.STAT_KEYS.forEach(function (k) {
+      state[k] = C.clampInt(source[k] || 0, 0, C.LIMIT.statMax);
+    });
+    let over = used() - state.total;
+    for (let i = C.STAT_KEYS.length - 1; i >= 0 && over > 0; i--) {
+      const k = C.STAT_KEYS[i];
+      const cut = Math.min(state[k], over);
+      state[k] -= cut; over -= cut;
+    }
+    save(); render();
+  }
+
+  // ---- 建議配點：PVE 與 PVP 分開 ------------------------------------------
+  const PRESETS = [
+    { name: 'PVE・練功', desc: '速度買出手與段數，體質撐長戰鬥。',
+      weights: [['agi', 45], ['con', 30], ['tou', 15], ['str', 10]] },
+    { name: 'PVE・打王', desc: '活得久才有輸出：血量與防禦優先，敏捷保出手。',
+      weights: [['con', 35], ['tou', 25], ['agi', 20], ['str', 10], ['tec', 10]] },
+    { name: 'PVP・切磋', desc: '先手與命中定勝負：速度與技巧優先，體質抗暴。',
+      weights: [['agi', 30], ['tec', 25], ['con', 25], ['tou', 10], ['str', 10]] },
+  ];
+  function applyPreset(p) {
+    C.STAT_KEYS.forEach(function (k) { state[k] = 0; });
+    let spent = 0;
+    p.weights.forEach(function (w) {
+      const pts = Math.floor(state.total * w[1] / 100);
+      state[w[0]] = pts; spent += pts;
+    });
+    state[p.weights[0][0]] += state.total - spent;   // 零頭補給第一優先的能力
+    save(); render();
+  }
+  function renderPresets(host) {
+    host.appendChild(el('div', 'h', '建議配點（點「套用」直接鋪滿總點數）'));
+    const grid = el('div', 'grid');
+    PRESETS.forEach(function (p) {
+      const tile = el('div', 'tile');
+      tile.style.setProperty('--c', p.name.indexOf('PVP') === 0 ? 'var(--down)' : 'var(--up)');
+      const name = el('div', 'name', p.name);
+      tile.appendChild(name);
+      tile.appendChild(el('div', 'meta', p.weights.map(function (w) {
+        return C.STAT_BY_KEY ? C.STAT_BY_KEY[w[0]].cjk + ' ' + w[1] + '%' :
+               w[0] + ' ' + w[1] + '%';
+      }).join(' · ')));
+      tile.appendChild(el('div', 'hint', p.desc));
+      const steps = el('div', 'steps');
+      const b = el('button', null, '套用');
+      b.setAttribute('aria-label', '套用 ' + p.name);
+      b.addEventListener('click', function () { applyPreset(p); });
+      steps.appendChild(b);
+      tile.appendChild(steps);
+      grid.appendChild(tile);
+    });
+    host.appendChild(grid);
+  }
+
+  function renderBuilds(host) {
+    host.appendChild(el('div', 'h', '我的配置'));
+    const list = builds();
+    const row = el('div', 'row');
+
+    const nameIn = document.createElement('input');
+    nameIn.type = 'text';
+    nameIn.className = 'bname';
+    nameIn.placeholder = '配置名稱（例：打王用）';
+    nameIn.value = nameDraft;
+    nameIn.setAttribute('aria-label', '配置名稱');
+    nameIn.addEventListener('input', function () { nameDraft = nameIn.value; });
+    row.appendChild(nameIn);
+
+    const add = el('button', null, '儲存新配置');
+    add.setAttribute('aria-label', '儲存新配置');
+    add.addEventListener('click', function () {
+      const name = nameDraft.trim() || '配置 ' + (list.length + 1);
+      const b = snapshotBuild(name);
+      list.push(b); saveBuilds(list);
+      selBuild = b.id; nameDraft = name; render();
+    });
+    row.appendChild(add);
+    host.appendChild(row);
+
+    if (!list.length) {
+      host.appendChild(el('div', 'hint', '還沒有儲存的配置——配好點、取個名字，按「儲存新配置」。'));
+      return;
+    }
+
+    const row2 = el('div', 'row');
+    const sel = document.createElement('select');
+    sel.setAttribute('aria-label', '已存配置');
+    list.forEach(function (b) {
+      const o = document.createElement('option');
+      o.value = b.id;
+      o.textContent = b.name + '（Lv ' + b.level + '）';
+      sel.appendChild(o);
+    });
+    if (list.some(function (b) { return b.id === selBuild; })) sel.value = selBuild;
+    else selBuild = sel.value;
+    sel.addEventListener('change', function () { selBuild = sel.value; });
+    row2.appendChild(sel);
+
+    function selected() {
+      return list.find(function (b) { return b.id === selBuild; }) || null;
+    }
+    [['載入', function () {
+        const b = selected(); if (!b) return;
+        state.level = C.clampInt(b.level, C.LIMIT.levelMin, C.LIMIT.levelMax);
+        state.total = C.statPointsFor(state.level);
+        nameDraft = b.name;
+        applyStats(b);
+      }],
+     ['覆蓋更新', function () {
+        const b = selected(); if (!b) return;
+        const name = nameDraft.trim() || b.name;
+        const i = list.indexOf(b);
+        list[i] = snapshotBuild(name, b.id);
+        saveBuilds(list); render();
+      }],
+     ['刪除', function () {
+        const i = list.findIndex(function (b) { return b.id === selBuild; });
+        if (i < 0) return;
+        list.splice(i, 1); saveBuilds(list);
+        selBuild = ''; render();
+      }]].forEach(function (a) {
+      const b = el('button', null, a[0]);
+      b.setAttribute('aria-label', a[0] + '配置');
+      b.addEventListener('click', a[1]);
+      row2.appendChild(b);
+    });
+    host.appendChild(row2);
+  }
+
   // ---- 配點 ---------------------------------------------------------------
   function renderAlloc(host) {
     const sum = el('div', 'sum');
@@ -1064,6 +1221,9 @@ const GAOCALC = (function () {
     });
     acts.appendChild(clr);
     host.appendChild(acts);
+
+    renderPresets(host);
+    renderBuilds(host);
 
     const outlook = Object.create(null);
     C.statOutlooks(state).forEach(function (o) { outlook[o.stat.key] = o; });
@@ -1337,5 +1497,8 @@ const GAOCALC = (function () {
   window.__GAOCALC_UI__ = { render: render, get state() { return state; } };
 })();
 </script>
+<footer class="site">
+9aohelper · 遊戲版本 v3.1.8 · 2026-09-05 更新
+</footer>
 </body>
 </html>
