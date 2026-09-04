@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="style.css">
 <script src="site.js" defer></script>
 <script src="data/search-index.js" defer></script>
+<script src="data/db.js"></script>
 </head>
 <body>
 <header class="site">
@@ -36,13 +37,14 @@
 <main>
 <h1>敵人圖鑑</h1>
 <p class="lead">①大草原～⑧青藏高原的敵人（150 隻，含秘境出沒）。
-HP 與等級是<strong>觀測下限</strong>，樓層越深數值越高；掉落物點名稱可看素材詳情。</p>
+HP 與等級是<strong>觀測下限</strong>，樓層越深數值越高。
+預設是<strong>一隻怪一張卡</strong>，搜尋列旁可切回表格、可排序；掉落物點名稱直接看詳情。</p>
 
 <h2>敵人總表（可搜尋・可篩地圖）</h2>
 <p class="note"><strong>打片段就會篩</strong>——搜怪名（「菇菇」）、掉落物（「傘」「技能書名」）或種族（「植物」），
 也可以按地圖籤。手機上每一列攤成一張卡片。</p>
 <div class="table-wrap">
-<table class="rtable" data-search="搜尋敵人、掉落物或種族（例：菇菇、狗頭人爪、植物）" data-chip-col="1">
+<table id="etab" class="rtable" data-search="搜尋敵人、掉落物或種族（例：菇菇、狗頭人爪、植物）" data-chip-col="1">
 <thead><tr><th>名稱</th><th>地圖</th><th>出沒</th><th>最低HP</th><th>最低等級</th><th>種族</th><th>掉落素材</th><th>掉落技能書</th><th>掉落卷軸</th><th>掉落補品</th><th>掉落其他</th><th>裝備</th><th>使用技能</th></tr></thead>
 <tbody>
 <tr><td><a class="dlink" href="detail.html?t=enemy&amp;id=小白兔">小白兔</a></td><td>大草原</td><td>大草原 1</td><td>238</td><td>1</td><td>動物</td><td>兔皮、S級兔皮</td><td>—</td><td>—</td><td>兔肉，高級兔肉，S級兔肉</td><td>—</td><td>—</td><td>—</td></tr>

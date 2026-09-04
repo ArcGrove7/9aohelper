@@ -183,6 +183,124 @@
     if (input && box) wireSearch(input, box);
   }
 
+  /* ---- 8) 敵人圖鑑卡片檢視：一隻怪一張卡（屬性 chips＋掉落＋出沒），
+     資料吃 data/db.js 的關聯（掉落可點進素材／技能詳情），與表格搜尋
+     籤同步過濾；預設卡片、可切表格、可排序，偏好存瀏覽器。 ---- */
+  function enemyCards() {
+    const table = document.getElementById('etab');
+    const DB = window.DB;
+    if (!table || !DB || !DB.enemies) return;
+    const wrap = table.closest('.table-wrap');
+    const rows = bodyRows(table);
+    if (rows.length !== DB.enemies.length) return;   // 對不上就不動，表格照舊
+
+    const esc = (x) => String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    const dlink = (t, id, text) => '<a href="detail.html?t=' + t + '&id='
+      + encodeURIComponent(id) + '">' + esc(text == null ? id : text) + '</a>';
+    const splitList = (x) => String(x || '').split(/[、,，\/／]/)
+      .map((v) => v.trim()).filter(Boolean);
+
+    const grid = document.createElement('div');
+    grid.id = 'ecards';
+    const cards = DB.enemies.map((e) => {
+      const card = document.createElement('article');
+      card.className = 'ecard';
+      let h = '<header>' + dlink('enemy', e.id, e.n)
+        + '<span class="lvb">LV ' + (e.lv ? esc(e.lv) : '?') + '</span>'
+        + (e.race ? '<span class="raceb">' + esc(e.race) + '</span>' : '')
+        + '</header>';
+      h += '<div class="esec">怪物屬性</div><div class="echips">'
+        + '<span class="stat">最低HP<b>' + (e.hp ? esc(e.hp) : '—') + '</b></span>'
+        + '<span class="stat">最低等級<b>' + (e.lv ? esc(e.lv) : '—') + '</b></span>'
+        + '</div>';
+      const dropIds = new Set(e.dropIds || []);
+      const bookIds = new Set(e.bookIds || []);
+      const drops = splitList(e.drops).map((d) =>
+        dropIds.has(d) ? dlink('material', d) : '<span>' + esc(d) + '</span>');
+      const books = splitList(e.books).map((b) =>
+        bookIds.has(b) ? dlink('skill', b) : '<span>' + esc(b) + '</span>');
+      const rest = [e.scrolls, e.potions, e.other].map(splitList).flat()
+        .map((v) => '<span class="dim">' + esc(v) + '</span>');
+      if (drops.length + books.length + rest.length) {
+        h += '<div class="esec">掉落</div><div class="echips">'
+          + drops.join('') + books.join('') + rest.join('') + '</div>';
+      }
+      h += '<div class="esec">出沒地圖</div><div class="echips">'
+        + dlink('zone', e.zoneId, e.zone)
+        + (e.at && e.at !== e.zone
+            ? '<span class="' + (e.at.indexOf(e.zone) === 0 ? '' : 'realm') + '">'
+              + esc(e.at) + '</span>' : '')
+        + '</div>';
+      if (e.equip || e.skills) {
+        h += '<div class="emeta">'
+          + (e.equip ? '<div>裝備：' + esc(e.equip) + '</div>' : '')
+          + (e.skills ? '<div>技能：' + esc(e.skills) + '</div>' : '') + '</div>';
+      }
+      card.innerHTML = h;
+      return card;
+    });
+    cards.forEach((c) => grid.append(c));
+    wrap.parentNode.insertBefore(grid, wrap);
+
+    // 與表格的搜尋／籤同步：表格列被篩掉，卡片跟著消失
+    const sync = () => rows.forEach((tr, i) => { cards[i].hidden = tr.hidden; });
+    document.addEventListener('input', sync);
+    document.addEventListener('click', () => setTimeout(sync, 0));
+    sync();
+
+    // 檢視切換＋排序，掛在搜尋列上
+    const bar = wrap.parentNode.querySelector('.tbar .row');
+    const VKEY = 'pref.enemyview';
+    let mode = 'cards';
+    try { if (localStorage.getItem(VKEY) === 'table') mode = 'table'; } catch (e) {}
+    const vbtns = {};
+    const applyView = () => {
+      grid.hidden = mode !== 'cards';
+      wrap.hidden = mode === 'cards';
+      Object.entries(vbtns).forEach(([m, b]) =>
+        b.setAttribute('aria-pressed', String(m === mode)));
+    };
+    [['cards', '▦ 卡片'], ['table', '☰ 表格']].forEach(([m, label]) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'vbtn';
+      b.textContent = label;
+      b.setAttribute('aria-label', label + '檢視');
+      b.addEventListener('click', () => {
+        mode = m;
+        try { localStorage.setItem(VKEY, m); } catch (e) {}
+        applyView();
+      });
+      vbtns[m] = b;
+      if (bar) bar.append(b);
+    });
+    applyView();
+
+    const sel = document.createElement('select');
+    sel.setAttribute('aria-label', '排序');
+    [['', '預設順序'], ['lv-a', '等級低→高'], ['lv-d', '等級高→低'],
+     ['hp-a', 'HP低→高'], ['hp-d', 'HP高→低']].forEach(([v, label]) => {
+      const o = document.createElement('option');
+      o.value = v;
+      o.textContent = label;
+      sel.append(o);
+    });
+    sel.addEventListener('change', () => {
+      const [key, dir] = sel.value ? sel.value.split('-') : [null, null];
+      const order = DB.enemies.map((e, i) => i);
+      if (key) {
+        order.sort((a, b) => {
+          const va = Number(DB.enemies[a][key]) || Infinity;
+          const vb = Number(DB.enemies[b][key]) || Infinity;
+          return dir === 'd' ? (vb === Infinity ? -1 : va === Infinity ? 1 : vb - va) : va - vb;
+        });
+      }
+      const tbody = rows[0].parentNode;
+      order.forEach((i) => { grid.append(cards[i]); tbody.append(rows[i]); });
+    });
+    if (bar) bar.append(sel);
+  }
+
   /* ---- 7) 易讀模式：放大字距行距、表格攤成卡片，整站記住 ---- */
   function readableToggle() {
     const KEY = 'pref.readable';
@@ -292,6 +410,7 @@
     document.querySelectorAll('table.rtable').forEach(labelCells);
     document.querySelectorAll('table[data-search]').forEach(attachSearch);
     attachGlobalSearch();
+    enemyCards();
     readableToggle();
     headerSearch();
     urlQuery();

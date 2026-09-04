@@ -770,6 +770,58 @@ async function main() {
         p.querySelector('.pt') && p.querySelector('.pd') && p.querySelector('.pn')));
     dom.window.close();
   }
+
+  // -------------------------------------------------------------------------
+  console.log('⑳ 敵人圖鑑卡片檢視：一隻怪一張卡、與搜尋同步、可切表格、可排序');
+  {
+    const dom = await load('enemies.html', '', ['data/db.js']);
+    const d = dom.window.document, w = dom.window;
+    const cards = [...d.querySelectorAll('#ecards .ecard')];
+    ok('150 張怪物卡建出來了', cards.length === 150);
+    ok('預設卡片檢視：表格收起、卡片顯示',
+      d.querySelector('.table-wrap').hidden === true &&
+      d.getElementById('ecards').hidden === false);
+    const c0 = cards[0];
+    ok('卡片有名稱連結、LV 徽章、屬性 chips 與出沒地圖',
+      c0.querySelector('header a').href.includes('detail.html?t=enemy') &&
+      c0.querySelector('.lvb') && c0.textContent.includes('最低HP') &&
+      c0.textContent.includes('出沒地圖'));
+    ok('掉落素材在卡片上是實體連結',
+      cards.some((c) => [...c.querySelectorAll('a')].some((a) =>
+        a.href.includes('detail.html?t=material'))));
+
+    // 搜尋與籤同步
+    const input = d.querySelector('.tbar input[type="search"]');
+    type(input, '菇菇', w);
+    const visCards = () => cards.filter((c) => !c.hidden).length;
+    ok('搜尋「菇菇」→ 卡片跟著表格一起被篩', visCards() > 3 && visCards() < 150);
+    type(input, '', w);
+    ok('清空搜尋 → 卡片全回來', visCards() === 150);
+
+    // 切檢視＋記住
+    const tbtn = [...d.querySelectorAll('.vbtn')].find((b) => b.textContent.includes('表格'));
+    tbtn.click();
+    ok('切到表格檢視：表格展開、卡片收起、偏好記住',
+      d.querySelector('.table-wrap').hidden === false &&
+      d.getElementById('ecards').hidden === true &&
+      w.localStorage.getItem('pref.enemyview') === 'table');
+    [...d.querySelectorAll('.vbtn')].find((b) => b.textContent.includes('卡片')).click();
+
+    // 排序
+    const sel = d.querySelector('select[aria-label="排序"]');
+    sel.value = 'lv-d';
+    sel.dispatchEvent(new w.Event('change', { bubbles: true }));
+    const DBx = (() => {
+      const window = {};
+      eval(fs.readFileSync(path.join(SITE, 'data', 'db.js'), 'utf8'));
+      return window.DB;
+    })();
+    const maxLv = Math.max(...DBx.enemies.map((e) => Number(e.lv) || 0));
+    const first = d.querySelector('#ecards .ecard');
+    ok('排序「等級高→低」→ 最高等級（' + maxLv + '）排最前',
+      first.querySelector('.lvb').textContent === 'LV ' + maxLv);
+    dom.window.close();
+  }
 }
 
 main().then(() => {
