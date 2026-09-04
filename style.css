@@ -812,3 +812,52 @@ html.readable .point .pd { font-size: 1em; }
   padding: 0.35rem 0.5rem; font-size: 0.88rem; min-height: 2.2rem;
 }
 html.readable .ecard { font-size: 1.02em; }
+
+/* ============================================================
+   地圖圖鑑領域輪播（2026-09-05）——照遊戲內世界地圖的分頁：
+   ‹ 領域名＋MAP 範圍＋指示點 ›，一次看一個領域。
+   ============================================================ */
+.wmap {
+  background: var(--card);
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem 1.1rem;
+  margin: 1.2rem 0;
+}
+.wmap-head {
+  display: flex; align-items: center; gap: 0.8rem;
+  padding-bottom: 0.7rem; margin-bottom: 0.9rem;
+  border-bottom: 1px solid var(--line);
+}
+.wnav {
+  flex: 0 0 auto;
+  width: 2.6rem; height: 2.6rem; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--code-bg); color: var(--ink);
+  border: 1px solid var(--edge);
+  font-size: 1.2rem; cursor: pointer;
+}
+.wnav:hover { border-color: var(--accent); color: var(--accent-hi); }
+.wmap-title { flex: 1 1 auto; text-align: center; }
+.wmap-title b { display: block; color: var(--ink); font-size: 1.05rem; }
+.wmap-title .wrange {
+  display: block; font: 700 0.78rem var(--mono);
+  letter-spacing: 0.12em; color: var(--muted); margin-top: 0.1rem;
+}
+.wdots { display: inline-flex; gap: 0.35rem; margin-top: 0.4rem; }
+.wdot {
+  width: 1.5rem; height: 0.22rem; border-radius: 99px;
+  background: var(--line); display: inline-block;
+}
+.wdot.on { background: var(--accent); }
+.wzone[hidden] { display: none; }
+.zmystery {
+  background: var(--card);
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+  color: var(--muted);
+}
+.zmystery h3 { margin: 0; font-size: 1rem; color: var(--muted); }
+.zmystery .zhead { display: flex; align-items: center; gap: 0.6rem; }
+.zmystery .zdesc { margin: 0.5rem 0 0; font-size: 0.88rem; }

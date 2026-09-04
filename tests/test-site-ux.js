@@ -822,6 +822,36 @@ async function main() {
       first.querySelector('.lvb').textContent === 'LV ' + maxLv);
     dom.window.close();
   }
+
+  // -------------------------------------------------------------------------
+  console.log('㉑ 地圖圖鑑領域輪播：編號數法移除，兩個領域用 ‹ › 切換');
+  {
+    const html = fs.readFileSync(path.join(SITE, 'zones.html'), 'utf8');
+    ok('編號數法整節移除', !html.includes('編號數法'));
+
+    const dom = await load('zones.html');
+    const d = dom.window.document;
+    const panels = [...d.querySelectorAll('.wzone')];
+    ok('兩個領域面板（起始之鎮／耶索得）', panels.length === 2 &&
+      panels[0].dataset.name === '起始之鎮 領域' && panels[1].dataset.name === '耶索得 領域');
+    ok('起始領域 11 張卡、耶索得領域 2 張卡＋未開放佔位',
+      panels[0].querySelectorAll('.zcard').length === 11 &&
+      panels[1].querySelectorAll('.zcard').length === 2 &&
+      panels[1].querySelector('.zmystery'));
+    ok('預設顯示起始之鎮領域（MAP 01 – 10），另一頁收起',
+      !panels[0].hidden && panels[1].hidden &&
+      d.getElementById('wrange').textContent === 'MAP 01 – 10');
+    d.getElementById('wnext').click();
+    ok('按 › 切到耶索得領域（MAP 11 – 20），指示點跟著動',
+      panels[0].hidden && !panels[1].hidden &&
+      d.getElementById('wname').textContent === '耶索得 領域' &&
+      d.querySelectorAll('.wdot')[1].classList.contains('on'));
+    d.getElementById('wnext').click();
+    ok('再按 › 繞回起始之鎮領域', !panels[0].hidden && panels[1].hidden);
+    d.getElementById('wprev').click();
+    ok('按 ‹ 也能往回繞', panels[0].hidden && !panels[1].hidden);
+    dom.window.close();
+  }
 }
 
 main().then(() => {

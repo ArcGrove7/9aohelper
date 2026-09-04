@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>地圖圖鑑 — 9aohelper</title>
-<meta name="description" content="13 張地圖的描述、編號數法、秘境對照與王關機制。">
+<meta name="description" content="13 張地圖的領域圖鑑：官方描述、秘境與王關機制。">
 <meta name="theme-color" content="#0b0e14">
 <link rel="canonical" href="https://9aohelper.pages.dev/zones">
 <meta property="og:site_name" content="9aohelper">
 <meta property="og:title" content="地圖圖鑑 — 9aohelper">
-<meta property="og:description" content="13 張地圖的描述、編號數法、秘境對照與王關機制。">
+<meta property="og:description" content="13 張地圖的領域圖鑑：官方描述、秘境與王關機制。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://9aohelper.pages.dev/zones">
 <link rel="stylesheet" href="style.css">
@@ -35,16 +35,18 @@
 </header>
 <main>
 <h1>地圖圖鑑</h1>
-<h2>編號數法</h2>
-<div class="table-wrap">
-<table>
-<tr><th>①</th><th>②</th><th>③</th><th>④</th><th>⑤</th><th>⑥</th><th>⑦</th><th>⑧</th><th>⑨</th><th>⑩</th><th>⑪</th></tr>
-<tr><td>大草原</td><td>猛牛園</td><td>兒童樂園</td><td>蘑菇園</td><td>圓明園</td><td>黃石</td><td>鄰家花園</td><td>青藏高原</td><td>火鳳燎原</td><td>阿波羅尼斯圓</td><td>鷹洞</td></tr>
-</table>
-</div>
-
-<h2>全地圖一覽</h2>
-<div class="zonecards">
+<div class="wmap">
+  <div class="wmap-head">
+    <button type="button" class="wnav" id="wprev" aria-label="上一個領域">‹</button>
+    <div class="wmap-title">
+      <b id="wname">起始之鎮 領域</b>
+      <span class="wrange" id="wrange">MAP 01 – 10</span>
+      <span class="wdots" id="wdots" aria-hidden="true"></span>
+    </div>
+    <button type="button" class="wnav" id="wnext" aria-label="下一個領域">›</button>
+  </div>
+  <section class="wzone" data-name="起始之鎮 領域" data-range="MAP 01 – 10">
+    <div class="zonecards">
   <div class="zcard town">
     <div class="zhead"><span class="zicon">🏘️</span>
       <h3><a class="dlink" href="detail.html?t=zone&amp;id=starting_town">起始之鎮</a><span class="zkey">starting_town</span></h3>
@@ -122,28 +124,67 @@
     <p class="zdesc">定比之圓，尺規與定理交織的異境。</p>
     <div class="zmeta"><span class="zr">秘境：三角寒樹</span></div>
   </div>
-  <div class="zcard">
-    <div class="zhead"><span class="zicon">🦅</span>
-      <h3><a class="dlink" href="detail.html?t=zone&amp;id=eagle_cave">鷹洞</a><span class="zkey">eagle_cave</span></h3>
-      <span class="znum">⑪</span></div>
-    <p class="zdesc">猛禽盤旋的峭壁洞窟，深處傳來格鬥家的低吼。</p>
-    <div class="zmeta"><span class="zr">秘境：陰洞</span><span>陰洞樓層是「地下 N 層」往下數</span><span>地圖第 1 頁</span></div>
-  </div>
+    </div>
+  </section>
+  <section class="wzone" data-name="耶索得 領域" data-range="MAP 11 – 20">
+    <div class="zonecards">
   <div class="zcard town">
     <div class="zhead"><span class="zicon">🏛️</span>
       <h3><a class="dlink" href="detail.html?t=zone&amp;id=yesod">耶索得</a><span class="zkey">yesod</span></h3>
       <span class="znum">城鎮</span></div>
     <p class="zdesc">第二座城鎮，無法在此戰鬥。</p>
-    <div class="zmeta"><span>地圖第 1 頁</span></div>
+    <div class="zmeta"></div>
   </div>
+  <div class="zcard">
+    <div class="zhead"><span class="zicon">🦅</span>
+      <h3><a class="dlink" href="detail.html?t=zone&amp;id=eagle_cave">鷹洞</a><span class="zkey">eagle_cave</span></h3>
+      <span class="znum">⑪</span></div>
+    <p class="zdesc">猛禽盤旋的峭壁洞窟，深處傳來格鬥家的低吼。</p>
+    <div class="zmeta"><span class="zr">秘境：陰洞</span><span>陰洞樓層是「地下 N 層」往下數</span></div>
+  </div>
+      <div class="zmystery">
+        <div class="zhead"><span class="zicon">❓</span><h3>MAP 12 – 20</h3></div>
+        <p class="zdesc">尚未開放。</p>
+      </div>
+    </div>
+  </section>
 </div>
+<script>
+/* 領域輪播：照遊戲內世界地圖的分頁，‹ › 在兩個領域之間切換。
+   沒有 JS 時兩個領域直接並列，內容一樣看得到。 */
+(function () {
+  'use strict';
+  var panels = [].slice.call(document.querySelectorAll('.wzone'));
+  var name = document.getElementById('wname');
+  var range = document.getElementById('wrange');
+  var dots = document.getElementById('wdots');
+  var cur = 0;
+  panels.forEach(function (p, i) {
+    var d = document.createElement('span');
+    d.className = 'wdot';
+    dots.appendChild(d);
+  });
+  function show(i) {
+    cur = (i + panels.length) % panels.length;
+    panels.forEach(function (p, j) { p.hidden = j !== cur; });
+    name.textContent = panels[cur].dataset.name;
+    range.textContent = panels[cur].dataset.range;
+    [].slice.call(dots.children).forEach(function (d, j) {
+      d.className = 'wdot' + (j === cur ? ' on' : '');
+    });
+  }
+  document.getElementById('wprev').addEventListener('click', function () { show(cur - 1); });
+  document.getElementById('wnext').addEventListener('click', function () { show(cur + 1); });
+  show(0);
+})();
+</script>
 <div class="points">
   <div class="point good-b"><span class="pn">×1.4</span><span>
     <span class="pt">秘境收益是同層主圖的 1.4 倍</span>
     <span class="pd">出自官方更新日誌。</span></span></div>
-  <div class="point"><span class="pn">頁</span><span>
-    <span class="pt">死亡復活點跟著地圖頁走</span>
-    <span class="pd">鷹洞與耶索得在第 1 頁，死在耶索得；其餘在第 0 頁，死在起始之鎮。</span></span></div>
+  <div class="point"><span class="pn">域</span><span>
+    <span class="pt">死亡復活點跟著領域走</span>
+    <span class="pd">耶索得領域（鷹洞）死在耶索得；起始之鎮領域死在起始之鎮。</span></span></div>
   <div class="point"><span class="pn">1F</span><span>
     <span class="pt">換圖或死亡會把樓層歸 1</span>
     <span class="pd">回鎮是把樓層歸零的正規手段。</span></span></div>
