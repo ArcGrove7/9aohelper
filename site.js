@@ -104,9 +104,10 @@
     wrap.parentNode.insertBefore(empty, wrap.nextSibling);
 
     const hay = rows.map((tr) => norm(tr.textContent));
+    // 籤比對用「切開後的整值」：按「通用」不能把「通用槍械」一起算進去
     const tagText = rows.map((tr) => {
       const c = chipCol == null ? null : tr.children[Number(chipCol)];
-      return c ? c.textContent : '';
+      return c ? c.textContent.split(/[·、／\/]/).map((s) => s.trim()).filter(Boolean) : [];
     });
 
     function render() {

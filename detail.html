@@ -160,6 +160,10 @@
     const same = DB.skills.filter((x) => x.type === s.type && x.id !== s.id);
     h += '<h2>同型別的其他技能（' + same.length + '）</h2><div class="chips dchips">'
       + same.map((x) => link('skill', x.id)).join('') + '</div>';
+    if (s.acq || s.note) {
+      h += '<h2>取得方式</h2><p>' + esc(s.acq || '') +
+        (s.note ? (s.acq ? '（' + esc(s.note) + '）' : esc(s.note)) : '') + '</p>';
+    }
     h += '<h2>技能書掉落</h2>';
     h += (s.books && s.books.length)
       ? '<div class="chips dchips">' + s.books.map((en) => link('enemy', en)).join('') + '</div>'

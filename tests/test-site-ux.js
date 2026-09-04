@@ -154,14 +154,18 @@ async function main() {
     const dom = await load('skills.html');
     const d = dom.window.document, w = dom.window;
     const rows = [...d.querySelectorAll('table[data-search] tbody tr')];
-    ok('34 招（單手劍＋短刀＋細劍＋通用槍械／其他）', rows.length === 34);
+    ok('197 招（14 種型別全收）', rows.length === 197);
     const input = d.querySelector('.tbar input[type="search"]');
     type(input, '追擊', w);
     ok('打效果片段「追擊」篩得到（不必記招名）', vis(rows) >= 4);
     type(input, '', w);
     const chips = [...d.querySelectorAll('.tbar .chip')];
     chips.find((b) => b.textContent.startsWith('短刀')).click();
-    ok('按型別籤「短刀」→ 只剩短刀的招', vis(rows) === 9);
+    ok('按型別籤「短刀」→ 只剩短刀的招', vis(rows) === 14);
+    chips.find((b) => b.textContent.startsWith('短刀')).click();   // 還原
+    chips.find((b) => b.textContent.startsWith('通用 ')).click();
+    ok('按「通用」不會把「通用槍械」一起算進去（整值比對）', vis(rows) === 39);
+    chips.find((b) => b.textContent.startsWith('通用 ')).click();
     ok('對空鳴槍沒被弄丟（併進總表）',
       rows.some((tr) => tr.textContent.includes('對空鳴槍')));
     dom.window.close();
@@ -434,9 +438,9 @@ async function main() {
       eval(fs.readFileSync(path.join(SITE, 'data', 'db.js'), 'utf8'));
       return window.DB;
     })();
-    ok('五類實體數量對（241/31/34/15/13）',
+    ok('五類實體數量對（241/31/197/15/13）',
       DB.materials.length === 241 && DB.effects.length === 31 &&
-      DB.skills.length === 34 && DB.eqtypes.length === 15 && DB.zones.length === 13);
+      DB.skills.length === 197 && DB.eqtypes.length === 15 && DB.zones.length === 13);
     const effById = Object.fromEntries(DB.effects.map((e) => [e.id, e]));
     const matById = Object.fromEntries(DB.materials.map((m) => [m.id, m]));
     ok('素材→特效的每一筆引用都存在，且特效端反向列得到它',
@@ -512,7 +516,7 @@ async function main() {
     // 列表 → 詳情：各列表頁的名稱是實體連結
     const dl = await load('skills.html');
     ok('技能表名稱連到詳情頁',
-      [...dl.window.document.querySelectorAll('table a.dlink')].length === 34);
+      [...dl.window.document.querySelectorAll('table a.dlink')].length === 197);
     dl.window.close();
   }
 

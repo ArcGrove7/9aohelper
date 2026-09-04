@@ -45,13 +45,16 @@ const materials = M.map(([n, atk, def, luck, wt, dur, tags, fx]) => {
 });
 if (materials.length !== 241) fail('素材應為 241 種，讀到 ' + materials.length);
 
-/* ---- 技能（34 招）＋ 型別分組 ---- */
+/* ---- 技能（197 招，14 種型別）＋ 取得方式 ---- */
 const skills = [];
 for (const tr of doc('skills.html').querySelectorAll('table[data-search] tbody tr')) {
-  const [n, type, desc, gid] = [...tr.children].map((td) => td.textContent.trim());
-  skills.push({ id: n, type, desc, gid: gid === '—' ? null : Number(gid) });
+  const [n, type, desc, gid, acq, note] = [...tr.children].map((td) => td.textContent.trim());
+  skills.push({ id: n, type, desc,
+    gid: gid === '—' ? null : Number(gid),
+    acq: acq === '—' ? '' : acq,
+    note: note === '—' ? '' : note });
 }
-if (skills.length !== 34) fail('技能應為 34 招，讀到 ' + skills.length);
+if (skills.length !== 197) fail('技能應為 197 招，讀到 ' + skills.length);
 
 /* ---- 裝備類型（15 種，效果頁內嵌 EQ 表） ---- */
 const eqSrc = read('effects.html').match(/const EQ=(\[.*?\]);\n/s)[1];
