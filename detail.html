@@ -54,9 +54,7 @@
     <a href="materials.html">素材圖鑑</a>
     <a href="effects.html">裝備圖鑑</a>
     <a href="formulas.html">公式與武器</a>
-    <a href="stats.html">配點攻略</a>
     <a href="allocation.html">點數計算機</a>
-    <a href="compare.html">武器比較</a>
     <a href="updates.html">版本情報</a>
   </nav>
 </header>
@@ -170,17 +168,12 @@
       ? '<div class="chips dchips">' + s.books.map((en) => link('enemy', en)).join('') + '</div>'
       : '<p class="unknown">尚無掉落紀錄——技能書也可能來自王關或成就。</p>';
     const eqt = (DB.eqtypes || []).find((x) => x.id === s.type);
-    const wms = (DB.wmult || []).filter((w) => w.id.includes(s.type));
     const guns = s.type === '通用槍械'
       ? (DB.eqtypes || []).filter((x) => ['手槍', '衝鋒槍', '輕機槍', '狙擊槍'].includes(x.id)) : [];
-    if (eqt || wms.length || guns.length) {
+    if (eqt || guns.length) {
       h += '<h2>拿什麼武器用它</h2><div class="chips dchips">';
       if (eqt) h += link('eqtype', eqt.id, eqt.id + '（裝備類型）');
       guns.forEach((g) => { h += link('eqtype', g.id, g.id); });
-      wms.forEach((w) => {
-        h += '<a href="compare.html?at=' + encodeURIComponent(w.id) + '">'
-          + esc(w.id) + ' 放進比較器</a>';
-      });
       h += '</div>';
     }
     h += updBlock(s, s.id);
@@ -199,9 +192,9 @@
     const vars = (DB.wmult || []).filter((w) =>
       w.id.includes(e.id) || (e.id === '盾牌' && w.id.includes('盾')));
     if (vars.length) {
-      h += '<h2>放進武器比較器</h2><div class="chips dchips">'
-        + vars.map((w) => '<a href="compare.html?at=' + encodeURIComponent(w.id) + '">'
-          + esc(w.id) + '（命中 ×' + w.hit + '）</a>').join('')
+      h += '<h2>戰鬥型別倍率（命中）</h2><div class="chips dchips">'
+        + vars.map((w) => '<a href="formulas.html?q=' + encodeURIComponent(w.id) + '">'
+          + esc(w.id) + ' ×' + w.hit + '</a>').join('')
         + '</div>';
     }
     h += '<p class="note">' + listLink('effects.html', '', '完整係數與品質倍率在裝備圖鑑 →')

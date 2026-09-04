@@ -30,9 +30,7 @@ const detail = (t, id) => 'detail.html?t=' + t + '&id=' + encodeURIComponent(id)
  ['素材圖鑑', 'materials.html', '素材 鍛造 標籤 特效'],
  ['裝備圖鑑', 'effects.html', '裝備 係數 品質 特效 附魔'],
  ['公式與武器', 'formulas.html', '傷害 公式 熟練 折算 倍率 戰報'],
- ['配點攻略', 'stats.html', '配點 能力點 屬性 天賦'],
  ['點數計算機', 'allocation.html', '計算機 工具 配點 配置 PVE PVP'],
- ['武器比較器', 'compare.html', '比較 武器 輸出 折算 倍率 工具'],
  ['版本情報', 'updates.html', '更新 日誌 版本 changelog'],
 ].forEach(([n, u, k]) => add(n, '頁面', u, k));
 
