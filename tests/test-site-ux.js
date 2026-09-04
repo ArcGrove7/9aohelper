@@ -677,15 +677,36 @@ async function main() {
     const dom = await load('enemies.html');
     const d = dom.window.document, w = dom.window;
     const rows = [...d.querySelectorAll('table[data-search] tbody tr')];
-    ok('150 隻敵人全在', rows.length === 150);
+    ok('162 隻敵人全在', rows.length === 162);
     const input = d.querySelector('.tbar input[type="search"]');
     type(input, '菇菇', w);
-    ok('打「菇菇」篩得到蘑菇園那掛', vis(rows) > 3 && vis(rows) < 150);
+    ok('打「菇菇」篩得到蘑菇園那掛', vis(rows) > 3 && vis(rows) < 162);
     type(input, '狗頭人爪', w);
     ok('打掉落物「狗頭人爪」也搜得到', vis(rows) >= 2);
     type(input, '', w);
     const chips = [...d.querySelectorAll('.tbar .chip')];
-    ok('地圖籤有 8 張圖', chips.length === 8);
+    ok('地圖籤有 9 張圖', chips.length === 9);
+    ok('地圖籤多了鷹洞', chips.some((b) => b.textContent.startsWith('鷹洞')));
+
+    // 鷹洞（第 11 張圖）：陰洞十種＋王關兩種
+    const eagleRows = rows.filter((r) => r.children[1].textContent.trim() === '鷹洞');
+    ok('鷹洞 12 隻敵人', eagleRows.length === 12);
+    ok('陰洞的魑魅魍魎四隻都在', ['魑', '魅', '魍', '魎']
+      .every((n) => eagleRows.some((r) => r.children[0].textContent.trim() === n)));
+    const heitie = eagleRows.find((r) => r.children[0].textContent.includes('黑鐵一輝'));
+    ok('黑鐵一輝 Lv175、HP 8889、人形',
+      heitie.children[4].textContent.trim() === '175'
+      && heitie.children[3].textContent.trim() === '8889'
+      && heitie.children[5].textContent.trim() === '人形');
+    const yelu = eagleRows.find((r) => r.children[0].textContent.includes('夜露'));
+    ok('夜露帶 SMG 與三招（掃射轉移／瞬爆閃／跑射）',
+      yelu.children[11].textContent.includes('SMG')
+      && ['掃射轉移', '瞬爆閃', '跑射'].every((k) => yelu.children[12].textContent.includes(k)));
+    ok('陰洞的出沒欄寫「地下 N 層」，不是 NF',
+      eagleRows.filter((r) => r.children[2].textContent.includes('陰洞'))
+        .every((r) => r.children[2].textContent.includes('地下')));
+    ok('王關兩隻標在鷹洞 30', eagleRows
+      .filter((r) => r.children[2].textContent.includes('王關')).length === 2);
     chips.find((b) => b.textContent.startsWith('青藏高原')).click();
     ok('按「青藏高原」→ 只剩那張圖的敵人', vis(rows) > 0 &&
       rows.filter((tr) => !tr.hidden).every((tr) => tr.children[1].textContent.includes('青藏高原')));
@@ -697,7 +718,7 @@ async function main() {
       eval(fs.readFileSync(path.join(SITE, 'data', 'db.js'), 'utf8'));
       return window.DB;
     })();
-    ok('敵人 150 隻進庫', DB3.enemies.length === 150);
+    ok('敵人 162 隻進庫', DB3.enemies.length === 162);
     const matById3 = Object.fromEntries(DB3.materials.map((m) => [m.id, m]));
     ok('敵人→素材的每筆掉落，素材端都反向列得到',
       DB3.enemies.every((e) => e.dropIds.every((m) =>
@@ -816,7 +837,7 @@ async function main() {
     const dom = await load('enemies.html', '', ['data/db.js']);
     const d = dom.window.document, w = dom.window;
     const cards = [...d.querySelectorAll('#ecards .ecard')];
-    ok('150 張怪物卡建出來了', cards.length === 150);
+    ok('162 張怪物卡建出來了', cards.length === 162);
     ok('預設卡片檢視：表格收起、卡片顯示',
       d.querySelector('.table-wrap').hidden === true &&
       d.getElementById('ecards').hidden === false);
@@ -833,9 +854,9 @@ async function main() {
     const input = d.querySelector('.tbar input[type="search"]');
     type(input, '菇菇', w);
     const visCards = () => cards.filter((c) => !c.hidden).length;
-    ok('搜尋「菇菇」→ 卡片跟著表格一起被篩', visCards() > 3 && visCards() < 150);
+    ok('搜尋「菇菇」→ 卡片跟著表格一起被篩', visCards() > 3 && visCards() < 162);
     type(input, '', w);
-    ok('清空搜尋 → 卡片全回來', visCards() === 150);
+    ok('清空搜尋 → 卡片全回來', visCards() === 162);
 
     // 切檢視＋記住
     const tbtn = [...d.querySelectorAll('.vbtn')].find((b) => b.textContent.includes('表格'));
