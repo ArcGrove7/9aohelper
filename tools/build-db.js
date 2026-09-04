@@ -76,6 +76,22 @@ if (zones.length !== 13) fail('地圖應為 13 張，讀到 ' + zones.length);
 const dupZone = zones.map((z) => z.id).filter((k, i, a) => a.indexOf(k) !== i);
 if (dupZone.length) fail('地圖鍵重複：' + dupZone.join(','));
 
+/* ---- 武器型別倍率（公式頁 §3 表；比較器要用） ---- */
+const wmult = [];
+for (const tr of doc('formulas.html').querySelectorAll('table[data-search] tr')) {
+  const tds = [...tr.children].filter((c) => c.tagName === 'TD');
+  if (tds.length !== 7) continue;
+  const [label, hit, block, dodge, pierce, cres, consec] = tds.map((td) => td.textContent.trim());
+  wmult.push({
+    id: label,
+    hit: Number(hit), block: Number(block), dodge: Number(dodge),
+    pierce: Number(pierce), cres: Number(cres), consec: Number(consec),
+  });
+}
+if (wmult.length !== 21) fail('武器倍率應為 21 列，讀到 ' + wmult.length);
+if (wmult.some((w) => [w.hit, w.block, w.dodge, w.pierce, w.cres, w.consec].some((v) => !(v > 0))))
+  fail('武器倍率有非正數，來源表可能改了欄位順序');
+
 /* ---- 版本情報關聯：實體名稱在更新內容裡的命中（每實體最新 8 筆） ---- */
 const updates = [];
 for (const tr of doc('updates.html').querySelectorAll('table[data-search] tbody tr')) {
@@ -105,6 +121,7 @@ const db = {
   skills: skills.map((s) => ({ ...s, upd: related(s.id) })),
   eqtypes: eqtypes.map((e) => ({ ...e, upd: related(e.id) })),
   zones: zones.map((z) => ({ ...z, upd: related(z.n, z.realm ? [z.realm.split('（')[0]] : []) })),
+  wmult,
 };
 
 if (process.exitCode) {

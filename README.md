@@ -17,6 +17,7 @@
 | `formulas.html` | 公式與武器：傷害公式、熟練折算、型別倍率表 |
 | `stats.html` | 配點攻略：能力點公式與建議 |
 | `allocation.html` | 點數計算機（離線單檔工具） |
+| `compare.html` | 武器比較器：兩把並排比型別倍率、熟練折算與輸出指標 |
 | `updates.html` | 版本情報：官方更新日誌 256 版全文檢索 |
 
 ## 部署到 Cloudflare Pages
@@ -69,7 +70,7 @@
 ## 網址
 
 列表頁：`/materials`、`/effects`、`/skills`、`/zones`、`/formulas`、`/stats`、
-`/allocation`、`/updates`（`?q=片段` 進頁自動篩，網址隨輸入同步，可直接分享）。
+`/allocation`、`/compare`、`/updates`（`?q=片段` 進頁自動篩，網址隨輸入同步，可直接分享）。
 詳情頁：`/detail?t=material|effect|skill|eqtype|zone&id=名稱`。
 舊網址全部不變，只加不改。
 

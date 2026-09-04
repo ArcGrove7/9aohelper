@@ -349,7 +349,7 @@ async function main() {
     ok('導覽不換行（flex-wrap: nowrap），塞不下就橫滑', css.includes('flex-wrap: nowrap'));
     for (const p of ['index.html', 'formulas.html', 'stats.html', 'zones.html',
                      'skills.html', 'materials.html', 'effects.html', 'updates.html',
-                     'allocation.html']) {
+                     'allocation.html', 'compare.html']) {
       const dom = await load(p);
       const d = dom.window.document;
       const head = d.querySelector('header.site');
@@ -512,6 +512,62 @@ async function main() {
     ok('技能表名稱連到詳情頁',
       [...dl.window.document.querySelectorAll('table a.dlink')].length === 34);
     dl.window.close();
+  }
+
+  // -------------------------------------------------------------------------
+  console.log('⑮ 武器比較器：折算計算、網址還原、未知區間、詳情頁帶入');
+  {
+    const q = '?at=%E7%8B%99%E6%93%8A%E6%A7%8D&aatk=100000&adef=50000&aluck=30000&awt=1000&aprof=10000000'
+            + '&bt=%E9%9B%99%E6%89%8B%E5%8A%8D&batk=150000&bdef=40000&bluck=20000&bwt=2000&bprof=1000000';
+    const dom = await load('compare.html', q, ['data/db.js']);
+    const d = dom.window.document, w = dom.window;
+    ok('網址參數還原成輸入值', d.getElementById('aatk').value === '100000' &&
+      d.getElementById('btype').value === '雙手劍');
+    const rows = (side) => [...d.querySelectorAll('.wpanel[data-side="' + side + '"] .rrow')]
+      .map((r) => r.textContent);
+    // A：需求 1790 萬、達成率 55.9%、折算 1.205×achv^0.153、×狙擊命中 1.8
+    const achvA = 10000000 / 17900000;
+    const outA = Math.round(100000 * 1.205 * Math.pow(achvA, 0.153) * 1.8);
+    ok('A 的需求熟練照（攻＋防＋幸−重）×100 算', rows('a').some((t) => t.includes('17,900,000')));
+    ok('A 的輸出指標＝攻擊×折算比×命中倍率', rows('a').some((t) =>
+      t.includes('輸出指標') && t.replace(/,/g, '').includes(String(outA))));
+    // B：達成率 4.8% ≤ 6.7% → 硬地板 0.20 → 150000×0.2×1.0 = 30000
+    ok('B 掉在 0.20 硬地板，指標 30,000', rows('b').some((t) =>
+      t.includes('輸出指標') && t.replace(/,/g, '').includes('30000')));
+    const verdict = d.getElementById('verdict');
+    ok('判定指出 A 較高', !verdict.hidden && verdict.textContent.includes('A（狙擊槍）'));
+    // 改選型別 → 網址跟著變
+    const sel = d.getElementById('btype');
+    sel.value = '太刀';
+    sel.dispatchEvent(new w.Event('change', { bubbles: true }));
+    ok('改型別後網址同步（bt=太刀）',
+      decodeURIComponent(w.location.search).includes('bt=太刀'));
+    dom.window.close();
+
+    // 6.7%～27% 的未知區間照實顯示，不內插
+    const q2 = '?at=%E7%8B%99%E6%93%8A%E6%A7%8D&aatk=100000&adef=50000&aluck=30000&awt=1000&aprof=2000000';
+    const d2 = await load('compare.html', q2, ['data/db.js']);
+    const body2 = d2.window.document.querySelector('.wpanel[data-side="a"]').textContent;
+    ok('未知區間顯示 0.2～0.99 與「此區間無公式」',
+      body2.includes('0.2～0.99') && body2.includes('此區間無公式'));
+    d2.window.close();
+
+    // 從裝備類型詳情頁帶入
+    const d3 = await load('detail.html', '?t=eqtype&id=%E7%8B%99%E6%93%8A%E6%A7%8D', ['data/db.js']);
+    ok('狙擊槍詳情頁有「放進武器比較器」連結',
+      [...d3.window.document.querySelectorAll('a')].some((a) =>
+        a.href.includes('compare.html?at=')));
+    d3.window.close();
+
+    // 實體庫的倍率表完整
+    const DB2 = (() => {
+      const window = {};
+      eval(fs.readFileSync(path.join(SITE, 'data', 'db.js'), 'utf8'));
+      return window.DB;
+    })();
+    ok('倍率表 21 列、狙擊命中 1.8 與公式頁一致',
+      DB2.wmult.length === 21 &&
+      DB2.wmult.find((x) => x.id === '狙擊槍').hit === 1.8);
   }
 }
 

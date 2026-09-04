@@ -55,6 +55,7 @@
     <a href="formulas.html">公式與武器</a>
     <a href="stats.html">配點攻略</a>
     <a href="allocation.html">點數計算機</a>
+    <a href="compare.html">武器比較</a>
     <a href="updates.html">版本情報</a>
   </nav>
 </header>
@@ -166,6 +167,11 @@
              ['素材需求', esc(e.q) + ' 個']]);
     h += kv([['部位', esc(e.slot)], ['持法', esc(e.hand)], ['tag', '<code>' + esc(e.tag) + '</code>']]);
     h += updBlock(e, e.id);
+    if (e.hand !== '—') {
+      const wm = (DB.wmult || []).find((w) => w.id.includes(e.id));
+      if (wm) h += '<p class="note"><a href="compare.html?at=' + encodeURIComponent(wm.id)
+        + '">放進武器比較器（' + esc(wm.id) + '）→</a></p>';
+    }
     h += '<p class="note">' + listLink('effects.html', '', '完整係數與品質倍率在裝備圖鑑 →')
       + '　' + listLink('formulas.html', '', '戰鬥中的型別倍率在公式與武器 →') + '</p>';
     return h;
