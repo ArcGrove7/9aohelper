@@ -349,7 +349,7 @@ async function main() {
     ok('導覽不換行（flex-wrap: nowrap），塞不下就橫滑', css.includes('flex-wrap: nowrap'));
     for (const p of ['index.html', 'formulas.html', 'stats.html', 'zones.html',
                      'skills.html', 'materials.html', 'effects.html', 'updates.html',
-                     'allocation.html', 'compare.html']) {
+                     'allocation.html', 'compare.html', 'enemies.html']) {
       const dom = await load(p);
       const d = dom.window.document;
       const head = d.querySelector('header.site');
@@ -619,6 +619,77 @@ async function main() {
     ok('手槍詳情列出 2 種持法各自帶入比較器',
       links.length === 2 && links.every((a) => decodeURIComponent(a.href).includes('手槍')));
     dq.window.close();
+  }
+
+  // -------------------------------------------------------------------------
+  console.log('⑰ 敵人圖鑑（①～⑧）：列表、掉落雙向關聯、詳情頁');
+  {
+    // 列表頁
+    const dom = await load('enemies.html');
+    const d = dom.window.document, w = dom.window;
+    const rows = [...d.querySelectorAll('table[data-search] tbody tr')];
+    ok('150 隻敵人全在', rows.length === 150);
+    const input = d.querySelector('.tbar input[type="search"]');
+    type(input, '菇菇', w);
+    ok('打「菇菇」篩得到蘑菇園那掛', vis(rows) > 3 && vis(rows) < 150);
+    type(input, '狗頭人爪', w);
+    ok('打掉落物「狗頭人爪」也搜得到', vis(rows) >= 2);
+    type(input, '', w);
+    const chips = [...d.querySelectorAll('.tbar .chip')];
+    ok('地圖籤有 8 張圖', chips.length === 8);
+    chips.find((b) => b.textContent.startsWith('青藏高原')).click();
+    ok('按「青藏高原」→ 只剩那張圖的敵人', vis(rows) > 0 &&
+      rows.filter((tr) => !tr.hidden).every((tr) => tr.children[1].textContent.includes('青藏高原')));
+    dom.window.close();
+
+    // 實體庫雙向：敵人掉落 ↔ 素材來源、技能書、地圖敵人
+    const DB3 = (() => {
+      const window = {};
+      eval(fs.readFileSync(path.join(SITE, 'data', 'db.js'), 'utf8'));
+      return window.DB;
+    })();
+    ok('敵人 150 隻進庫', DB3.enemies.length === 150);
+    const matById3 = Object.fromEntries(DB3.materials.map((m) => [m.id, m]));
+    ok('敵人→素材的每筆掉落，素材端都反向列得到',
+      DB3.enemies.every((e) => e.dropIds.every((m) =>
+        matById3[m] && matById3[m].sources.some((sc) => sc.e === e.id))));
+    ok('素材→來源的每筆引用，敵人端都真的掉它',
+      DB3.materials.every((m) => m.sources.every((sc) => {
+        const e = DB3.enemies.find((x) => x.id === sc.e);
+        return e && e.dropIds.includes(m.id);
+      })));
+    ok('狗頭人爪的來源包含狗頭人',
+      matById3['狗頭人爪'].sources.some((sc) => sc.e.includes('狗頭人')));
+    ok('大草原的敵人清單非空',
+      DB3.zones.find((z) => z.id === 'great_plains').enemies.length > 5);
+    ok('技能「短刃」有技能書掉落來源',
+      DB3.skills.find((x) => x.id === '短刃').books.length >= 2);
+
+    // 詳情頁走一圈：敵人 → 素材 → 回到敵人
+    const de = await load('detail.html', '?t=enemy&id=' + encodeURIComponent('狗頭人'), ['data/db.js']);
+    const ed = de.window.document;
+    ok('敵人詳情：HP／等級下限與出沒都在',
+      ed.body.textContent.includes('最低 HP') && ed.body.textContent.includes('狗頭人'));
+    ok('掉落素材連到素材詳情頁',
+      [...ed.querySelectorAll('a')].some((a) =>
+        a.href.includes('detail.html?t=material') && a.textContent === '狗頭人爪'));
+    de.window.close();
+    const dm2 = await load('detail.html', '?t=material&id=' + encodeURIComponent('狗頭人爪'), ['data/db.js']);
+    ok('素材詳情的「取得來源」反向列出敵人',
+      [...dm2.window.document.querySelectorAll('a')].some((a) =>
+        a.href.includes('detail.html?t=enemy') && a.textContent.includes('狗頭人')));
+    dm2.window.close();
+    const dz2 = await load('detail.html', '?t=zone&id=great_plains', ['data/db.js']);
+    ok('地圖詳情列出這張圖的敵人',
+      [...dz2.window.document.querySelectorAll('a')].filter((a) =>
+        a.href.includes('detail.html?t=enemy')).length > 5);
+    dz2.window.close();
+    const dk2 = await load('detail.html', '?t=skill&id=' + encodeURIComponent('短刃'), ['data/db.js']);
+    ok('技能詳情列出技能書掉落的敵人',
+      dk2.window.document.body.textContent.includes('技能書掉落') &&
+      [...dk2.window.document.querySelectorAll('a')].some((a) =>
+        a.href.includes('detail.html?t=enemy')));
+    dk2.window.close();
   }
 }
 

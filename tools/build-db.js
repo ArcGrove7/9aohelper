@@ -76,6 +76,41 @@ if (zones.length !== 13) fail('地圖應為 13 張，讀到 ' + zones.length);
 const dupZone = zones.map((z) => z.id).filter((k, i, a) => a.indexOf(k) !== i);
 if (dupZone.length) fail('地圖鍵重複：' + dupZone.join(','));
 
+/* ---- 敵人（敵人圖鑑頁；玩家共編資料）＋ 掉落關聯 ---- */
+const zoneByName = Object.fromEntries(zones.map((z) => [z.n, z.id]));
+const matSet = new Set(materials.map((m) => m.id));
+const skillSet = new Set(skills.map((x) => x.id));
+const splitList = (s) => String(s || '').replace(/—/g, '')
+  .split(/[、,，\/／]/).map((t) => t.trim()).filter(Boolean);
+const enemies = [];
+for (const tr of doc('enemies.html').querySelectorAll('table[data-search] tbody tr')) {
+  const a = tr.querySelector('a');
+  const id = new URLSearchParams(a.getAttribute('href').split('?')[1]).get('id');
+  const c = [...tr.children].map((td) => td.textContent.trim().replace(/^—$/, ''));
+  const e = { id, n: c[0], zone: c[1], at: c[2], hp: c[3], lv: c[4], race: c[5],
+              drops: c[6], books: c[7], scrolls: c[8], potions: c[9], other: c[10],
+              equip: c[11], skills: c[12] };
+  if (!zoneByName[e.zone]) fail('敵人「' + e.n + '」的地圖「' + e.zone + '」不在地圖圖鑑');
+  e.zoneId = zoneByName[e.zone];
+  e.dropIds = splitList(e.drops).filter((x) => matSet.has(x));
+  e.bookIds = splitList(e.books).filter((x) => skillSet.has(x));
+  enemies.push(e);
+}
+if (enemies.length < 140) fail('敵人少於 140 隻，讀到 ' + enemies.length);
+{
+  const dup = enemies.map((x) => x.id).filter((k, i, a2) => a2.indexOf(k) !== i);
+  if (dup.length) fail('敵人 id 重複：' + [...new Set(dup)].join(','));
+}
+// 反向關聯：素材←掉落來源、技能←技能書來源、地圖←敵人
+const matSources = Object.create(null);
+const skillBooks = Object.create(null);
+const zoneEnemies = Object.create(null);
+for (const e of enemies) {
+  e.dropIds.forEach((m) => (matSources[m] = matSources[m] || []).push({ e: e.id, at: e.at || e.zone }));
+  e.bookIds.forEach((k) => (skillBooks[k] = skillBooks[k] || []).push(e.id));
+  (zoneEnemies[e.zoneId] = zoneEnemies[e.zoneId] || []).push(e.id);
+}
+
 /* ---- 武器型別倍率（公式頁 §3 表；比較器要用） ---- */
 const wmult = [];
 for (const tr of doc('formulas.html').querySelectorAll('table[data-search] tr')) {
@@ -116,11 +151,13 @@ for (const [label, list] of [['素材', materials], ['特效', effects], ['技�
 const db = {
   version: GAME_VERSION,
   built: new Date().toISOString().slice(0, 10),
-  materials: materials.map((m) => ({ ...m, upd: related(m.id) })),
+  materials: materials.map((m) => ({ ...m, sources: matSources[m.id] || [], upd: related(m.id) })),
   effects: effects.map((e) => ({ ...e, upd: related(e.id, [e.key]) })),
-  skills: skills.map((s) => ({ ...s, upd: related(s.id) })),
+  skills: skills.map((s) => ({ ...s, books: skillBooks[s.id] || [], upd: related(s.id) })),
   eqtypes: eqtypes.map((e) => ({ ...e, upd: related(e.id) })),
-  zones: zones.map((z) => ({ ...z, upd: related(z.n, z.realm ? [z.realm.split('（')[0]] : []) })),
+  zones: zones.map((z) => ({ ...z, enemies: zoneEnemies[z.id] || [],
+    upd: related(z.n, z.realm ? [z.realm.split('（')[0]] : []) })),
+  enemies,
   wmult,
 };
 
@@ -137,4 +174,6 @@ console.log('data/db.js（' + Buffer.byteLength(out) + ' bytes）：'
   + '特效 ' + db.effects.length + '（' + withUpd(db.effects) + '）、'
   + '技能 ' + db.skills.length + '（' + withUpd(db.skills) + '）、'
   + '裝備 ' + db.eqtypes.length + '（' + withUpd(db.eqtypes) + '）、'
-  + '地圖 ' + db.zones.length + '（' + withUpd(db.zones) + '）');
+  + '地圖 ' + db.zones.length + '（' + withUpd(db.zones) + '）、'
+  + '敵人 ' + db.enemies.length + '（素材掉落來源 '
+  + db.materials.filter((m) => m.sources.length).length + ' 種）');

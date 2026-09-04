@@ -25,6 +25,7 @@ const detail = (t, id) => 'detail.html?t=' + t + '&id=' + encodeURIComponent(id)
 // 頁面本身
 [['首頁', 'index.html', '9aohelper 圖鑑 攻略'],
  ['地圖圖鑑', 'zones.html', '地圖 秘境 王關 編號'],
+ ['敵人圖鑑', 'enemies.html', '敵人 怪物 掉落 出沒'],
  ['技能圖鑑', 'skills.html', '技能 招式 刷熟'],
  ['素材圖鑑', 'materials.html', '素材 鍛造 標籤 特效'],
  ['裝備圖鑑', 'effects.html', '裝備 係數 品質 特效 附魔'],
@@ -44,6 +45,9 @@ for (const z of DB.zones) {
 for (const s of DB.skills) add(s.id, '技能・' + s.type, detail('skill', s.id), s.desc);
 for (const e of DB.effects) add(e.id, '特效・' + e.cat, detail('effect', e.id), e.key + ' ' + e.mech);
 for (const e of DB.eqtypes) add(e.id, '裝備・' + e.slot, detail('eqtype', e.id), e.tag + ' ' + e.desc);
+for (const e of DB.enemies)
+  add(e.n, '敵人・' + e.zone, detail('enemy', e.id),
+    (e.race || '') + ' ' + e.drops + ' ' + e.books);
 for (const m of DB.materials)
   add(m.id, '素材', detail('material', m.id),
     m.tags.join(' ') + ' ' + m.effects.map((f) => f.e).join(' '));

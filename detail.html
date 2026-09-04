@@ -86,6 +86,7 @@
     skill:    { label: '技能', list: 'skills',    page: 'skills.html' },
     eqtype:   { label: '裝備類型', list: 'eqtypes', page: 'effects.html' },
     zone:     { label: '地圖', list: 'zones',     page: 'zones.html' },
+    enemy:    { label: '敵人', list: 'enemies',   page: 'enemies.html' },
   };
 
   function head(name, typeLabel) {
@@ -128,7 +129,12 @@
       ? '<div class="chips dchips">' + m.effects.map((f) =>
           link('effect', f.e, f.e + ' ' + f.v)).join('') + '</div>'
       : '<p class="unknown">這種素材不帶特效。</p>';
-    h += unknownBlock('取得來源');
+    h += '<h2>取得來源</h2>';
+    h += (m.sources && m.sources.length)
+      ? '<div class="chips dchips">' + m.sources.map((sc) =>
+          link('enemy', sc.e, sc.e + '（' + sc.at + '）')).join('') + '</div>'
+        + '<p class="note">出沒為首見樓層；掉落率與更深層的來源尚無紀錄。</p>'
+      : '<p class="unknown">尚無可靠資料。</p>';
     h += updBlock(m, m.id);
     h += '<p class="note">' + listLink('materials.html', m.id, '在素材圖鑑檢視 →') + '</p>';
     return h;
@@ -154,6 +160,10 @@
     const same = DB.skills.filter((x) => x.type === s.type && x.id !== s.id);
     h += '<h2>同型別的其他技能（' + same.length + '）</h2><div class="chips dchips">'
       + same.map((x) => link('skill', x.id)).join('') + '</div>';
+    h += '<h2>技能書掉落</h2>';
+    h += (s.books && s.books.length)
+      ? '<div class="chips dchips">' + s.books.map((en) => link('enemy', en)).join('') + '</div>'
+      : '<p class="unknown">尚無掉落紀錄——技能書也可能來自王關或成就。</p>';
     const eqt = (DB.eqtypes || []).find((x) => x.id === s.type);
     const wms = (DB.wmult || []).filter((w) => w.id.includes(s.type));
     const guns = s.type === '通用槍械'
@@ -204,9 +214,45 @@
     if (z.meta.length) {
       h += '<h2>備註</h2><ul>' + z.meta.map((m) => '<li>' + esc(m) + '</li>').join('') + '</ul>';
     }
-    h += unknownBlock('敵人與掉落');
+    h += '<h2>敵人（' + ((z.enemies || []).length) + '）</h2>';
+    if (z.enemies && z.enemies.length) {
+      h += '<div class="chips dchips">' + z.enemies.map((en) => link('enemy', en)).join('') + '</div>'
+        + '<p class="note">' + listLink('enemies.html', z.n, '在敵人圖鑑篩這張圖 →') + '</p>';
+    } else {
+      h += '<p class="unknown">' + (z.town ? '城鎮不會遇敵。' : '尚無可靠資料。') + '</p>';
+    }
     h += updBlock(z, z.n);
     h += '<p class="note">' + listLink('zones.html', '', '在地圖圖鑑檢視 →') + '</p>';
+    return h;
+  }
+
+  function renderEnemy(e) {
+    let h = head(e.n, '敵人・' + (e.race || '種族未記'));
+    h += kv([['最低 HP', e.hp ? esc(e.hp) : '<span class="unknown">—</span>'],
+             ['最低等級', e.lv ? esc(e.lv) : '<span class="unknown">—</span>'],
+             ['出沒', esc(e.at || e.zone)],
+             ['地圖', link('zone', e.zoneId, e.zone)]]);
+    if (e.equip) h += '<h2>裝備</h2><p>' + esc(e.equip) + '</p>';
+    if (e.skills) h += '<h2>使用技能</h2><p>' + esc(e.skills) + '</p>';
+    h += '<h2>掉落素材</h2>';
+    if (e.drops) {
+      const ids = new Set(e.dropIds || []);
+      h += '<div class="chips dchips">' + e.drops.split(/[、,，\/／]/)
+        .map((x) => x.trim()).filter(Boolean)
+        .map((x) => ids.has(x) ? link('material', x) : '<span>' + esc(x) + '</span>').join('') + '</div>';
+    } else h += '<p class="unknown">尚無紀錄。</p>';
+    if (e.books) {
+      const ids = new Set(e.bookIds || []);
+      h += '<h2>掉落技能書</h2><div class="chips dchips">' + e.books.split(/[、,，\/／]/)
+        .map((x) => x.trim()).filter(Boolean)
+        .map((x) => ids.has(x) ? link('skill', x) : '<span>' + esc(x) + '</span>').join('') + '</div>';
+    }
+    const rest = [['掉落卷軸', e.scrolls], ['掉落補品', e.potions], ['掉落其他', e.other]]
+      .filter((p) => p[1]);
+    if (rest.length) h += '<h2>其他掉落</h2><ul>'
+      + rest.map((p) => '<li>' + p[0] + '：' + esc(p[1]) + '</li>').join('') + '</ul>';
+    h += '<p class="note">數值為觀測下限，樓層越深越高。資料整理自玩家共編的 GAO 資料庫。</p>';
+    h += '<p class="note">' + listLink('enemies.html', e.n, '在敵人圖鑑檢視 →') + '</p>';
     return h;
   }
 
@@ -221,7 +267,7 @@
       + '</div></div>';
     return;
   }
-  document.title = (t === 'zone' ? entity.n : entity.id) + ' — ' + conf.label + ' — 9aohelper';
+  document.title = (entity.n || entity.id) + ' — ' + conf.label + ' — 9aohelper';
   const canon = document.createElement('link');
   canon.rel = 'canonical';
   canon.href = 'https://9aohelper.pages.dev/detail?t=' + t + '&id=' + encodeURIComponent(id);
@@ -231,6 +277,7 @@
     : t === 'effect' ? renderEffect(entity)
     : t === 'skill' ? renderSkill(entity)
     : t === 'eqtype' ? renderEqtype(entity)
+    : t === 'enemy' ? renderEnemy(entity)
     : renderZone(entity);
 })();
 </script>

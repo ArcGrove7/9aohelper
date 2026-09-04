@@ -129,7 +129,7 @@
   /* ---- 4) 全站搜尋（索引在 data/search-index.js；結果依型別分組排序） ----
      wireSearch 把「輸入框＋結果匣」接上索引：首頁 hero 用一組，
      每一頁的頁首搜尋覆蓋層再用一組。名稱命中的排在關鍵字命中之前。 */
-  const CAT_ORDER = ['頁面', '地圖', '秘境', '素材', '特效', '技能', '裝備', '武器倍率', '版本線'];
+  const CAT_ORDER = ['頁面', '地圖', '秘境', '敵人', '素材', '特效', '技能', '裝備', '武器倍率', '版本線'];
   const catRank = (c) => {
     for (let i = 0; i < CAT_ORDER.length; i++) if (c.indexOf(CAT_ORDER[i]) === 0) return i;
     return CAT_ORDER.length;
