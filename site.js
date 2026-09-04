@@ -183,6 +183,31 @@
     if (input && box) wireSearch(input, box);
   }
 
+  /* ---- 7) 易讀模式：放大字距行距、表格攤成卡片，整站記住 ---- */
+  function readableToggle() {
+    const KEY = 'pref.readable';
+    let on = false;
+    try { on = localStorage.getItem(KEY) === '1'; } catch (e) {}
+    const apply = () => document.documentElement.classList.toggle('readable', on);
+    apply();
+    const head = document.querySelector('header.site');
+    if (!head) return;
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.id = 'areadable';
+    b.textContent = 'Aa 易讀';
+    b.title = '易讀模式：放大字距與行距，所有表格攤成一列一張卡片';
+    b.setAttribute('aria-label', '切換易讀模式');
+    b.setAttribute('aria-pressed', String(on));
+    b.addEventListener('click', () => {
+      on = !on;
+      try { localStorage.setItem(KEY, on ? '1' : '0'); } catch (e) {}
+      apply();
+      b.setAttribute('aria-pressed', String(on));
+    });
+    head.appendChild(b);
+  }
+
   /* ---- 5) 頁首搜尋：每一頁右上角的搜尋鈕＋覆蓋層，Ctrl／Cmd＋K 也開得了 ---- */
   function headerSearch() {
     const head = document.querySelector('header.site');
@@ -267,6 +292,7 @@
     document.querySelectorAll('table.rtable').forEach(labelCells);
     document.querySelectorAll('table[data-search]').forEach(attachSearch);
     attachGlobalSearch();
+    readableToggle();
     headerSearch();
     urlQuery();
     const cur = document.querySelector('nav.site a[aria-current="page"]');

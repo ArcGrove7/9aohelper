@@ -363,8 +363,12 @@ async function main() {
       ok(p + ' 站名是連回首頁的連結',
         head.querySelector('a.title')?.getAttribute('href') === 'index.html' &&
         head.querySelector('a.title').textContent === '9aohelper');
-      ok(p + ' 頁首是「站名＋導覽＋搜尋鈕」一行三件',
-        head.children.length === 3 && head.querySelector('#hsearch'));
+      ok(p + ' 頁首是「站名＋導覽＋易讀＋搜尋」一行四件',
+        head.children.length === 4 && head.querySelector('#hsearch') &&
+        head.querySelector('#areadable'));
+      ok(p + ' 導覽包含全部十一頁（敵人圖鑑在內）',
+        head.querySelectorAll('nav a').length === 11 &&
+        head.querySelector('nav a[href="enemies.html"]'));
       dom.window.close();
     }
   }
@@ -696,6 +700,58 @@ async function main() {
       [...dk2.window.document.querySelectorAll('a')].some((a) =>
         a.href.includes('detail.html?t=enemy')));
     dk2.window.close();
+  }
+
+  // -------------------------------------------------------------------------
+  console.log('⑱ 易讀模式：一鍵大字距＋全表格卡片化，狀態記住');
+  {
+    const css = fs.readFileSync(path.join(SITE, 'style.css'), 'utf8');
+    ok('易讀模式的字級與行距規則在',
+      /html\.readable body \{[^}]*font-size/.test(css) &&
+      /html\.readable body \{[^}]*line-height/.test(css));
+    ok('易讀模式下 rtable 在任何寬度都攤成卡片',
+      css.includes('html.readable table.rtable td::before') &&
+      /html\.readable table\.rtable thead \{ display: none/.test(css));
+    ok('表格有斑馬紋與滑過高亮（逐行閱讀輔助）',
+      css.includes('tbody tr:nth-child(even)') && css.includes('tbody tr:hover'));
+
+    const dom = await load('skills.html');
+    const d = dom.window.document, w = dom.window;
+    const btn = d.getElementById('areadable');
+    ok('頁首有「Aa 易讀」開關', !!btn && btn.getAttribute('aria-pressed') === 'false');
+    btn.click();
+    ok('按下後整站進入易讀模式（html.readable）',
+      d.documentElement.classList.contains('readable') &&
+      btn.getAttribute('aria-pressed') === 'true');
+    ok('偏好記進瀏覽器', w.localStorage.getItem('pref.readable') === '1');
+    btn.click();
+    ok('再按一次還原', !d.documentElement.classList.contains('readable') &&
+      w.localStorage.getItem('pref.readable') === '0');
+    dom.window.close();
+
+    // 換頁後偏好仍生效（進頁就套，不必再按）
+    const dom2 = await load('materials.html', '', []);
+    dom2.window.close();
+    const dom3 = await new Promise((resolve) => {
+      const { JSDOM } = require('jsdom');
+      const dm = new JSDOM(fs.readFileSync(path.join(SITE, 'zones.html'), 'utf8'), {
+        runScripts: 'dangerously',
+        url: 'https://example.invalid/zones.html',
+        beforeParse(window) {
+          window.localStorage.setItem('pref.readable', '1');
+        },
+      });
+      dm.window.addEventListener('load', () => {
+        const sc = dm.window.document.createElement('script');
+        sc.textContent = fs.readFileSync(path.join(SITE, 'site.js'), 'utf8');
+        dm.window.document.body.appendChild(sc);
+        resolve(dm);
+      });
+    });
+    ok('帶著偏好進下一頁，直接就是易讀模式',
+      dom3.window.document.documentElement.classList.contains('readable') &&
+      dom3.window.document.getElementById('areadable').getAttribute('aria-pressed') === 'true');
+    dom3.window.close();
   }
 }
 
