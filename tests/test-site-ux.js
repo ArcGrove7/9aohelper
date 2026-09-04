@@ -290,6 +290,45 @@ async function main() {
     const huofeng = cards.find((c) => c.textContent.includes('huofeng_liaoyuan'));
     ok('火鳳燎原卡片寫明三國秘境三選一與巾色山麥岔路',
       huofeng.textContent.includes('三選一') && huofeng.textContent.includes('巾色山麥'));
+
+    // 秘境入口與王關樓層：卡片與一覽表要對得上，別讓兩處各說各話
+    ok('蘑菇園卡片有秘境入口 F12 與王關 F24',
+      cards.find((c) => c.textContent.includes('mushroom_garden')).textContent
+        .includes('秘境入口 F12')
+      && cards.find((c) => c.textContent.includes('mushroom_garden')).textContent
+        .includes('王關 F24'));
+    ok('鷹洞卡片有秘境入口 F1、王關 F30 與毒的提示',
+      eagle.textContent.includes('秘境入口 F1') && eagle.textContent.includes('王關 F30')
+      && eagle.textContent.includes('地下 50 層起有毒'));
+
+    const tables = [...d.querySelectorAll('table.rtable')];
+    ok('地圖頁有三張表（秘境王關一覽／三國識別碼／黃巾軍團）', tables.length === 3);
+    tables.forEach((t, i) => ok('第 ' + (i + 1) + ' 張表有 thead（易讀模式卡片化要吃）',
+      !!t.querySelector('thead')));
+    const overview = tables[0];
+    ok('一覽表 11 張戰鬥圖各一列',
+      overview.querySelectorAll('tbody tr').length === 11);
+    const mushRow = [...overview.querySelectorAll('tbody tr')]
+      .find((r) => r.textContent.includes('蘑菇園'));
+    ok('一覽表的蘑菇園與卡片一致（入口 F12、王關 F24）',
+      mushRow.textContent.includes('F12') && mushRow.textContent.includes('F24'));
+
+    const wei = [...tables[1].querySelectorAll('tbody tr')]
+      .find((r) => r.textContent.includes('魏'));
+    ok('三國識別碼表列出 secret_realm_wei',
+      wei.textContent.includes('secret_realm_wei'));
+    ok('巾色山麥寫明落地 F75，不是從 F1 起算',
+      d.body.textContent.includes('落地 F75'));
+
+    const jin = [...tables[2].querySelectorAll('tbody tr')];
+    ok('黃巾軍團表列出七種成員', jin.length === 7);
+    ok('三名頭目都在', ['張角', '張寶', '張梁']
+      .every((n) => jin.some((r) => r.textContent.includes(n))));
+
+    ok('陰洞的輝鐵標明只在地下 26～36 層',
+      d.body.textContent.includes('地下 26～36 層'));
+    ok('底部警告不再說樓層「不固定」（已知的都列在表上）',
+      !d.querySelector('.warn').textContent.includes('不固定'));
     dom.window.close();
 
     // 版本情報：549 條變更、可搜尋、可篩類型

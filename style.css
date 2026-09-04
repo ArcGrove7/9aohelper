@@ -593,6 +593,7 @@ a.catcard .cn { font-size: 0.75rem; color: var(--muted); font-family: var(--mono
   background: var(--code-bg); border: 1px solid var(--line); white-space: nowrap;
 }
 .zcard .zmeta .zr { color: var(--accent-2); }
+.zcard .zmeta .zb { color: var(--accent); font-weight: 600; }
 .zcard.town { border-style: dashed; }
 .zcard.town .zdesc, .zcard.town h3 { color: var(--muted); }
 
@@ -744,6 +745,7 @@ html.readable .mattbl { max-height: none; overflow: visible; }
 .point .pd .unknown, .point .pd code { font-size: 0.95em; }
 .point.warn-b { border-left-color: var(--warnc); }
 .point.good-b { border-left-color: var(--accent-2); }
+.point.bad-b { border-left-color: var(--warnc); }
 html.readable .point .pd { font-size: 1em; }
 
 /* ============================================================
