@@ -336,6 +336,26 @@ async function main() {
       .every((u) => cat.includes(u)));
     dom4.window.close();
   }
+
+  // -------------------------------------------------------------------------
+  console.log('⑫ 頁首只有一行（人下的令，2026-09-05：站名＋導覽同一行，不堆高）');
+  {
+    const css = fs.readFileSync(path.join(SITE, 'style.css'), 'utf8');
+    ok('header.site 是 flex 橫排', /header\.site \{[^}]*display: flex/.test(css));
+    ok('導覽不換行（flex-wrap: nowrap），塞不下就橫滑', css.includes('flex-wrap: nowrap'));
+    for (const p of ['index.html', 'formulas.html', 'stats.html', 'zones.html',
+                     'skills.html', 'materials.html', 'effects.html', 'updates.html']) {
+      const dom = await load(p);
+      const d = dom.window.document;
+      const head = d.querySelector('header.site');
+      ok(p + ' 頁首沒有副標題那一行', !head.querySelector('.subtitle'));
+      ok(p + ' 站名是連回首頁的連結',
+        head.querySelector('a.title')?.getAttribute('href') === 'index.html' &&
+        head.querySelector('a.title').textContent === '9aohelper');
+      ok(p + ' 頁首直接子元素只有「站名＋導覽」兩件', head.children.length === 2);
+      dom.window.close();
+    }
+  }
 }
 
 main().then(() => {

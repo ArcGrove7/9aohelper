@@ -1,0 +1,11 @@
+# 不該被當成網站資產上傳的東西（wrangler assets 部署時讀這份）
+node_modules
+tests
+tools
+package.json
+package-lock.json
+wrangler.jsonc
+.assetsignore
+.gitignore
+README.md
+LICENSE

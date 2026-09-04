@@ -1,0 +1,10 @@
+// Cloudflare Worker 設定：純靜態資產部署（沒有 Worker 程式碼，只有 assets）。
+// 儀表板的部署命令 `npx wrangler deploy` 讀這一份。
+{
+  "name": "9aohelper",
+  "compatibility_date": "2026-09-04",
+  "assets": {
+    "directory": "./",
+    "html_handling": "auto-trailing-slash"
+  }
+}
