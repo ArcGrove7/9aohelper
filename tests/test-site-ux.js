@@ -141,7 +141,7 @@ async function main() {
     type(input, 'evil', w);
     ok('打鍵名片段「evil」也找得到邪惡力量', vis(rows) === 1);
     type(input, '', w);
-    const chips = [...bar.querySelectorAll('.chip')];
+    const chips = [...bar.querySelectorAll('.chip:not(.colchip)')];
     ok('分類籤（攻擊／防禦／特殊）生出來了', chips.length === 3);
     chips.find((b) => b.textContent.startsWith('防禦')).click();
     ok('按「防禦」→ 只剩防禦・回復那一組', vis(rows) === 11);
@@ -336,13 +336,13 @@ async function main() {
     const d2 = dom2.window.document, w2 = dom2.window;
     const table = d2.querySelector('table[data-search]');
     const rows = [...table.querySelectorAll('tbody tr')];
-    ok('更新日誌 549 條全在', rows.length === 549);
+    ok('更新日誌 550 條全在（含 3.1.9）', rows.length === 550);
     const bar = table.closest('.table-wrap').previousElementSibling;
     const input = bar.querySelector('input[type="search"]');
     type(input, '鷹洞', w2);
-    ok('打「鷹洞」篩得到相關更新', vis(rows) > 3 && vis(rows) < 549);
+    ok('打「鷹洞」篩得到相關更新', vis(rows) > 3 && vis(rows) < 550);
     type(input, '', w2);
-    const chips = [...bar.querySelectorAll('.chip')];
+    const chips = [...bar.querySelectorAll('.chip:not(.colchip)')];
     ok('類型籤（新功能／調整／修復…）生出來了', chips.length === 5);
     chips.find((b) => b.textContent.startsWith('修復')).click();
     ok('按「修復」→ 只剩修復類（206 條）', vis(rows) === 206);
@@ -619,7 +619,7 @@ async function main() {
     type(input, '狗頭人爪', w);
     ok('打掉落物「狗頭人爪」也搜得到', vis(rows) >= 2);
     type(input, '', w);
-    const chips = [...d.querySelectorAll('.tbar .chip')];
+    const chips = [...d.querySelectorAll('.tbar .chip:not(.colchip)')];
     ok('地圖籤有 9 張圖', chips.length === 9);
     ok('地圖籤多了鷹洞', chips.some((b) => b.textContent.startsWith('鷹洞')));
 
@@ -704,9 +704,9 @@ async function main() {
     ok('易讀模式的字級與行距規則在',
       /html\.readable body \{[^}]*font-size/.test(css) &&
       /html\.readable body \{[^}]*line-height/.test(css));
-    ok('易讀模式下 rtable 在任何寬度都攤成卡片',
-      css.includes('html.readable table.rtable td::before') &&
-      /html\.readable table\.rtable thead \{ display: none/.test(css));
+    ok('卡片模式（預設開）下 rtable 在任何寬度都攤成卡片',
+      css.includes('html.cards table.rtable td::before') &&
+      /html\.cards table\.rtable thead \{ display: none/.test(css));
     ok('表格有斑馬紋與滑過高亮（逐行閱讀輔助）',
       css.includes('tbody tr:nth-child(even)') && css.includes('tbody tr:hover'));
 
@@ -846,6 +846,154 @@ async function main() {
     d.getElementById('wprev').click();
     ok('按 ‹ 也能往回繞', panels[0].hidden && !panels[1].hidden);
     dom.window.close();
+  }
+
+  // -------------------------------------------------------------------------
+  console.log('㉒ 圖鑑圖示與遊戲原生特效色（v3.1.9 對齊）');
+  {
+    // 敵人表與卡片：名稱前有圖示
+    const de = await load('enemies.html', '', ['data/icons.js', 'data/db.js']);
+    const ed = de.window.document;
+    const firstA = ed.querySelector('table tbody tr a.dlink');
+    ok('敵人表名稱前有圖示（小白兔 → 🐇）',
+      firstA.querySelector('.ic') && firstA.textContent.includes('🐇'));
+    const card = ed.querySelector('#ecards .ecard header');
+    ok('敵人卡片名稱前也有圖示', !!card.querySelector('.ic'));
+    de.window.close();
+
+    // 素材表：名稱前有圖示、特效用遊戲原生色
+    const dm = await load('materials.html', '', ['data/icons.js']);
+    const md = dm.window.document;
+    const rows = [...md.querySelectorAll('#mtab tbody tr')];
+    const obsidian = rows.find((tr) => tr.textContent.includes('藍黑曜石'));
+    ok('藍黑曜石名稱前有石頭圖示', obsidian.querySelector('.ic') &&
+      obsidian.textContent.includes('🪨'));
+    const nail = rows.find((tr) => tr.textContent.includes('巴洛古的指甲'));
+    const evil = [...nail.querySelectorAll('.el')].find((el) => el.textContent.includes('邪惡力量'));
+    ok('特效小標籤套遊戲原生色（邪惡力量＝#c97aff）',
+      evil.getAttribute('style').includes('#c97aff'));
+    const curse = [...nail.querySelectorAll('.el')].find((el) => el.textContent.includes('詛咒'));
+    ok('詛咒也是 elements 模組的紫色', curse.getAttribute('style').includes('#c97aff'));
+    dm.window.close();
+
+    // 技能表：依型別的武器圖示；特效表：名稱套原生色
+    const dk = await load('skills.html', '', ['data/icons.js']);
+    ok('技能表名稱前有型別圖示',
+      !!dk.window.document.querySelector('table tbody tr a.dlink .ic'));
+    dk.window.close();
+    const df = await load('effects.html', '', ['data/icons.js']);
+    const fxA = [...df.window.document.querySelectorAll('table[data-search] tbody tr a.dlink')];
+    const fire = fxA.find((a) => a.textContent.includes('火焰') && !a.textContent.includes('抗性'));
+    ok('特效表名稱套遊戲原生色（火焰＝#ff4655）',
+      fire.style.color && fire.style.color.replace(/\s/g, '') !== '');
+    df.window.close();
+
+    // 3.1.9 入庫與版本標記
+    const du = await load('updates.html');
+    ok('3.1.9（技能書機率調整）已入版本情報',
+      du.window.document.body.textContent.includes('3.1.9') &&
+      du.window.document.body.textContent.includes('技能書機率全面統一'));
+    ok('頁尾版本標記更新為 v3.1.9',
+      du.window.document.querySelector('footer').textContent.includes('v3.1.9'));
+    du.window.close();
+  }
+
+  // -------------------------------------------------------------------------
+  console.log('㉓ 全表格卡片化預設＋系統鍵名隱藏');
+  {
+    const css = fs.readFileSync(path.join(SITE, 'style.css'), 'utf8');
+    ok('[hidden] 欄位在卡片模式也藏得住（!important）',
+      css.includes('th[hidden], td[hidden] { display: none !important; }'));
+    ok('地圖卡片的系統鍵名（zkey）不顯示', css.includes('.zcard .zkey { display: none; }'));
+
+    const dom = await load('skills.html');
+    const d = dom.window.document, w = dom.window;
+    ok('進頁預設就是卡片模式（html.cards）',
+      d.documentElement.classList.contains('cards'));
+    ok('搜尋列上有「卡片／表格」切換', !!d.querySelector('.tbar .vbtn'));
+    const tb = [...d.querySelectorAll('.vbtn')].find((b) => b.textContent.includes('表格'));
+    tb.click();
+    ok('切表格：html.cards 移除、偏好記住',
+      !d.documentElement.classList.contains('cards') &&
+      w.localStorage.getItem('pref.tableview') === '1');
+    ok('技能表的 ID 欄整欄 hidden（玩家看不到，搜尋照吃）',
+      d.querySelectorAll('table thead th[hidden]').length === 1 &&
+      d.querySelectorAll('table tbody td[hidden]').length === 197);
+    dom.window.close();
+
+    const de = await load('effects.html');
+    ok('特效表的鍵欄整欄 hidden',
+      de.window.document.querySelectorAll('table[data-search] tbody td[hidden]').length === 31);
+    de.window.close();
+
+    const dd = await load('detail.html', '?t=effect&id=' + encodeURIComponent('邪惡力量'), ['data/db.js', 'data/icons.js']);
+    ok('特效詳情不再顯示鍵名', !dd.window.document.body.textContent.includes('evil_power'));
+    dd.window.close();
+    const dk3 = await load('detail.html', '?t=skill&id=' + encodeURIComponent('短刃'), ['data/db.js', 'data/icons.js']);
+    ok('技能詳情不再顯示技能 ID', !dk3.window.document.body.textContent.includes('技能 ID'));
+    dk3.window.close();
+  }
+
+  // -------------------------------------------------------------------------
+  console.log('㉔ 篩選欄摺疊＋隱藏欄位＋卡片一排多張');
+  {
+    const css = fs.readFileSync(path.join(SITE, 'style.css'), 'utf8');
+    ok('卡片模式 tbody 用 grid：一排塞多張、不留大片空白',
+      /html\.cards table\.rtable tbody \{\n  display: grid;/.test(css) &&
+      css.includes('repeat(auto-fill, minmax(20rem, 1fr))'));
+    ok('長文表標 data-cards="wide" 維持一欄（版本情報）',
+      css.includes('html.cards table.rtable[data-cards="wide"] tbody { display: block; }') &&
+      fs.readFileSync(path.join(SITE, 'updates.html'), 'utf8').includes('data-cards="wide"'));
+    ok('被篩掉的列在卡片模式也真的消失（[hidden] 全域 !important）',
+      css.includes('[hidden] { display: none !important; }'));
+
+    // 通用搜尋列：篩選籤預設收合、「欄位」鈕可整欄隱藏，怪物卡跟著收
+    const dom = await load('enemies.html', '', ['data/db.js', 'data/icons.js']);
+    const d = dom.window.document, w = dom.window;
+    const chips = d.querySelector('.tbar .chips:not(.wrap)');
+    ok('篩選籤預設收合（省空間）', !!chips && chips.hidden === true);
+    const fbtn = [...d.querySelectorAll('.tbar .vbtn')].find((b) => b.textContent.startsWith('篩選'));
+    fbtn.click();
+    ok('按「篩選」展開籤、狀態整站記住',
+      chips.hidden === false && w.localStorage.getItem('pref.filters') === '1');
+    const cbtn = [...d.querySelectorAll('.tbar .vbtn')].find((b) => b.textContent.startsWith('欄位'));
+    ok('搜尋列有「欄位」鈕、欄位籤預設收合',
+      !!cbtn && d.querySelector('.tbar .chips.wrap').hidden === true);
+    cbtn.click();
+    const drop = [...d.querySelectorAll('.colchip')].find((b) => b.textContent === '掉落素材');
+    drop.click();
+    const etab = d.getElementById('etab');
+    ok('點「掉落素材」→ 表頭與 162 格整欄 hidden',
+      etab.querySelector('tr').children[6].hidden === true &&
+      [...etab.querySelectorAll('tbody tr')].every((tr) => tr.children[6].hidden));
+    const cardDrops = [...d.querySelectorAll('#ecards [data-c="掉落素材"]')];
+    ok('怪物卡上的掉落素材一起收', cardDrops.length > 100 && cardDrops.every((el) => el.hidden));
+    ok('隱藏欄位整站記住（pref.hidecols）',
+      (w.localStorage.getItem('pref.hidecols.enemies.html:etab') || '').includes('掉落素材'));
+    drop.click();
+    ok('再點一下整欄顯示回來', etab.querySelector('tr').children[6].hidden === false &&
+      cardDrops.every((el) => !el.hidden));
+    dom.window.close();
+
+    // 素材頁自家工具列：同一套摺疊與欄位隱藏
+    const dm = await load('materials.html', '', ['data/icons.js']);
+    const md = dm.window.document;
+    ok('素材頁籤區預設收合（#mfilters）', md.getElementById('mfilters').hidden === true);
+    md.getElementById('mfbtn').click();
+    ok('按「篩選」展開標籤與特效籤',
+      md.getElementById('mfilters').hidden === false &&
+      md.querySelectorAll('#mtags .chip').length > 5);
+    const mcbtn = [...md.querySelectorAll('.tbar .vbtn')].find((b) => b.textContent.startsWith('欄位'));
+    ok('素材工具列也有「欄位」鈕', !!mcbtn);
+    mcbtn.click();
+    [...md.querySelectorAll('.colchip')].find((b) => b.textContent === '特效').click();
+    ok('隱藏「特效」欄 → 241 列的特效格都 hidden',
+      [...md.querySelectorAll('#mtab tbody tr')].every((tr) => tr.children[7].hidden));
+    md.getElementById('mdir').click();          // tbody 整個重畫
+    await new Promise((r) => setTimeout(r, 30));
+    ok('表格重畫後隱藏欄仍生效（MutationObserver 補掛）',
+      [...md.querySelectorAll('#mtab tbody tr')].every((tr) => tr.children[7].hidden));
+    dm.window.close();
   }
 }
 

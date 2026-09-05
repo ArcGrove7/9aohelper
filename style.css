@@ -274,9 +274,11 @@ nav.site a {
   border: 1px solid var(--line);
   border-radius: 10px;
 }
-.tbar .row { display: flex; align-items: center; gap: 0.5rem; width: 100%; }
+.tbar .row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; width: 100%; }
+.tbar .foldbox { width: 100%; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.tbar .foldbox .hint { margin-top: 0.15rem; }
 .tbar input[type="search"] {
-  flex: 1;
+  flex: 1 1 11rem;            /* 擠不下時讓按鈕換行，而不是把輸入框壓扁 */
   min-width: 0;
   min-height: 2.75rem;
   padding: 0.5rem 0.8rem;
@@ -657,33 +659,33 @@ html.readable th, html.readable td { padding: 0.65rem 0.85rem; }
 html.readable .zcard .zdesc, html.readable .card p, html.readable a.catcard p { font-size: 1em; }
 
 /* ---- 易讀模式：所有 rtable 攤成卡片（規則與手機卡片模式同一套） ---- */
-html.readable table.rtable, html.readable table.rtable tbody,
-html.readable table.rtable tr, html.readable table.rtable td { display: block; width: 100%; }
-html.readable table.rtable thead { display: none; }
-html.readable table.rtable tr {
+html.cards table.rtable, html.cards table.rtable tbody,
+html.cards table.rtable tr, html.cards table.rtable td { display: block; width: 100%; }
+html.cards table.rtable thead { display: none; }
+html.cards table.rtable tr {
   border: 1px solid var(--edge);
   border-radius: 10px;
   margin: 0 0 0.7rem;
   padding: 0.6rem 0.8rem;
   background: var(--card);
 }
-html.readable table tbody tr:nth-child(even) { background: var(--card); }
-html.readable table.rtable td {
+html.cards table tbody tr:nth-child(even) { background: var(--card); }
+html.cards table.rtable td {
   border: 0;
   display: flex;
   align-items: baseline;
   gap: 0.6rem;
   padding: 0.2rem 0;
 }
-html.readable table.rtable td::before {
+html.cards table.rtable td::before {
   content: attr(data-label);
   flex: 0 0 5rem;
   color: var(--muted);
   font-size: 0.82em;
   font-family: var(--mono);
 }
-html.readable table.rtable td > .v { flex: 1 1 auto; min-width: 0; }
-html.readable table.rtable td.title {
+html.cards table.rtable td > .v { flex: 1 1 auto; min-width: 0; }
+html.cards table.rtable td.title {
   display: block;
   font-size: 1.1em;
   font-weight: 700;
@@ -692,17 +694,30 @@ html.readable table.rtable td.title {
   padding-bottom: 0.3rem;
   border-bottom: 1px solid var(--line);
 }
-html.readable table.rtable td.title::before { content: none; }
-html.readable table.rtable td:empty { display: none; }
-html.readable table.rtable td.num {
+html.cards table.rtable td.title::before { content: none; }
+html.cards table.rtable td:empty { display: none; }
+html.cards table.rtable td.num {
   display: inline-flex;
   width: auto;
   gap: 0.3rem;
   margin-right: 1rem;
 }
-html.readable table.rtable td.num > .v { flex: 0 0 auto; }
-html.readable table.rtable td.num::before { flex: 0 0 auto; }
-html.readable .mattbl { max-height: none; overflow: visible; }
+html.cards table.rtable td.num > .v { flex: 0 0 auto; }
+html.cards table.rtable td.num::before { flex: 0 0 auto; }
+html.cards .mattbl { max-height: none; overflow: visible; }
+
+/* 卡片模式桌機排版：一排塞多張卡，不留大片空白。
+   tbody 改 grid 自動填滿；窄螢幕塞不下兩欄時自然回到一欄。
+   長文字型的表（如版本情報全文）標 data-cards="wide" 維持一欄好讀。 */
+html.cards table.rtable tbody {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  gap: 0.7rem;
+  align-items: stretch;
+}
+html.cards table.rtable tr { margin: 0; }
+html.cards table.rtable[data-cards="wide"] tbody { display: block; }
+html.cards table.rtable[data-cards="wide"] tr { margin: 0 0 0.7rem; }
 
 /* ============================================================
    逐點卡片（2026-09-05）——攻略文字不再用長段落與長列表：
@@ -787,7 +802,8 @@ html.readable .point .pd { font-size: 1em; }
 .ecard .echips {
   display: flex; flex-wrap: wrap; gap: 0.35rem; justify-content: center;
 }
-.ecard .echips > * {
+.ecard .echips .dgrp { display: contents; }
+.ecard .echips > *, .ecard .echips .dgrp > * {
   display: inline-flex; align-items: center; gap: 0.35rem;
   font-size: 0.85rem; padding: 0.18rem 0.55rem;
   border: 1px solid var(--line); border-radius: 6px;
@@ -863,3 +879,20 @@ html.readable .ecard { font-size: 1.02em; }
 .zmystery h3 { margin: 0; font-size: 1rem; color: var(--muted); }
 .zmystery .zhead { display: flex; align-items: center; gap: 0.6rem; }
 .zmystery .zdesc { margin: 0.5rem 0 0; font-size: 0.88rem; }
+
+/* 圖鑑名稱前的實體圖示（data/icons.js 指派） */
+.ic { margin-right: 0.35rem; font-style: normal; }
+.dhead h1 .ic { margin-right: 0.5rem; }
+.ecard header .ic { font-size: 1.25rem; margin-right: 0; }
+
+/* 系統鍵名不給一般玩家看（資料仍在 DOM，搜尋照吃）。
+   [hidden] 一律強制隱藏：卡片模式把 tr／td 改成 block/flex 之後，
+   純 UA 的 [hidden]{display:none} 會被蓋掉——沒有這條，篩掉的列還是會顯示。 */
+th[hidden], td[hidden] { display: none !important; }
+[hidden] { display: none !important; }
+.zcard .zkey { display: none; }
+
+/* 費茲定律：可點目標放大——卡片模式的名稱連結吃滿整行、籤與 chips 加高 */
+html.cards table.rtable td.title a.dlink { display: block; padding: 0.15rem 0; }
+.chips .chip { min-height: 2.4rem; padding: 0.3rem 0.75rem; }
+.dchips a, .dchips span { min-height: 2.4rem; padding: 0.3rem 0.8rem; }

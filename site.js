@@ -61,6 +61,7 @@
     row1.className = 'row';
     row1.append(input, count);
     bar.append(row1);
+    cardsToggleButtons(row1, table);
 
     /* 篩選籤：從指定欄位的值切出來（以「·」「、」「／」分隔） */
     let chipBox = null;
@@ -95,6 +96,32 @@
       }
     }
 
+    /* 篩選籤預設收合（省空間），按「篩選」展開；有籤在用時鈕上帶數字 */
+    let fbtn = null;
+    if (chipBox) {
+      let open = false;
+      try { open = localStorage.getItem(FKEY) === '1'; } catch (e) {}
+      chipBox.hidden = !open;
+      fbtn = document.createElement('button');
+      fbtn.type = 'button';
+      fbtn.className = 'vbtn';
+      fbtn.setAttribute('aria-expanded', String(open));
+      fbtn.addEventListener('click', () => {
+        chipBox.hidden = !chipBox.hidden;
+        try { localStorage.setItem(FKEY, chipBox.hidden ? '0' : '1'); } catch (e) {}
+        fbtn.setAttribute('aria-expanded', String(!chipBox.hidden));
+        foldLabel();
+      });
+      row1.append(fbtn);
+      foldLabel();
+    }
+    function foldLabel() {
+      if (fbtn) fbtn.textContent = '篩選' + (picked.size ? '（' + picked.size + '）' : '')
+        + (chipBox.hidden ? ' ▾' : ' ▴');
+    }
+
+    colToggle(row1, bar, table);
+
     const empty = document.createElement('p');
     empty.className = 'empty-hit';
     empty.hidden = true;
@@ -122,9 +149,112 @@
       });
       count.innerHTML = '<b>' + hit + '</b> / ' + rows.length;
       empty.hidden = hit !== 0;
+      foldLabel();
     }
     input.addEventListener('input', render);
     render();
+  }
+
+  /* ---- 11) 隱藏欄位：搜尋列的「欄位」鈕展開一排籤，點掉不想看的欄
+     （例：敵人圖鑑隱藏掉落物）。th／td 掛 hidden、CSS 強制不顯示，
+     資料仍在 DOM，搜尋照吃；選擇整站記住（依頁面＋表格）。
+     敵人圖鑑的怪物卡也吃同一份設定（data-c 對應欄名）。 ---- */
+  const FKEY = 'pref.filters';
+  const colAppliers = [];
+  function colToggle(row, tbar, table) {
+    const head = table.querySelector('tr');
+    if (!head) return;
+    const titleCol = table.dataset.titleCol === 'none' ? -1 : Number(table.dataset.titleCol || 0);
+    const eligible = [...head.children].map((th, i) => ({
+      th, i, name: th.textContent.replace(/[▾▴]/g, '').trim(),
+    })).filter((o) => o.i !== titleCol && !o.th.hidden && o.name);
+    if (eligible.length < 2) return;
+
+    const page = location.pathname.replace(/^.*\//, '') || 'index.html';
+    const KEY = 'pref.hidecols.' + page + ':'
+      + (table.id || [...document.querySelectorAll('table')].indexOf(table));
+    const hidden = new Set();
+    try {
+      const names = new Set(eligible.map((o) => o.name));
+      JSON.parse(localStorage.getItem(KEY) || '[]')
+        .filter((n) => names.has(n)).forEach((n) => hidden.add(n));
+    } catch (e) {}
+
+    function apply() {
+      eligible.forEach((o) => {
+        const off = hidden.has(o.name);
+        o.th.hidden = off;
+        bodyRows(table).forEach((tr) => {
+          const td = tr.children[o.i];
+          if (td) td.hidden = off;
+        });
+      });
+      if (table.id === 'etab') applyEnemyCardCols(hidden);
+    }
+    colAppliers.push(apply);
+    // 動態重畫 tbody 的表（素材表）：列換掉後把隱藏欄補回去
+    const tb = table.tBodies && table.tBodies[0];
+    if (tb) {
+      new MutationObserver(() => {
+        try { apply(); } catch (e) { /* 頁面卸載中就算了 */ }
+      }).observe(tb, { childList: true });
+    }
+
+    const box = document.createElement('div');
+    box.className = 'chips wrap';
+    box.hidden = true;
+    const hint = document.createElement('span');
+    hint.className = 'hint';
+    hint.textContent = '點一下隱藏那一欄，再點一下顯示回來：';
+    box.append(hint);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'vbtn';
+    btn.setAttribute('aria-expanded', 'false');
+    const label = () => {
+      btn.textContent = '欄位' + (hidden.size ? '（藏 ' + hidden.size + '）' : '')
+        + (box.hidden ? ' ▾' : ' ▴');
+    };
+    btn.addEventListener('click', () => {
+      box.hidden = !box.hidden;
+      btn.setAttribute('aria-expanded', String(!box.hidden));
+      label();
+    });
+    eligible.forEach((o) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'chip colchip';
+      b.textContent = o.name;
+      const sync = () => b.setAttribute('aria-pressed', hidden.has(o.name) ? 'false' : 'true');
+      sync();
+      b.addEventListener('click', () => {
+        if (hidden.has(o.name)) hidden.delete(o.name); else hidden.add(o.name);
+        try { localStorage.setItem(KEY, JSON.stringify([...hidden])); } catch (e) {}
+        sync();
+        apply();
+        label();
+      });
+      box.append(b);
+    });
+    row.append(btn);
+    tbar.append(box);
+    apply();
+    label();
+  }
+  function applyEnemyCardCols(hidden) {
+    const grid = document.getElementById('ecards');
+    if (!grid) return;
+    grid.querySelectorAll('[data-c]').forEach((el) => {
+      el.hidden = hidden.has(el.dataset.c);
+    });
+    // 一節（怪物屬性／掉落／出沒地圖）的欄全被藏起來時，小標題跟整節一起收
+    grid.querySelectorAll('.echips[data-sec], .emeta').forEach((sec) => {
+      const kids = [...sec.children].filter((k) => k.hasAttribute('data-c'));
+      const off = kids.length > 0 && kids.every((k) => k.hidden);
+      sec.hidden = off;
+      const h = sec.previousElementSibling;
+      if (h && h.classList.contains('esec')) h.hidden = off;
+    });
   }
 
   /* ---- 4) 全站搜尋（索引在 data/search-index.js；結果依型別分組排序） ----
@@ -205,13 +335,17 @@
     const cards = DB.enemies.map((e) => {
       const card = document.createElement('article');
       card.className = 'ecard';
-      let h = '<header>' + dlink('enemy', e.id, e.n)
+      const ic = window.GAOICON ? window.GAOICON.enemy(e.n, e.race) : '';
+      // data-c＝表格欄名：搜尋列「欄位」鈕藏掉某欄時，卡片上對應的那塊一起收
+      const dg = (col, html) => (html ? '<span class="dgrp" data-c="' + col + '">' + html + '</span>' : '');
+      let h = '<header>' + (ic ? '<span class="ic" aria-hidden="true">' + ic + '</span>' : '')
+        + dlink('enemy', e.id, e.n)
         + '<span class="lvb">LV ' + (e.lv ? esc(e.lv) : '?') + '</span>'
-        + (e.race ? '<span class="raceb">' + esc(e.race) + '</span>' : '')
+        + (e.race ? '<span class="raceb" data-c="種族">' + esc(e.race) + '</span>' : '')
         + '</header>';
-      h += '<div class="esec">怪物屬性</div><div class="echips">'
-        + '<span class="stat">最低HP<b>' + (e.hp ? esc(e.hp) : '—') + '</b></span>'
-        + '<span class="stat">最低等級<b>' + (e.lv ? esc(e.lv) : '—') + '</b></span>'
+      h += '<div class="esec">怪物屬性</div><div class="echips" data-sec="1">'
+        + '<span class="stat" data-c="最低HP">最低HP<b>' + (e.hp ? esc(e.hp) : '—') + '</b></span>'
+        + '<span class="stat" data-c="最低等級">最低等級<b>' + (e.lv ? esc(e.lv) : '—') + '</b></span>'
         + '</div>';
       const dropIds = new Set(e.dropIds || []);
       const bookIds = new Set(e.bookIds || []);
@@ -219,22 +353,25 @@
         dropIds.has(d) ? dlink('material', d) : '<span>' + esc(d) + '</span>');
       const books = splitList(e.books).map((b) =>
         bookIds.has(b) ? dlink('skill', b) : '<span>' + esc(b) + '</span>');
-      const rest = [e.scrolls, e.potions, e.other].map(splitList).flat()
-        .map((v) => '<span class="dim">' + esc(v) + '</span>');
-      if (drops.length + books.length + rest.length) {
-        h += '<div class="esec">掉落</div><div class="echips">'
-          + drops.join('') + books.join('') + rest.join('') + '</div>';
+      const dim = (x) => splitList(x)
+        .map((v) => '<span class="dim">' + esc(v) + '</span>').join('');
+      if (drops.length + books.length
+          + (e.scrolls || '').length + (e.potions || '').length + (e.other || '').length) {
+        h += '<div class="esec">掉落</div><div class="echips" data-sec="1">'
+          + dg('掉落素材', drops.join('')) + dg('掉落技能書', books.join(''))
+          + dg('掉落卷軸', dim(e.scrolls)) + dg('掉落補品', dim(e.potions))
+          + dg('掉落其他', dim(e.other)) + '</div>';
       }
-      h += '<div class="esec">出沒地圖</div><div class="echips">'
-        + dlink('zone', e.zoneId, e.zone)
+      h += '<div class="esec">出沒地圖</div><div class="echips" data-sec="1">'
+        + dg('地圖', dlink('zone', e.zoneId, e.zone))
         + (e.at && e.at !== e.zone
-            ? '<span class="' + (e.at.indexOf(e.zone) === 0 ? '' : 'realm') + '">'
+            ? '<span data-c="出沒" class="' + (e.at.indexOf(e.zone) === 0 ? '' : 'realm') + '">'
               + esc(e.at) + '</span>' : '')
         + '</div>';
       if (e.equip || e.skills) {
         h += '<div class="emeta">'
-          + (e.equip ? '<div>裝備：' + esc(e.equip) + '</div>' : '')
-          + (e.skills ? '<div>技能：' + esc(e.skills) + '</div>' : '') + '</div>';
+          + (e.equip ? '<div data-c="裝備">裝備：' + esc(e.equip) + '</div>' : '')
+          + (e.skills ? '<div data-c="使用技能">技能：' + esc(e.skills) + '</div>' : '') + '</div>';
       }
       card.innerHTML = h;
       return card;
@@ -299,6 +436,74 @@
       order.forEach((i) => { grid.append(cards[i]); tbody.append(rows[i]); });
     });
     if (bar) bar.append(sel);
+  }
+
+  /* ---- 10) 表格卡片化：預設所有 rtable 攤成「一列一張卡」（html.cards），
+     搜尋列上可切回傳統表格，偏好整站記住。 ---- */
+  const CKEY = 'pref.tableview';
+  function cardsPref() {
+    let table = false;
+    try { table = localStorage.getItem(CKEY) === '1'; } catch (e) {}
+    document.documentElement.classList.toggle('cards', !table);
+    return !table;
+  }
+  function cardsToggleButtons(bar, table) {
+    if (!bar || table.id === 'etab') return;   // 敵人圖鑑有自己的怪物卡檢視
+    const btns = {};
+    const apply = () => {
+      const on = document.documentElement.classList.contains('cards');
+      btns.cards.setAttribute('aria-pressed', String(on));
+      btns.table.setAttribute('aria-pressed', String(!on));
+    };
+    [['cards', '▦ 卡片'], ['table', '☰ 表格']].forEach(([m, label]) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'vbtn';
+      b.textContent = label;
+      b.setAttribute('aria-label', label + '檢視');
+      b.addEventListener('click', () => {
+        try { localStorage.setItem(CKEY, m === 'table' ? '1' : '0'); } catch (e) {}
+        const on = cardsPref();
+        // 同一頁可能有多張表各一組切換鈕，全部同步（敵人圖鑑自己的檢視鈕不在此列）
+        document.querySelectorAll('.tbar .vbtn').forEach((x) => {
+          if (x.textContent.includes('卡片')) x.setAttribute('aria-pressed', String(on));
+          else if (x.textContent.includes('表格')) x.setAttribute('aria-pressed', String(!on));
+        });
+      });
+      btns[m] = b;
+      bar.append(b);
+    });
+    apply();
+  }
+
+  /* ---- 9) 圖鑑圖示：table[data-icons] 的名稱前加上該實體的 emoji 圖示，
+     規則在 data/icons.js（與遊戲本身的 emoji 視覺語言一致）。 ---- */
+  function iconizeTables() {
+    const G = window.GAOICON;
+    if (!G) return;
+    document.querySelectorAll('table[data-icons]').forEach((table) => {
+      const kind = table.dataset.icons;
+      bodyRows(table).forEach((tr) => {
+        const a = tr.children[0] && tr.children[0].querySelector('a');
+        if (!a || a.querySelector('.ic')) return;
+        const name = a.textContent.trim();
+        let icon = '';
+        if (kind === 'enemy') icon = G.enemy(name, tr.children[5] ? tr.children[5].textContent : '');
+        else if (kind === 'material') icon = G.mat(name, tr.children[6] ? tr.children[6].textContent : '');
+        else if (kind === 'skill') icon = G.skill(tr.children[1] ? tr.children[1].textContent : '');
+        else if (kind === 'effect') {
+          icon = G.effectCat(tr.children[1] ? tr.children[1].textContent : '');
+          const c = G.fxColor(name);
+          if (c) a.style.color = c;
+        }
+        if (!icon) return;
+        const sp = document.createElement('span');
+        sp.className = 'ic';
+        sp.textContent = icon;
+        sp.setAttribute('aria-hidden', 'true');
+        a.prepend(sp);
+      });
+    });
   }
 
   /* ---- 7) 易讀模式：放大字距行距、表格攤成卡片，整站記住 ---- */
@@ -408,9 +613,19 @@
 
   function boot() {
     document.querySelectorAll('table.rtable').forEach(labelCells);
+    cardsPref();
+    iconizeTables();
     document.querySelectorAll('table[data-search]').forEach(attachSearch);
+    // 素材表的工具列是自己畫的（materials.html），欄位鈕在這裡補掛
+    const mtab = document.getElementById('mtab');
+    if (mtab) {
+      const mbar = document.querySelector('.tbar');
+      const mrow = mbar && mbar.querySelectorAll('.row')[1];
+      if (mrow) colToggle(mrow, mbar, mtab);
+    }
     attachGlobalSearch();
     enemyCards();
+    colAppliers.forEach((f) => f());   // 怪物卡此時才建好，欄位設定再套一次
     readableToggle();
     headerSearch();
     urlQuery();

@@ -16,6 +16,7 @@
 <script src="site.js" defer></script>
 <script src="data/search-index.js" defer></script>
 <script src="data/db.js"></script>
+<script src="data/icons.js"></script>
 <style>
   .dhead { display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap; }
   .dhead h1 { border-bottom: none; margin-bottom: 0.2rem; }
@@ -72,6 +73,8 @@
   const id = qs.get('id') || '';
   const main = document.getElementById('dmain');
   const DB = window.DB || {};
+  const G = window.GAOICON || null;
+
   const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const link = (type, key, text) =>
     '<a href="detail.html?t=' + type + '&id=' + encodeURIComponent(key) + '">' + esc(text == null ? key : text) + '</a>';
@@ -88,8 +91,10 @@
     enemy:    { label: '敵人', list: 'enemies',   page: 'enemies.html' },
   };
 
-  function head(name, typeLabel) {
-    return '<div class="dhead"><h1>' + esc(name) + '</h1>'
+  function head(name, typeLabel, icon) {
+    return '<div class="dhead"><h1>'
+      + (icon ? '<span class="ic" aria-hidden="true">' + icon + '</span>' : '')
+      + esc(name) + '</h1>'
       + '<span class="dtype">' + typeLabel + '</span>'
       + '<span class="dver">v' + esc(DB.version || '?') + '</span></div>';
   }
@@ -116,7 +121,7 @@
     '<h2>' + title + '</h2><p class="unknown">尚無可靠資料。</p>';
 
   function renderMaterial(m) {
-    let h = head(m.id, '素材');
+    let h = head(m.id, '素材', G && G.mat(m.id, m.tags.join('·')));
     h += kv([['攻擊', num(m.atk)], ['防禦', num(m.def)], ['幸運', num(m.luck)],
              ['重量', num(m.wt)], ['耐久', num(m.dur)]]);
     h += '<h2>標籤</h2><div class="chips dchips">'
@@ -125,8 +130,12 @@
         : '<span class="unknown">無</span>') + '</div>';
     h += '<h2>特效</h2>';
     h += m.effects.length
-      ? '<div class="chips dchips">' + m.effects.map((f) =>
-          link('effect', f.e, f.e + ' ' + f.v)).join('') + '</div>'
+      ? '<div class="chips dchips">' + m.effects.map((f) => {
+          const c = G ? G.fxColor(f.e) : '';
+          return '<a href="detail.html?t=effect&id=' + encodeURIComponent(f.e) + '"'
+            + (c ? ' style="color:' + c + ';border-color:' + c + '55"' : '') + '>'
+            + esc(f.e + ' ' + f.v) + '</a>';
+        }).join('') + '</div>'
       : '<p class="unknown">這種素材不帶特效。</p>';
     h += '<h2>取得來源</h2>';
     h += (m.sources && m.sources.length)
@@ -140,8 +149,10 @@
   }
 
   function renderEffect(e) {
-    let h = head(e.id, '特效・' + e.cat);
-    h += kv([['分類', esc(e.cat)], ['鍵名', '<code>' + esc(e.key) + '</code>']]);
+    let h = head(e.id, '特效・' + e.cat, G && G.effectCat(e.cat));
+    const fc = G ? G.fxColor(e.id) : '';
+    if (fc) h = h.replace('</h1>', '</h1>').replace('<h1>', '<h1 style="color:' + fc + '">');
+    h += kv([['分類', esc(e.cat)]]);
     h += '<h2>機制</h2><p>' + esc(e.mech) + '</p>';
     h += '<h2>帶這個特效的素材（' + e.materials.length + '）</h2>';
     h += e.materials.length
@@ -153,8 +164,8 @@
   }
 
   function renderSkill(s) {
-    let h = head(s.id, '技能・' + s.type);
-    h += kv([['武器型別', esc(s.type)], ['技能 ID', s.gid == null ? '<span class="unknown">—</span>' : esc(s.gid)]]);
+    let h = head(s.id, '技能・' + s.type, G && G.skill(s.type));
+    h += kv([['武器型別', esc(s.type)]]);
     h += '<h2>效果</h2><p>' + esc(s.desc) + '</p>';
     const same = DB.skills.filter((x) => x.type === s.type && x.id !== s.id);
     h += '<h2>同型別的其他技能（' + same.length + '）</h2><div class="chips dchips">'
@@ -182,12 +193,12 @@
   }
 
   function renderEqtype(e) {
-    let h = head(e.id, '裝備・' + e.slot);
+    let h = head(e.id, '裝備・' + e.slot, G && G.eqtype(e.id));
     h += '<p>' + esc(e.desc) + '</p>';
     h += kv([['攻擊係數', esc(e.a) + 'x'], ['防禦係數', esc(e.df) + 'x'],
              ['幸運係數', esc(e.l) + 'x'], ['耐久係數', esc(e.u) + 'x'],
              ['素材需求', esc(e.q) + ' 個']]);
-    h += kv([['部位', esc(e.slot)], ['持法', esc(e.hand)], ['tag', '<code>' + esc(e.tag) + '</code>']]);
+    h += kv([['部位', esc(e.slot)], ['持法', esc(e.hand)]]);
     h += updBlock(e, e.id);
     const vars = (DB.wmult || []).filter((w) =>
       w.id.includes(e.id) || (e.id === '盾牌' && w.id.includes('盾')));
@@ -225,7 +236,7 @@
   }
 
   function renderEnemy(e) {
-    let h = head(e.n, '敵人・' + (e.race || '種族未記'));
+    let h = head(e.n, '敵人・' + (e.race || '種族未記'), G && G.enemy(e.n, e.race));
     h += kv([['最低 HP', e.hp ? esc(e.hp) : '<span class="unknown">—</span>'],
              ['最低等級', e.lv ? esc(e.lv) : '<span class="unknown">—</span>'],
              ['出沒', esc(e.at || e.zone)],
@@ -280,7 +291,7 @@
 })();
 </script>
 <footer class="site">
-9aohelper · 遊戲版本 v3.1.8 · 2026-09-05 更新
+9aohelper · 遊戲版本 v3.1.9 · 2026-09-05 更新
 </footer>
 </body>
 </html>
