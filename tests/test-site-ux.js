@@ -612,10 +612,10 @@ async function main() {
     const dom = await load('enemies.html');
     const d = dom.window.document, w = dom.window;
     const rows = [...d.querySelectorAll('table[data-search] tbody tr')];
-    ok('176 隻敵人全在', rows.length === 176);
+    ok('192 隻敵人全在', rows.length === 192);
     const input = d.querySelector('.tbar input[type="search"]');
     type(input, '菇菇', w);
-    ok('打「菇菇」篩得到蘑菇園那掛', vis(rows) > 3 && vis(rows) < 176);
+    ok('打「菇菇」篩得到蘑菇園那掛', vis(rows) > 3 && vis(rows) < 192);
     type(input, '狗頭人爪', w);
     ok('打掉落物「狗頭人爪」也搜得到', vis(rows) >= 2);
     type(input, '', w);
@@ -645,7 +645,7 @@ async function main() {
 
     // 火鳳燎原（第 9 張圖）：西涼兵到三國群雄，王關是董卓＋呂布
     const fireRows = rows.filter((r) => r.children[1].textContent.trim() === '火鳳燎原');
-    ok('火鳳燎原 14 隻敵人', fireRows.length === 14);
+    ok('火鳳燎原 30 隻敵人', fireRows.length === 30);
     ok('西涼四兵種都在', ['西涼槍兵', '西涼刀兵', '西涼暴徒', '西涼精銳']
       .every((n) => fireRows.some((r) => r.children[0].textContent.trim() === n)));
     ok('三國群雄都在', ['李傕', '郭汜', '文醜', '顏良', '袁紹', '袁術']
@@ -658,6 +658,23 @@ async function main() {
     ok('呂布帶方天畫戟', lubu.children[11].textContent.includes('方天畫戟'));
     ok('火鳳燎原的王關兩隻都標了', fireRows
       .filter((r) => r.children[2].textContent.includes('王關')).length === 2);
+
+    // 三國秘境與巾色山麥：秘境名要各自正確，不能全寫成「陰洞」
+    const wuRows = fireRows.filter((r) => r.children[2].textContent.includes('秘境（吳國）'));
+    ok('吳國秘境 9 隻', wuRows.length === 9);
+    ok('吳國名將都在', ['甘寧', '丁奉', '黃蓋', '太史慈', '孫堅', '孫策', '周瑜', '孫權']
+      .every((n) => wuRows.some((r) => r.children[0].textContent.trim() === n)));
+    const jinRows = fireRows.filter((r) => r.children[2].textContent.includes('巾色山麥'));
+    ok('巾色山麥 7 隻', jinRows.length === 7);
+    ok('黃巾軍團四兵種都在', ['黃巾刺客', '黃巾劍客', '黃巾弓手', '黃巾長槍兵']
+      .every((n) => jinRows.some((r) => r.children[0].textContent.trim() === n)));
+    ok('張角三兄弟都在', ['張角', '張寶', '張梁']
+      .every((n) => jinRows.some((r) => r.children[0].textContent.trim() === n)));
+    ok('張角 Lv204、HP 10474',
+      jinRows.find((r) => r.children[0].textContent.includes('張角'))
+        .children[4].textContent.trim() === '204');
+    ok('沒有把三國的秘境誤標成陰洞',
+      !fireRows.some((r) => r.children[2].textContent.includes('陰洞')));
     chips.find((b) => b.textContent.startsWith('青藏高原')).click();
     ok('按「青藏高原」→ 只剩那張圖的敵人', vis(rows) > 0 &&
       rows.filter((tr) => !tr.hidden).every((tr) => tr.children[1].textContent.includes('青藏高原')));
@@ -669,7 +686,7 @@ async function main() {
       eval(fs.readFileSync(path.join(SITE, 'data', 'db.js'), 'utf8'));
       return window.DB;
     })();
-    ok('敵人 176 隻進庫', DB3.enemies.length === 176);
+    ok('敵人 192 隻進庫', DB3.enemies.length === 192);
     const matById3 = Object.fromEntries(DB3.materials.map((m) => [m.id, m]));
     ok('敵人→素材的每筆掉落，素材端都反向列得到',
       DB3.enemies.every((e) => e.dropIds.every((m) =>
@@ -788,7 +805,7 @@ async function main() {
     const dom = await load('enemies.html', '', ['data/db.js']);
     const d = dom.window.document, w = dom.window;
     const cards = [...d.querySelectorAll('#ecards .ecard')];
-    ok('176 張怪物卡建出來了', cards.length === 176);
+    ok('192 張怪物卡建出來了', cards.length === 192);
     ok('預設卡片檢視：表格收起、卡片顯示',
       d.querySelector('.table-wrap').hidden === true &&
       d.getElementById('ecards').hidden === false);
@@ -805,9 +822,9 @@ async function main() {
     const input = d.querySelector('.tbar input[type="search"]');
     type(input, '菇菇', w);
     const visCards = () => cards.filter((c) => !c.hidden).length;
-    ok('搜尋「菇菇」→ 卡片跟著表格一起被篩', visCards() > 3 && visCards() < 176);
+    ok('搜尋「菇菇」→ 卡片跟著表格一起被篩', visCards() > 3 && visCards() < 192);
     type(input, '', w);
-    ok('清空搜尋 → 卡片全回來', visCards() === 176);
+    ok('清空搜尋 → 卡片全回來', visCards() === 192);
 
     // 切檢視＋記住
     const tbtn = [...d.querySelectorAll('.vbtn')].find((b) => b.textContent.includes('表格'));
