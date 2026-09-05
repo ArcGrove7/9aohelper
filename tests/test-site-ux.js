@@ -629,9 +629,9 @@ async function main() {
     ok('陰洞的魑魅魍魎四隻都在', ['魑', '魅', '魍', '魎']
       .every((n) => eagleRows.some((r) => r.children[0].textContent.trim() === n)));
     const heitie = eagleRows.find((r) => r.children[0].textContent.includes('黑鐵一輝'));
-    ok('黑鐵一輝 Lv175、HP 8889、人形',
+    ok('黑鐵一輝 Lv175、HP 8500、人形',
       heitie.children[4].textContent.trim() === '175'
-      && heitie.children[3].textContent.trim() === '8889'
+      && heitie.children[3].textContent.trim() === '8500'
       && heitie.children[5].textContent.trim() === '人形');
     const yelu = eagleRows.find((r) => r.children[0].textContent.includes('夜露'));
     ok('夜露帶 SMG 與三招（掃射轉移／瞬爆閃／跑射）',
