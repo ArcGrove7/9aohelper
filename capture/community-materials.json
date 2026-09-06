@@ -1,0 +1,3877 @@
+{
+ "source": "玩家共編的 GAO 資料庫試算表（人於 2026-09-06 提供）",
+ "note": "數值是以泥土＝1.00 為基準的相對係數，與站上 materials.html 的絕對值不同單位，不要混用。品質欄位是「打出該品質所需的數量」。",
+ "generatedAt": "2026-09-06T09:10:28.960Z",
+ "qualities": [
+  "屎一般",
+  "垃圾般",
+  "破爛",
+  "劣質",
+  "次等",
+  "普通",
+  "上等",
+  "高級",
+  "精良",
+  "頂級",
+  "完美",
+  "史詩",
+  "神話",
+  "傳說"
+ ],
+ "categories": [
+  "土",
+  "植物",
+  "森林區",
+  "鐵礦山",
+  "阿嬤山",
+  "石",
+  "?",
+  "大草原",
+  "猛牛原",
+  "兒童樂園",
+  "蘑菇園",
+  "圓明園",
+  "非洲大草原",
+  "空中花園",
+  "青藏高原",
+  "火鳳燎原",
+  "骷髏墓園",
+  "鷹洞",
+  "蝙蝠洞",
+  "老鼠洞",
+  "岩洞",
+  "盤絲洞",
+  "水簾洞",
+  "龍洞",
+  "藍洞",
+  "黑洞",
+  "無底洞",
+  "地下迷宮",
+  "鹿港天后宮",
+  "克里姆林宮",
+  "金屬"
+ ],
+ "count": 315,
+ "materials": [
+  {
+   "name": "爐渣",
+   "category": "?",
+   "atk": 2.98,
+   "def": 1.2,
+   "lck": 0.43,
+   "wgt": 1.17,
+   "dur": 1.75,
+   "effect": "毒：1",
+   "qualityNeed": {
+    "普通": 4,
+    "上等": 4,
+    "高級": 5,
+    "精良": 5
+   }
+  },
+  {
+   "name": "藍黑土",
+   "category": "土",
+   "atk": 3.82,
+   "def": 0.64,
+   "lck": 0.9,
+   "wgt": 0.66,
+   "dur": 1.43,
+   "effect": "敏捷：1"
+  },
+  {
+   "name": "紅土",
+   "category": "土",
+   "atk": 3.06,
+   "def": 2.73,
+   "lck": 2.46,
+   "wgt": 1.09,
+   "dur": 2.25,
+   "effect": null,
+   "qualityNeed": {
+    "次等": 3
+   }
+  },
+  {
+   "name": "黑土",
+   "category": "土",
+   "atk": 2.02,
+   "def": 1.39,
+   "lck": 1.69,
+   "wgt": 0.72,
+   "dur": 1.63,
+   "effect": null,
+   "qualityNeed": {
+    "次等": 6
+   }
+  },
+  {
+   "name": "泥土",
+   "category": "土",
+   "atk": 1,
+   "def": 1,
+   "lck": 1,
+   "wgt": 1,
+   "dur": 1,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 2,
+    "垃圾般": 2,
+    "破爛": 2,
+    "劣質": 3,
+    "次等": 3,
+    "普通": 3,
+    "上等": 3,
+    "高級": 3,
+    "精良": 3,
+    "頂級": 3,
+    "完美": 3,
+    "史詩": 4
+   }
+  },
+  {
+   "name": "赫拉克羅斯的角",
+   "category": "大草原",
+   "atk": 9.9,
+   "def": 4.86,
+   "lck": 2.16,
+   "wgt": 1.43,
+   "dur": 3.92,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 8,
+    "垃圾般": 8,
+    "精良": 10
+   }
+  },
+  {
+   "name": "狗頭人爪",
+   "category": "大草原",
+   "atk": 9.44,
+   "def": 3.25,
+   "lck": 0,
+   "wgt": 0.26,
+   "dur": 2.27,
+   "effect": "毒：1"
+  },
+  {
+   "name": "龜殼花牙",
+   "category": "大草原",
+   "atk": 8.24,
+   "def": 2.41,
+   "lck": 0.83,
+   "wgt": 0.37,
+   "dur": 2.97,
+   "effect": "毒：4",
+   "qualityNeed": {
+    "屎一般": 2,
+    "劣質": 3,
+    "次等": 3,
+    "普通": 3,
+    "上等": 3,
+    "高級": 3
+   }
+  },
+  {
+   "name": "草原狼牙",
+   "category": "大草原",
+   "atk": 8.21,
+   "def": 1.74,
+   "lck": 1.27,
+   "wgt": 0.59,
+   "dur": 2.49,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 3
+   }
+  },
+  {
+   "name": "大黃蜂的針",
+   "category": "大草原",
+   "atk": 7.67,
+   "def": 1.31,
+   "lck": 0.83,
+   "wgt": 0.07,
+   "dur": 1.48,
+   "effect": "毒：1 麻痹毒：2",
+   "qualityNeed": {
+    "屎一般": 5,
+    "垃圾般": 5,
+    "劣質": 6,
+    "次等": 6
+   }
+  },
+  {
+   "name": "山豬獠牙",
+   "category": "大草原",
+   "atk": 6.58,
+   "def": 2.61,
+   "lck": 2.08,
+   "wgt": 0.85,
+   "dur": 3.09,
+   "effect": null
+  },
+  {
+   "name": "超級綠水靈珠",
+   "category": "大草原",
+   "atk": 6.5,
+   "def": 2.03,
+   "lck": 5.03,
+   "wgt": 0.58,
+   "dur": 3,
+   "effect": null,
+   "qualityNeed": {
+    "精良": 10
+   }
+  },
+  {
+   "name": "青竹絲牙",
+   "category": "大草原",
+   "atk": 6.09,
+   "def": 1.69,
+   "lck": 2.08,
+   "wgt": 0.3,
+   "dur": 2.5,
+   "effect": "毒：2",
+   "qualityNeed": {
+    "屎一般": 2,
+    "精良": 3
+   }
+  },
+  {
+   "name": "狗牙",
+   "category": "大草原",
+   "atk": 5.8,
+   "def": 2.03,
+   "lck": 0,
+   "wgt": 0.44,
+   "dur": 2.27,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 2,
+    "普通": 3
+   }
+  },
+  {
+   "name": "綠水靈珠",
+   "category": "大草原",
+   "atk": 3.84,
+   "def": 1.65,
+   "lck": 4.29,
+   "wgt": 0.23,
+   "dur": 1.97,
+   "effect": null,
+   "qualityNeed": {
+    "精良": 3
+   }
+  },
+  {
+   "name": "蘑菇芽孢",
+   "category": "大草原",
+   "atk": 3.45,
+   "def": 0.68,
+   "lck": 1.22,
+   "wgt": 0.07,
+   "dur": 0.98,
+   "effect": null,
+   "qualityNeed": {
+    "精良": 3
+   }
+  },
+  {
+   "name": "綠液球",
+   "category": "大草原",
+   "atk": 3.09,
+   "def": 3.02,
+   "lck": 1.63,
+   "wgt": 0.87,
+   "dur": 3.49,
+   "effect": null,
+   "qualityNeed": {
+    "次等": 15,
+    "普通": 16,
+    "高級": 17,
+    "神話": 20
+   }
+  },
+  {
+   "name": "赫拉克羅斯的殼",
+   "category": "大草原",
+   "atk": 3.02,
+   "def": 7.82,
+   "lck": 0,
+   "wgt": 1.31,
+   "dur": 3.61,
+   "effect": null,
+   "qualityNeed": {
+    "破爛": 2,
+    "劣質": 3,
+    "次等": 3,
+    "普通": 3,
+    "上等": 3,
+    "高級": 3,
+    "史詩": 4,
+    "神話": 4,
+    "傳說": 4
+   }
+  },
+  {
+   "name": "藍黑寶殼",
+   "category": "大草原",
+   "atk": 2.96,
+   "def": 3.02,
+   "lck": 1.67,
+   "wgt": 0.44,
+   "dur": 2.88,
+   "effect": null,
+   "qualityNeed": {
+    "上等": 6,
+    "精良": 7
+   }
+  },
+  {
+   "name": "狗眼",
+   "category": "大草原",
+   "atk": 2.96,
+   "def": 0.66,
+   "lck": 1.67,
+   "wgt": 0.29,
+   "dur": 1.48,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 2
+   }
+  },
+  {
+   "name": "草原狼皮",
+   "category": "大草原",
+   "atk": 2.09,
+   "def": 3.35,
+   "lck": 0.87,
+   "wgt": 0.49,
+   "dur": 2.89,
+   "effect": null,
+   "qualityNeed": {
+    "普通": 3
+   }
+  },
+  {
+   "name": "狗頭人尾巴",
+   "category": "大草原",
+   "atk": 2.05,
+   "def": 2.05,
+   "lck": 1.76,
+   "wgt": 0.44,
+   "dur": 1.99,
+   "effect": null,
+   "qualityNeed": {
+    "上等": 9
+   }
+  },
+  {
+   "name": "黑兔皮",
+   "category": "大草原",
+   "atk": 2,
+   "def": 1.31,
+   "lck": 1.6,
+   "wgt": 0.36,
+   "dur": 1.99,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 2,
+    "垃圾般": 2,
+    "次等": 3,
+    "普通": 3,
+    "上等": 3
+   }
+  },
+  {
+   "name": "藍寶殼",
+   "category": "大草原",
+   "atk": 1.78,
+   "def": 3.35,
+   "lck": 1.28,
+   "wgt": 0.65,
+   "dur": 2.63,
+   "effect": null,
+   "qualityNeed": {
+    "高級": 3
+   }
+  },
+  {
+   "name": "S級兔皮",
+   "category": "大草原",
+   "atk": 1.41,
+   "def": 3.09,
+   "lck": 4.95,
+   "wgt": 0.2,
+   "dur": 2.63,
+   "effect": null,
+   "qualityNeed": {
+    "精良": 5
+   }
+  },
+  {
+   "name": "嫩寶殼",
+   "category": "大草原",
+   "atk": 1,
+   "def": 2.89,
+   "lck": 1.36,
+   "wgt": 0.51,
+   "dur": 2.27,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 2,
+    "劣質": 3
+   }
+  },
+  {
+   "name": "兔皮",
+   "category": "大草原",
+   "atk": 0.82,
+   "def": 1.66,
+   "lck": 2.46,
+   "wgt": 0.29,
+   "dur": 1.73,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 2,
+    "垃圾般": 2,
+    "破爛": 2,
+    "劣質": 3,
+    "次等": 3,
+    "普通": 3,
+    "上等": 3
+   }
+  },
+  {
+   "name": "重型廢鐵",
+   "category": "水簾洞",
+   "atk": 11.26,
+   "def": 5.62,
+   "lck": 0.6,
+   "wgt": 3.6,
+   "dur": 3.92,
+   "effect": null
+  },
+  {
+   "name": "烈焰猴頭",
+   "category": "水簾洞",
+   "atk": 9.51,
+   "def": 5.87,
+   "lck": 1.6,
+   "wgt": 2,
+   "dur": 4,
+   "effect": "火焰：4"
+  },
+  {
+   "name": "廢鐵",
+   "category": "水簾洞",
+   "atk": 8.76,
+   "def": 4.37,
+   "lck": 0.6,
+   "wgt": 2.8,
+   "dur": 3.08,
+   "effect": null
+  },
+  {
+   "name": "火尾",
+   "category": "水簾洞",
+   "atk": 7.88,
+   "def": 3.23,
+   "lck": 1.57,
+   "wgt": 1.19,
+   "dur": 2.63,
+   "effect": "火焰：2"
+  },
+  {
+   "name": "悟空毛",
+   "category": "水簾洞",
+   "atk": 6.65,
+   "def": 7.71,
+   "lck": 3.92,
+   "wgt": 0.77,
+   "dur": 3.22,
+   "effect": null
+  },
+  {
+   "name": "豬鼻",
+   "category": "水簾洞",
+   "atk": 5.08,
+   "def": 2.63,
+   "lck": 3.38,
+   "wgt": 0.65,
+   "dur": 2.26,
+   "effect": null
+  },
+  {
+   "name": "金腹捲尾猴毛",
+   "category": "水簾洞",
+   "atk": 3.25,
+   "def": 7.12,
+   "lck": 5.4,
+   "wgt": 1,
+   "dur": 2.25,
+   "effect": null
+  },
+  {
+   "name": "青釭",
+   "category": "火鳳燎原",
+   "atk": 15.37,
+   "def": 6.19,
+   "lck": 0.81,
+   "wgt": 3.61,
+   "dur": 4.74,
+   "effect": null
+  },
+  {
+   "name": "蛭石",
+   "category": "石",
+   "atk": 4.02,
+   "def": 1.3,
+   "lck": 1.68,
+   "wgt": 1.19,
+   "dur": 1.76,
+   "effect": null,
+   "qualityNeed": {
+    "次等": 10
+   }
+  },
+  {
+   "name": "石頭",
+   "category": "石",
+   "atk": 2.98,
+   "def": 3,
+   "lck": 3.7,
+   "wgt": 2.36,
+   "dur": 2.47,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 8,
+    "精良": 10
+   }
+  },
+  {
+   "name": "好運石",
+   "category": "石",
+   "atk": 1.96,
+   "def": 2.38,
+   "lck": 5.09,
+   "wgt": 2.46,
+   "dur": 1.92,
+   "effect": null,
+   "qualityNeed": {
+    "破爛": 2
+   }
+  },
+  {
+   "name": "天金",
+   "category": "地下迷宮",
+   "atk": 20.85,
+   "def": 8.17,
+   "lck": 5.46,
+   "wgt": 6.76,
+   "dur": 4.61,
+   "effect": "魔物傷害：3 鉛毒：3 攝魂：2 減傷：1"
+  },
+  {
+   "name": "聖秘銀",
+   "category": "地下迷宮",
+   "atk": 13.16,
+   "def": 13.68,
+   "lck": 5.25,
+   "wgt": 3.15,
+   "dur": 7.31,
+   "effect": "減傷：4 精準攻擊：2 解麻：2 解毒：1 解暈：1"
+  },
+  {
+   "name": "橘寶石",
+   "category": "地下迷宮",
+   "atk": 4.92,
+   "def": 2.6,
+   "lck": 4.25,
+   "wgt": 1.2,
+   "dur": 1.45,
+   "effect": null
+  },
+  {
+   "name": "綠雞蛋",
+   "category": "地下迷宮",
+   "atk": 4.02,
+   "def": 1.99,
+   "lck": 5.01,
+   "wgt": 0.5,
+   "dur": 0.95,
+   "effect": "毒：12 麻痹毒：1 詛咒：2 邪惡力量：2 動物傷害：1 人型傷害：1"
+  },
+  {
+   "name": "哥布林皮",
+   "category": "地下迷宮",
+   "atk": 2.9,
+   "def": 5.2,
+   "lck": 1.73,
+   "wgt": 0.75,
+   "dur": 3.08,
+   "effect": "毒：2 邪惡力量：1"
+  },
+  {
+   "name": "拉達門牙",
+   "category": "老鼠洞",
+   "atk": 10.69,
+   "def": 2.4,
+   "lck": 3.83,
+   "wgt": 1.33,
+   "dur": 4.84,
+   "effect": null
+  },
+  {
+   "name": "莫尼西鼠門牙",
+   "category": "老鼠洞",
+   "atk": 9.9,
+   "def": 3.72,
+   "lck": 1.71,
+   "wgt": 1.82,
+   "dur": 5.67,
+   "effect": null
+  },
+  {
+   "name": "妖尾",
+   "category": "老鼠洞",
+   "atk": 9.47,
+   "def": 5.8,
+   "lck": 2.71,
+   "wgt": 0.72,
+   "dur": 1.48,
+   "effect": null
+  },
+  {
+   "name": "莫尼西鼠顱骨",
+   "category": "老鼠洞",
+   "atk": 9.44,
+   "def": 8.31,
+   "lck": 2.35,
+   "wgt": 2.11,
+   "dur": 6.13,
+   "effect": null
+  },
+  {
+   "name": "米老鼠耳朵",
+   "category": "老鼠洞",
+   "atk": 8.38,
+   "def": 5.12,
+   "lck": 6.22,
+   "wgt": 1.09,
+   "dur": 3.14,
+   "effect": null
+  },
+  {
+   "name": "黃金兔鼠皮",
+   "category": "老鼠洞",
+   "atk": 4.11,
+   "def": 1.96,
+   "lck": 5.32,
+   "wgt": 0.21,
+   "dur": 3.47,
+   "effect": null
+  },
+  {
+   "name": "貓毛",
+   "category": "老鼠洞",
+   "atk": 1.8,
+   "def": 1.93,
+   "lck": 7.73,
+   "wgt": 0,
+   "dur": 2.95,
+   "effect": null
+  },
+  {
+   "name": "老鼠屎",
+   "category": "老鼠洞",
+   "atk": 0.96,
+   "def": 0.62,
+   "lck": 1.67,
+   "wgt": 0.72,
+   "dur": 1.02,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 2
+   }
+  },
+  {
+   "name": "西伯利亞棕熊骨",
+   "category": "克里姆林宮",
+   "atk": 10.7,
+   "def": 11,
+   "lck": 0.89,
+   "wgt": 3.5,
+   "dur": 6.11,
+   "effect": null
+  },
+  {
+   "name": "西伯利亞棕熊皮",
+   "category": "克里姆林宮",
+   "atk": 5.11,
+   "def": 10.42,
+   "lck": 1.28,
+   "wgt": 2.5,
+   "dur": 7.33,
+   "effect": "冰結：1"
+  },
+  {
+   "name": "鎖鏈蛇牙",
+   "category": "兒童樂園",
+   "atk": 9.68,
+   "def": 1.31,
+   "lck": 1.25,
+   "wgt": 0.44,
+   "dur": 1.8,
+   "effect": "毒：3 麻痹毒：2"
+  },
+  {
+   "name": "比特犬牙",
+   "category": "兒童樂園",
+   "atk": 8.62,
+   "def": 2.74,
+   "lck": 0,
+   "wgt": 0.74,
+   "dur": 3.08,
+   "effect": null,
+   "qualityNeed": {
+    "劣質": 6
+   }
+  },
+  {
+   "name": "頭髮",
+   "category": "兒童樂園",
+   "atk": 5.26,
+   "def": 1.35,
+   "lck": 0.39,
+   "wgt": 0.29,
+   "dur": 1.47,
+   "effect": "詛咒：1",
+   "qualityNeed": {
+    "屎一般": 8
+   }
+  },
+  {
+   "name": "彈珠",
+   "category": "兒童樂園",
+   "atk": 5.09,
+   "def": 3.62,
+   "lck": 3.57,
+   "wgt": 0.44,
+   "dur": 2.33,
+   "effect": null,
+   "qualityNeed": {
+    "上等": 9
+   }
+  },
+  {
+   "name": "紅色布料",
+   "category": "兒童樂園",
+   "atk": 4.5,
+   "def": 2.33,
+   "lck": 0,
+   "wgt": 0.43,
+   "dur": 2.04,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 8
+   }
+  },
+  {
+   "name": "紅鼻子",
+   "category": "兒童樂園",
+   "atk": 3.85,
+   "def": 3.33,
+   "lck": 1.71,
+   "wgt": 0.3,
+   "dur": 1.53,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 8
+   }
+  },
+  {
+   "name": "紅色氣球",
+   "category": "兒童樂園",
+   "atk": 3.4,
+   "def": 0.67,
+   "lck": 3.22,
+   "wgt": 0,
+   "dur": 0.27,
+   "effect": "（可以讓裝備0重）",
+   "qualityNeed": {
+    "屎一般": 5
+   }
+  },
+  {
+   "name": "人皮",
+   "category": "兒童樂園",
+   "atk": 1.99,
+   "def": 2.62,
+   "lck": 0,
+   "wgt": 0.73,
+   "dur": 2.9,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 19
+   }
+  },
+  {
+   "name": "白色面具",
+   "category": "兒童樂園",
+   "atk": 0.97,
+   "def": 1.61,
+   "lck": 7.19,
+   "wgt": 0.39,
+   "dur": 0.96,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 2
+   }
+  },
+  {
+   "name": "安眠藥",
+   "category": "兒童樂園",
+   "atk": 0.96,
+   "def": 0,
+   "lck": 1.71,
+   "wgt": 0.14,
+   "dur": 0.53,
+   "effect": "睡眠：2"
+  },
+  {
+   "name": "鑽角犀獸角",
+   "category": "岩洞",
+   "atk": 16.41,
+   "def": 1.93,
+   "lck": 1.8,
+   "wgt": 3.73,
+   "dur": 3.86,
+   "effect": "破甲：1"
+  },
+  {
+   "name": "大岩蛇角",
+   "category": "岩洞",
+   "atk": 12.51,
+   "def": 5.25,
+   "lck": 2.6,
+   "wgt": 2.8,
+   "dur": 4.08,
+   "effect": null
+  },
+  {
+   "name": "蛇鋼",
+   "category": "岩洞",
+   "atk": 9.23,
+   "def": 11.22,
+   "lck": 0,
+   "wgt": 5.25,
+   "dur": 6.22,
+   "effect": null
+  },
+  {
+   "name": "大灰石",
+   "category": "岩洞",
+   "atk": 7.5,
+   "def": 6.32,
+   "lck": 1.71,
+   "wgt": 2.75,
+   "dur": 4.31,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 2
+   }
+  },
+  {
+   "name": "拳頭",
+   "category": "岩洞",
+   "atk": 5.9,
+   "def": 5.35,
+   "lck": 2.5,
+   "wgt": 2.2,
+   "dur": 3.46,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 5,
+    "頂級": 7
+   }
+  },
+  {
+   "name": "佛烈托斯殼",
+   "category": "岩洞",
+   "atk": 4.2,
+   "def": 9.43,
+   "lck": 0.4,
+   "wgt": 4,
+   "dur": 4.18,
+   "effect": "格檔：1"
+  },
+  {
+   "name": "岩殼",
+   "category": "岩洞",
+   "atk": 3.82,
+   "def": 8.67,
+   "lck": 1.8,
+   "wgt": 3.3,
+   "dur": 4.91,
+   "effect": "格擋：1"
+  },
+  {
+   "name": "紋身貼紙",
+   "category": "岩洞",
+   "atk": 3.78,
+   "def": 0.64,
+   "lck": 3.78,
+   "wgt": 0,
+   "dur": 1.47,
+   "effect": "威嚇：1 人型傷害：1"
+  },
+  {
+   "name": "朝北鼻鼻",
+   "category": "岩洞",
+   "atk": 3.1,
+   "def": 7.17,
+   "lck": 2.47,
+   "wgt": 3.76,
+   "dur": 3.09,
+   "effect": "精準攻擊：1"
+  },
+  {
+   "name": "帕祖祖的尾巴",
+   "category": "空中花園",
+   "atk": 9.22,
+   "def": 2.49,
+   "lck": 0,
+   "wgt": 0.53,
+   "dur": 3.06,
+   "effect": "毒：2 麻痹毒：2 邪惡力量：3"
+  },
+  {
+   "name": "帕祖祖的腳爪",
+   "category": "空中花園",
+   "atk": 8,
+   "def": 3.05,
+   "lck": 0,
+   "wgt": 0.67,
+   "dur": 3.02,
+   "effect": "毒：1 邪惡力量：2"
+  },
+  {
+   "name": "眼鏡蛇牙",
+   "category": "空中花園",
+   "atk": 7.92,
+   "def": 2.02,
+   "lck": 0,
+   "wgt": 0.45,
+   "dur": 2.06,
+   "effect": "毒：2 麻痹毒：4"
+  },
+  {
+   "name": "金蠍尾",
+   "category": "空中花園",
+   "atk": 7.8,
+   "def": 0.69,
+   "lck": 3.48,
+   "wgt": 0.37,
+   "dur": 0.54,
+   "effect": "毒：4 麻痹毒：5"
+  },
+  {
+   "name": "鷹爪",
+   "category": "空中花園",
+   "atk": 7.67,
+   "def": 1.95,
+   "lck": 1.67,
+   "wgt": 0.59,
+   "dur": 2.5,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 5
+   }
+  },
+  {
+   "name": "怒蛇尾",
+   "category": "空中花園",
+   "atk": 6.34,
+   "def": 3.2,
+   "lck": 0.34,
+   "wgt": 0.63,
+   "dur": 2.33,
+   "effect": "毒：1 麻痹毒：2"
+  },
+  {
+   "name": "黑肥尾蠍鉗",
+   "category": "空中花園",
+   "atk": 5.96,
+   "def": 3.3,
+   "lck": 1.7,
+   "wgt": 0.76,
+   "dur": 2.9,
+   "effect": null,
+   "qualityNeed": {
+    "上等": 6
+   }
+  },
+  {
+   "name": "黑肥尾蠍尾",
+   "category": "空中花園",
+   "atk": 4.95,
+   "def": 1.99,
+   "lck": 1.7,
+   "wgt": 0.45,
+   "dur": 1.9,
+   "effect": "毒：2 麻痹毒：3",
+   "qualityNeed": {
+    "屎一般": 2
+   }
+  },
+  {
+   "name": "怒蛇鱗",
+   "category": "空中花園",
+   "atk": 4.04,
+   "def": 4.31,
+   "lck": 0,
+   "wgt": 0.59,
+   "dur": 3.52,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 6
+   }
+  },
+  {
+   "name": "藤蔓",
+   "category": "空中花園",
+   "atk": 4.01,
+   "def": 2.01,
+   "lck": 0.82,
+   "wgt": 0.3,
+   "dur": 2.3,
+   "effect": null,
+   "qualityNeed": {
+    "破爛": 5
+   }
+  },
+  {
+   "name": "鷹毛",
+   "category": "空中花園",
+   "atk": 2.96,
+   "def": 3.58,
+   "lck": 1.57,
+   "wgt": 0.15,
+   "dur": 2.01,
+   "effect": null,
+   "qualityNeed": {
+    "精良": 7
+   }
+  },
+  {
+   "name": "黑肥尾蠍殼",
+   "category": "空中花園",
+   "atk": 2.03,
+   "def": 4.04,
+   "lck": 1.7,
+   "wgt": 0.74,
+   "dur": 2.82,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 5
+   }
+  },
+  {
+   "name": "椰棗葉",
+   "category": "空中花園",
+   "atk": 1.98,
+   "def": 3.92,
+   "lck": 2.13,
+   "wgt": 0.74,
+   "dur": 2.48,
+   "effect": null,
+   "qualityNeed": {
+    "普通": 3
+   }
+  },
+  {
+   "name": "藍黑曜石",
+   "category": "阿嬤山",
+   "atk": 23.2,
+   "def": 4.57,
+   "lck": 0.87,
+   "wgt": 1.15,
+   "dur": 2.68,
+   "effect": "敏捷：1",
+   "qualityNeed": {
+    "屎一般": 13
+   }
+  },
+  {
+   "name": "黑曜石",
+   "category": "阿嬤山",
+   "atk": 18.24,
+   "def": 4.84,
+   "lck": 0.72,
+   "wgt": 1.21,
+   "dur": 3.45,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 13,
+    "垃圾般": 14
+   }
+  },
+  {
+   "name": "燚之石",
+   "category": "阿嬤山",
+   "atk": 15.64,
+   "def": 0.95,
+   "lck": 2.26,
+   "wgt": 0.55,
+   "dur": 3.49,
+   "effect": "火焰：5"
+  },
+  {
+   "name": "原石",
+   "category": "阿嬤山",
+   "atk": 12.7,
+   "def": 8.68,
+   "lck": 5.67,
+   "wgt": 1.25,
+   "dur": 4.9,
+   "effect": "減傷：2 敏捷：1 守護：1 解暈：1"
+  },
+  {
+   "name": "焱之石",
+   "category": "阿嬤山",
+   "atk": 10.44,
+   "def": 1.27,
+   "lck": 2.89,
+   "wgt": 0.51,
+   "dur": 2.4,
+   "effect": "火焰：3"
+  },
+  {
+   "name": "紅寶石",
+   "category": "阿嬤山",
+   "atk": 9.04,
+   "def": 1.6,
+   "lck": 2.77,
+   "wgt": 0.7,
+   "dur": 3.38,
+   "effect": "（可以讓裝備0重）",
+   "qualityNeed": {
+    "精良": 21
+   }
+  },
+  {
+   "name": "炎之石",
+   "category": "阿嬤山",
+   "atk": 8.73,
+   "def": 1.59,
+   "lck": 2.79,
+   "wgt": 0.58,
+   "dur": 2.23,
+   "effect": "火焰：2"
+  },
+  {
+   "name": "紫水晶",
+   "category": "阿嬤山",
+   "atk": 8.09,
+   "def": 5.45,
+   "lck": 6.42,
+   "wgt": 2,
+   "dur": 3.91,
+   "effect": null,
+   "qualityNeed": {
+    "上等": 13
+   }
+  },
+  {
+   "name": "鋯石",
+   "category": "阿嬤山",
+   "atk": 7.88,
+   "def": 4.58,
+   "lck": 2.13,
+   "wgt": 1.29,
+   "dur": 4.5,
+   "effect": null
+  },
+  {
+   "name": "斯石英",
+   "category": "阿嬤山",
+   "atk": 7.42,
+   "def": 10.28,
+   "lck": 1.12,
+   "wgt": 1.98,
+   "dur": 5.32,
+   "effect": null,
+   "qualityNeed": {
+    "高級": 13
+   }
+  },
+  {
+   "name": "血鑽石",
+   "category": "阿嬤山",
+   "atk": 6.97,
+   "def": 9.97,
+   "lck": 5.17,
+   "wgt": 2,
+   "dur": 5.83,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 13
+   }
+  },
+  {
+   "name": "白冰冰石",
+   "category": "阿嬤山",
+   "atk": 6.51,
+   "def": 7,
+   "lck": 1.8,
+   "wgt": 1.33,
+   "dur": 3.27,
+   "effect": "冰結：4"
+  },
+  {
+   "name": "冰冰石",
+   "category": "阿嬤山",
+   "atk": 5.41,
+   "def": 5.48,
+   "lck": 2.64,
+   "wgt": 1.12,
+   "dur": 2.84,
+   "effect": "冰結：2"
+  },
+  {
+   "name": "火之石",
+   "category": "阿嬤山",
+   "atk": 5.33,
+   "def": 1.78,
+   "lck": 2.67,
+   "wgt": 0.67,
+   "dur": 1.78,
+   "effect": "火焰：1"
+  },
+  {
+   "name": "鑽石",
+   "category": "阿嬤山",
+   "atk": 5.25,
+   "def": 10.28,
+   "lck": 3.6,
+   "wgt": 1.55,
+   "dur": 7.12,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 16
+   }
+  },
+  {
+   "name": "琥珀",
+   "category": "阿嬤山",
+   "atk": 4.96,
+   "def": 1.94,
+   "lck": 2.56,
+   "wgt": 0.23,
+   "dur": 1.56,
+   "effect": null
+  },
+  {
+   "name": "強運水晶",
+   "category": "阿嬤山",
+   "atk": 4.75,
+   "def": 1.25,
+   "lck": 6.79,
+   "wgt": 1.6,
+   "dur": 1.33,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 5
+   }
+  },
+  {
+   "name": "莫桑石",
+   "category": "阿嬤山",
+   "atk": 4.5,
+   "def": 9.64,
+   "lck": 2.7,
+   "wgt": 1.32,
+   "dur": 6.24,
+   "effect": null,
+   "qualityNeed": {
+    "普通": 19
+   }
+  },
+  {
+   "name": "冰之石",
+   "category": "阿嬤山",
+   "atk": 4.5,
+   "def": 3.57,
+   "lck": 3.8,
+   "wgt": 1,
+   "dur": 1.91,
+   "effect": "冰結：1"
+  },
+  {
+   "name": "藍寶石",
+   "category": "阿嬤山",
+   "atk": 4.35,
+   "def": 5.46,
+   "lck": 2.46,
+   "wgt": 0.88,
+   "dur": 3.88,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 10
+   }
+  },
+  {
+   "name": "白冰石",
+   "category": "阿嬤山",
+   "atk": 3.83,
+   "def": 8.48,
+   "lck": 0.9,
+   "wgt": 1.52,
+   "dur": 3.85,
+   "effect": "冰結：3"
+  },
+  {
+   "name": "柯巴脂",
+   "category": "阿嬤山",
+   "atk": 3.82,
+   "def": 1.26,
+   "lck": 2.46,
+   "wgt": 0.24,
+   "dur": 1.28,
+   "effect": "體力恢復：2"
+  },
+  {
+   "name": "白骨",
+   "category": "阿嬤山",
+   "atk": 3.73,
+   "def": 2.32,
+   "lck": 1.76,
+   "wgt": 1.09,
+   "dur": 2.03,
+   "effect": "守護：1"
+  },
+  {
+   "name": "綠寶石",
+   "category": "阿嬤山",
+   "atk": 1.57,
+   "def": 5.3,
+   "lck": 5.57,
+   "wgt": 0.71,
+   "dur": 2,
+   "effect": "（可以讓裝備0重）",
+   "qualityNeed": {
+    "屎一般": 9
+   }
+  },
+  {
+   "name": "白髮",
+   "category": "阿嬤山",
+   "atk": 1.2,
+   "def": 1.46,
+   "lck": 2.88,
+   "wgt": 0.19,
+   "dur": 0.6,
+   "effect": "守護：1"
+  },
+  {
+   "name": "火肥肥尖牙",
+   "category": "青藏高原",
+   "atk": 10.96,
+   "def": 2.66,
+   "lck": 1.62,
+   "wgt": 1.14,
+   "dur": 3.65,
+   "effect": "火焰：1",
+   "qualityNeed": {
+    "屎一般": 2
+   }
+  },
+  {
+   "name": "黑肥肥尖牙",
+   "category": "青藏高原",
+   "atk": 9.44,
+   "def": 3.43,
+   "lck": 0.84,
+   "wgt": 1.15,
+   "dur": 3.57,
+   "effect": null,
+   "qualityNeed": {
+    "普通": 9
+   }
+  },
+  {
+   "name": "雪人牙",
+   "category": "青藏高原",
+   "atk": 7.76,
+   "def": 3.27,
+   "lck": 2.5,
+   "wgt": 0.71,
+   "dur": 3.31,
+   "effect": "冰結：2",
+   "qualityNeed": {
+    "屎一般": 2
+   }
+  },
+  {
+   "name": "西藏棕熊骨",
+   "category": "青藏高原",
+   "atk": 7.36,
+   "def": 5.96,
+   "lck": 1.7,
+   "wgt": 2.39,
+   "dur": 5.13,
+   "effect": null,
+   "qualityNeed": {
+    "上等": 9
+   }
+  },
+  {
+   "name": "黑木妖樹枝",
+   "category": "青藏高原",
+   "atk": 6.28,
+   "def": 2.38,
+   "lck": 0.86,
+   "wgt": 0.96,
+   "dur": 2.73,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 2
+   }
+  },
+  {
+   "name": "幼魔精靈的角",
+   "category": "青藏高原",
+   "atk": 5.98,
+   "def": 3.33,
+   "lck": 2.55,
+   "wgt": 0.9,
+   "dur": 3.6,
+   "effect": "詛咒：1 攝魂：1",
+   "qualityNeed": {
+    "傳說": 12
+   }
+  },
+  {
+   "name": "鋼之黑肥肥盔甲碎片",
+   "category": "青藏高原",
+   "atk": 5.48,
+   "def": 6.25,
+   "lck": 1.22,
+   "wgt": 3.77,
+   "dur": 3.31,
+   "effect": "格檔：0.33",
+   "qualityNeed": {
+    "劣質": 7
+   }
+  },
+  {
+   "name": "木妖樹枝",
+   "category": "青藏高原",
+   "atk": 5.06,
+   "def": 1.97,
+   "lck": 1.65,
+   "wgt": 0.74,
+   "dur": 2.56,
+   "effect": null,
+   "qualityNeed": {
+    "上等": 3
+   }
+  },
+  {
+   "name": "禿鷲毛",
+   "category": "青藏高原",
+   "atk": 4.95,
+   "def": 4.62,
+   "lck": 1.63,
+   "wgt": 0.15,
+   "dur": 2.47,
+   "effect": "毒：1",
+   "qualityNeed": {
+    "屎一般": 8,
+    "垃圾般": 8,
+    "破爛": 8,
+    "劣質": 9,
+    "次等": 9
+   }
+  },
+  {
+   "name": "火肥肥皮",
+   "category": "青藏高原",
+   "atk": 4.95,
+   "def": 6.23,
+   "lck": 1.69,
+   "wgt": 1.02,
+   "dur": 4.38,
+   "effect": "火焰：2",
+   "qualityNeed": {
+    "屎一般": 2
+   }
+  },
+  {
+   "name": "西藏棕熊皮",
+   "category": "青藏高原",
+   "atk": 4.43,
+   "def": 7.23,
+   "lck": 2.45,
+   "wgt": 1.57,
+   "dur": 4.95,
+   "effect": "冰結：0.4",
+   "qualityNeed": {
+    "神話": 4
+   }
+  },
+  {
+   "name": "黑肥肥皮",
+   "category": "青藏高原",
+   "atk": 3.4,
+   "def": 6.07,
+   "lck": 0.39,
+   "wgt": 1.07,
+   "dur": 4.4,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 5
+   }
+  },
+  {
+   "name": "雪人毛髮",
+   "category": "青藏高原",
+   "atk": 1.98,
+   "def": 3.31,
+   "lck": 3.3,
+   "wgt": 0.3,
+   "dur": 2.74,
+   "effect": "冰結：1.5",
+   "qualityNeed": {
+    "屎一般": 5
+   }
+  },
+  {
+   "name": "舍利子",
+   "category": "青藏高原",
+   "atk": 0,
+   "def": 4.5,
+   "lck": 3.78,
+   "wgt": 0.51,
+   "dur": 3.03,
+   "effect": "守護：3 生命恢復：2 魔物傷害：1"
+  },
+  {
+   "name": "象牙",
+   "category": "非洲大草原",
+   "atk": 11.83,
+   "def": 4.84,
+   "lck": 2.03,
+   "wgt": 2.76,
+   "dur": 3.84,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 5,
+    "垃圾般": 5,
+    "破爛": 5,
+    "普通": 6
+   }
+  },
+  {
+   "name": "羚羊角",
+   "category": "非洲大草原",
+   "atk": 10.58,
+   "def": 3.32,
+   "lck": 1.32,
+   "wgt": 0.95,
+   "dur": 2.36,
+   "effect": null
+  },
+  {
+   "name": "犀牛角",
+   "category": "非洲大草原",
+   "atk": 9.49,
+   "def": 3.71,
+   "lck": 2.11,
+   "wgt": 2.2,
+   "dur": 3.84,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 8
+   }
+  },
+  {
+   "name": "獅子牙",
+   "category": "非洲大草原",
+   "atk": 9.3,
+   "def": 3.36,
+   "lck": 0,
+   "wgt": 1.03,
+   "dur": 3.39,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 5,
+    "垃圾般": 5,
+    "普通": 6
+   }
+  },
+  {
+   "name": "狒狒牙",
+   "category": "非洲大草原",
+   "atk": 8.76,
+   "def": 2.33,
+   "lck": 0.16,
+   "wgt": 0.88,
+   "dur": 2.99,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 10,
+    "高級": 13
+   }
+  },
+  {
+   "name": "鬣狗牙",
+   "category": "非洲大草原",
+   "atk": 7.5,
+   "def": 4.05,
+   "lck": 0,
+   "wgt": 0.68,
+   "dur": 3.47,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 10
+   }
+  },
+  {
+   "name": "牛羚角",
+   "category": "非洲大草原",
+   "atk": 5.95,
+   "def": 5.06,
+   "lck": 0.83,
+   "wgt": 1.76,
+   "dur": 3.49,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 8,
+    "垃圾般": 8,
+    "破爛": 8,
+    "普通": 9,
+    "上等": 9,
+    "精良": 10
+   }
+  },
+  {
+   "name": "狒狒骨",
+   "category": "非洲大草原",
+   "atk": 5.1,
+   "def": 5.33,
+   "lck": 0.42,
+   "wgt": 1.59,
+   "dur": 3.5,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 8,
+    "上等": 9,
+    "精良": 10
+   }
+  },
+  {
+   "name": "象鼻",
+   "category": "非洲大草原",
+   "atk": 4.75,
+   "def": 4,
+   "lck": 4.23,
+   "wgt": 1.13,
+   "dur": 2.16,
+   "effect": null,
+   "qualityNeed": {
+    "普通": 16
+   }
+  },
+  {
+   "name": "豹子膽",
+   "category": "非洲大草原",
+   "atk": 4.25,
+   "def": 0.71,
+   "lck": 2.2,
+   "wgt": 0.33,
+   "dur": 1,
+   "effect": null
+  },
+  {
+   "name": "牛羚皮",
+   "category": "非洲大草原",
+   "atk": 3.54,
+   "def": 5.19,
+   "lck": 1.33,
+   "wgt": 1,
+   "dur": 3.99,
+   "effect": null,
+   "qualityNeed": {
+    "破爛": 5
+   }
+  },
+  {
+   "name": "長頸鹿頸椎",
+   "category": "非洲大草原",
+   "atk": 3.41,
+   "def": 4.67,
+   "lck": 2.11,
+   "wgt": 2.02,
+   "dur": 3.43,
+   "effect": null,
+   "qualityNeed": {
+    "普通": 8
+   }
+  },
+  {
+   "name": "皮骨角",
+   "category": "非洲大草原",
+   "atk": 2.95,
+   "def": 2.02,
+   "lck": 3.36,
+   "wgt": 1.18,
+   "dur": 2,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 13
+   }
+  },
+  {
+   "name": "豹皮",
+   "category": "非洲大草原",
+   "atk": 2.95,
+   "def": 4.08,
+   "lck": 1.64,
+   "wgt": 0.42,
+   "dur": 3.52,
+   "effect": null,
+   "qualityNeed": {
+    "劣質": 9
+   }
+  },
+  {
+   "name": "狒狒之魂",
+   "category": "非洲大草原",
+   "atk": 2.25,
+   "def": 1.03,
+   "lck": 0.9,
+   "wgt": 0.17,
+   "dur": 0.98,
+   "effect": null
+  },
+  {
+   "name": "斑馬皮",
+   "category": "非洲大草原",
+   "atk": 2.08,
+   "def": 4.74,
+   "lck": 0.42,
+   "wgt": 0.6,
+   "dur": 3.52,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 2
+   }
+  },
+  {
+   "name": "猩猩毛",
+   "category": "非洲大草原",
+   "atk": 2.03,
+   "def": 2.25,
+   "lck": 1.62,
+   "wgt": 0.2,
+   "dur": 1.88,
+   "effect": null
+  },
+  {
+   "name": "斑馬眼",
+   "category": "非洲大草原",
+   "atk": 2,
+   "def": 2.98,
+   "lck": 2.57,
+   "wgt": 0.29,
+   "dur": 1.97,
+   "effect": null,
+   "qualityNeed": {
+    "劣質": 3
+   }
+  },
+  {
+   "name": "獅子的鬃毛",
+   "category": "非洲大草原",
+   "atk": 1.93,
+   "def": 1.33,
+   "lck": 3.42,
+   "wgt": 0.43,
+   "dur": 1.47,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 10
+   }
+  },
+  {
+   "name": "巴洛古的指甲",
+   "category": "猛牛原",
+   "atk": 17.7,
+   "def": 6.06,
+   "lck": 0,
+   "wgt": 1.14,
+   "dur": 3.27,
+   "effect": "詛咒：2 邪惡力量：2",
+   "qualityNeed": {
+    "屎一般": 5,
+    "垃圾般": 5
+   }
+  },
+  {
+   "name": "金牛角",
+   "category": "猛牛原",
+   "atk": 14.17,
+   "def": 2.02,
+   "lck": 2.5,
+   "wgt": 3.63,
+   "dur": 1.77,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 5
+   }
+  },
+  {
+   "name": "長槍牛魔王之角",
+   "category": "猛牛原",
+   "atk": 13.37,
+   "def": 3.7,
+   "lck": 0.87,
+   "wgt": 2.17,
+   "dur": 3.5,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 5,
+    "垃圾般": 5,
+    "破爛": 5
+   }
+  },
+  {
+   "name": "月牙",
+   "category": "猛牛原",
+   "atk": 12.82,
+   "def": 4.73,
+   "lck": 0,
+   "wgt": 3.24,
+   "dur": 3.42,
+   "effect": "月牙：1",
+   "qualityNeed": {
+    "上等": 16
+   }
+  },
+  {
+   "name": "巴洛古之眼",
+   "category": "猛牛原",
+   "atk": 10.96,
+   "def": 3.86,
+   "lck": 0,
+   "wgt": 0.56,
+   "dur": 2.4,
+   "effect": "詛咒：4 邪惡力量：5"
+  },
+  {
+   "name": "肯泰羅角",
+   "category": "猛牛原",
+   "atk": 9.45,
+   "def": 4.51,
+   "lck": 0,
+   "wgt": 1.3,
+   "dur": 3.71,
+   "effect": null,
+   "qualityNeed": {
+    "精良": 7
+   }
+  },
+  {
+   "name": "青藍合金",
+   "category": "猛牛原",
+   "atk": 8.87,
+   "def": 7.16,
+   "lck": 0,
+   "wgt": 2.87,
+   "dur": 4.31,
+   "effect": null,
+   "qualityNeed": {
+    "精良": 7
+   }
+  },
+  {
+   "name": "爆炸頭水牛角",
+   "category": "猛牛原",
+   "atk": 8.7,
+   "def": 5.28,
+   "lck": 0.83,
+   "wgt": 1.81,
+   "dur": 3.92,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 8,
+    "劣質": 9,
+    "精良": 10
+   }
+  },
+  {
+   "name": "月牙牛魔王之角",
+   "category": "猛牛原",
+   "atk": 8.66,
+   "def": 6.39,
+   "lck": 0,
+   "wgt": 2.7,
+   "dur": 5.14,
+   "effect": null,
+   "qualityNeed": {
+    "破爛": 8,
+    "次等": 9,
+    "精良": 10
+   }
+  },
+  {
+   "name": "獨角犀牛角",
+   "category": "猛牛原",
+   "atk": 8.35,
+   "def": 3.28,
+   "lck": 0.82,
+   "wgt": 1.72,
+   "dur": 3.28,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 8,
+    "垃圾般": 8,
+    "破爛": 8,
+    "劣質": 9,
+    "次等": 9,
+    "普通": 9
+   }
+  },
+  {
+   "name": "水牛角",
+   "category": "猛牛原",
+   "atk": 7.02,
+   "def": 2.73,
+   "lck": 1.67,
+   "wgt": 1,
+   "dur": 3.22,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 5,
+    "垃圾般": 5,
+    "破爛": 5,
+    "劣質": 6,
+    "次等": 6
+   }
+  },
+  {
+   "name": "魔龍之眼",
+   "category": "猛牛原",
+   "atk": 6.94,
+   "def": 0.66,
+   "lck": 4.13,
+   "wgt": 0.44,
+   "dur": 1.48,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 10,
+    "精良": 14
+   }
+  },
+  {
+   "name": "肯泰羅尾巴",
+   "category": "猛牛原",
+   "atk": 5.96,
+   "def": 3.35,
+   "lck": 1.13,
+   "wgt": 0.73,
+   "dur": 2.97,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 8,
+    "上等": 9,
+    "精良": 10
+   }
+  },
+  {
+   "name": "獨角犀牛皮",
+   "category": "猛牛原",
+   "atk": 4.56,
+   "def": 5.89,
+   "lck": 0,
+   "wgt": 2.02,
+   "dur": 3.42,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 2,
+    "次等": 3,
+    "普通": 3,
+    "上等": 3,
+    "高級": 3
+   }
+  },
+  {
+   "name": "水牛皮",
+   "category": "猛牛原",
+   "atk": 3.02,
+   "def": 4.31,
+   "lck": 0,
+   "wgt": 0.74,
+   "dur": 3.11,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 5,
+    "垃圾般": 5,
+    "次等": 6
+   }
+  },
+  {
+   "name": "沙茶醬",
+   "category": "猛牛原",
+   "atk": 2.02,
+   "def": 0.68,
+   "lck": 1.63,
+   "wgt": 0.28,
+   "dur": 0.49,
+   "effect": "動物傷害：1 生命恢復：1 體力恢復：1",
+   "qualityNeed": {
+    "次等": 3
+   }
+  },
+  {
+   "name": "爆炸頭水牛頭毛",
+   "category": "猛牛原",
+   "atk": 2,
+   "def": 6.3,
+   "lck": 0.45,
+   "wgt": 0.74,
+   "dur": 3.45,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 8,
+    "傳說": 12
+   }
+  },
+  {
+   "name": "大奶罐尾巴",
+   "category": "猛牛原",
+   "atk": 1.85,
+   "def": 3.08,
+   "lck": 3.45,
+   "wgt": 0.64,
+   "dur": 1.23,
+   "effect": "生命恢復：2",
+   "qualityNeed": {
+    "屎一般": 10
+   }
+  },
+  {
+   "name": "肯泰羅鬃毛",
+   "category": "猛牛原",
+   "atk": 1.77,
+   "def": 3.69,
+   "lck": 2.47,
+   "wgt": 0.58,
+   "dur": 2.49,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 5,
+    "次等": 6,
+    "精良": 7
+   }
+  },
+  {
+   "name": "千里眼眼",
+   "category": "鹿港天后宮",
+   "atk": 10.15,
+   "def": 3.3,
+   "lck": 3.3,
+   "wgt": 0.9,
+   "dur": 3.9,
+   "effect": "精準攻擊：4"
+  },
+  {
+   "name": "順風耳耳",
+   "category": "鹿港天后宮",
+   "atk": 5.69,
+   "def": 8.02,
+   "lck": 1.67,
+   "wgt": 0.67,
+   "dur": 5.18,
+   "effect": "閃避：3 格檔：3"
+  },
+  {
+   "name": "白馬眼",
+   "category": "鹿港天后宮",
+   "atk": 5.3,
+   "def": 6.72,
+   "lck": 4.02,
+   "wgt": 0.6,
+   "dur": 2.23,
+   "effect": "閃避：3 精準攻擊：2"
+  },
+  {
+   "name": "藍黑檀木",
+   "category": "森林區",
+   "atk": 16.77,
+   "def": 4.28,
+   "lck": 0,
+   "wgt": 1.67,
+   "dur": 4.64,
+   "effect": "敏捷：1"
+  },
+  {
+   "name": "金絲楠木",
+   "category": "森林區",
+   "atk": 14.17,
+   "def": 4.02,
+   "lck": 3.24,
+   "wgt": 2.35,
+   "dur": 4.05,
+   "effect": null
+  },
+  {
+   "name": "黑檀木",
+   "category": "森林區",
+   "atk": 13.14,
+   "def": 4.83,
+   "lck": 0.87,
+   "wgt": 1.86,
+   "dur": 4.49,
+   "effect": null,
+   "qualityNeed": {
+    "劣質": 12
+   }
+  },
+  {
+   "name": "黃花梨",
+   "category": "森林區",
+   "atk": 9.68,
+   "def": 9.58,
+   "lck": 0.83,
+   "wgt": 1.48,
+   "dur": 3.52,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 8
+   }
+  },
+  {
+   "name": "紫檀木",
+   "category": "森林區",
+   "atk": 9.07,
+   "def": 4.29,
+   "lck": 4.26,
+   "wgt": 1.77,
+   "dur": 3.9,
+   "effect": "生命恢復：3",
+   "qualityNeed": {
+    "劣質": 6
+   }
+  },
+  {
+   "name": "大紅酸枝",
+   "category": "森林區",
+   "atk": 8.14,
+   "def": 7.73,
+   "lck": 3.33,
+   "wgt": 1.16,
+   "dur": 4.07,
+   "effect": "守護：0.5",
+   "qualityNeed": {
+    "屎一般": 10
+   }
+  },
+  {
+   "name": "柚木",
+   "category": "森林區",
+   "atk": 7.03,
+   "def": 5.94,
+   "lck": 2.43,
+   "wgt": 1,
+   "dur": 4.91,
+   "effect": null,
+   "qualityNeed": {
+    "完美": 3
+   }
+  },
+  {
+   "name": "香楠木",
+   "category": "森林區",
+   "atk": 6.96,
+   "def": 5.26,
+   "lck": 1.72,
+   "wgt": 2.24,
+   "dur": 4.82,
+   "effect": "生命恢復：1 體力恢復：2",
+   "qualityNeed": {
+    "高級": 3
+   }
+  },
+  {
+   "name": "白楓木",
+   "category": "森林區",
+   "atk": 5.78,
+   "def": 5.34,
+   "lck": 2.45,
+   "wgt": 0.97,
+   "dur": 3.9,
+   "effect": null,
+   "qualityNeed": {
+    "破爛": 5
+   }
+  },
+  {
+   "name": "紅楓木",
+   "category": "森林區",
+   "atk": 5.45,
+   "def": 4.8,
+   "lck": 3.28,
+   "wgt": 0.91,
+   "dur": 3.52,
+   "effect": null,
+   "qualityNeed": {
+    "精良": 10
+   }
+  },
+  {
+   "name": "癒創木",
+   "category": "森林區",
+   "atk": 4.5,
+   "def": 4.69,
+   "lck": 1.73,
+   "wgt": 1.07,
+   "dur": 3.34,
+   "effect": "生命恢復：2 體力恢復：1",
+   "qualityNeed": {
+    "破爛": 5
+   }
+  },
+  {
+   "name": "橡木",
+   "category": "森林區",
+   "atk": 4.03,
+   "def": 3.95,
+   "lck": 0.84,
+   "wgt": 1.12,
+   "dur": 1.97,
+   "effect": null,
+   "qualityNeed": {
+    "次等": 1
+   }
+  },
+  {
+   "name": "檜木",
+   "category": "森林區",
+   "atk": 3.53,
+   "def": 3.03,
+   "lck": 0.84,
+   "wgt": 0.77,
+   "dur": 2.81,
+   "effect": "體力恢復：1",
+   "qualityNeed": {
+    "普通": 3
+   }
+  },
+  {
+   "name": "胡桃木",
+   "category": "森林區",
+   "atk": 3.48,
+   "def": 3.98,
+   "lck": 4.96,
+   "wgt": 1.04,
+   "dur": 2.27,
+   "effect": null,
+   "qualityNeed": {
+    "上等": 9
+   }
+  },
+  {
+   "name": "杉木",
+   "category": "森林區",
+   "atk": 3.04,
+   "def": 2.31,
+   "lck": 0.83,
+   "wgt": 0.65,
+   "dur": 2.23,
+   "effect": null,
+   "qualityNeed": {
+    "普通": 6,
+    "上等": 6,
+    "高級": 6,
+    "精良": 7
+   }
+  },
+  {
+   "name": "桐木",
+   "category": "森林區",
+   "atk": 1.44,
+   "def": 1.71,
+   "lck": 2.14,
+   "wgt": 0.55,
+   "dur": 2.51,
+   "effect": null,
+   "qualityNeed": {
+    "上等": 3,
+    "高級": 3,
+    "精良": 3,
+    "頂級": 3,
+    "完美": 3
+   }
+  },
+  {
+   "name": "桂櫻",
+   "category": "植物",
+   "atk": 1.53,
+   "def": 0.34,
+   "lck": 1.6,
+   "wgt": 0.22,
+   "dur": 0.52,
+   "effect": "毒：1",
+   "qualityNeed": {
+    "劣質": 6,
+    "次等": 6,
+    "普通": 6,
+    "上等": 6,
+    "精良": 7
+   }
+  },
+  {
+   "name": "棉花",
+   "category": "植物",
+   "atk": 0.6,
+   "def": 1.34,
+   "lck": 0.8,
+   "wgt": 0.18,
+   "dur": 2.29,
+   "effect": null,
+   "qualityNeed": {
+    "上等": 3,
+    "精良": 3,
+    "神話": 4,
+    "傳說": 4
+   }
+  },
+  {
+   "name": "雜草",
+   "category": "植物",
+   "atk": 0.5,
+   "def": 0.33,
+   "lck": 2.48,
+   "wgt": 0.15,
+   "dur": 1.01,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 8,
+    "上等": 9,
+    "高級": 10,
+    "頂級": 11,
+    "完美": 11,
+    "史詩": 12
+   }
+  },
+  {
+   "name": "穿彈獸針",
+   "category": "無底洞",
+   "atk": 15.1,
+   "def": 3,
+   "lck": 1.54,
+   "wgt": 1,
+   "dur": 4.44,
+   "effect": "毒：10 破甲：2"
+  },
+  {
+   "name": "血口大蛇牙",
+   "category": "無底洞",
+   "atk": 13.41,
+   "def": 2.45,
+   "lck": 0.84,
+   "wgt": 1.44,
+   "dur": 4.95,
+   "effect": "人型傷害：1 動物傷害：1"
+  },
+  {
+   "name": "蠍掌頭蠍尾",
+   "category": "無底洞",
+   "atk": 11.84,
+   "def": 4.65,
+   "lck": 2.02,
+   "wgt": 1.33,
+   "dur": 3.83,
+   "effect": "毒：7 麻痹毒：2 人型傷害：1 動物傷害：1"
+  },
+  {
+   "name": "槌嘴鳥頭骨",
+   "category": "無底洞",
+   "atk": 9.71,
+   "def": 6.9,
+   "lck": 2.16,
+   "wgt": 1.33,
+   "dur": 4.77,
+   "effect": null
+  },
+  {
+   "name": "驅河馬皮",
+   "category": "無底洞",
+   "atk": 6.9,
+   "def": 7,
+   "lck": 3.41,
+   "wgt": 1.33,
+   "dur": 6.03,
+   "effect": "威嚇：1 格檔：2"
+  },
+  {
+   "name": "龍娑彩厚甲",
+   "category": "無底洞",
+   "atk": 6,
+   "def": 11.27,
+   "lck": 0.42,
+   "wgt": 2.64,
+   "dur": 7.1,
+   "effect": "格檔：3 破甲：3"
+  },
+  {
+   "name": "龍娑彩毒鱗",
+   "category": "無底洞",
+   "atk": 4.03,
+   "def": 9.11,
+   "lck": 2.67,
+   "wgt": 0.77,
+   "dur": 4.47,
+   "effect": "毒：3 麻痹毒：2 格檔：1"
+  },
+  {
+   "name": "泣屍鳥毛",
+   "category": "無底洞",
+   "atk": 3.94,
+   "def": 6.4,
+   "lck": 2.2,
+   "wgt": 0.52,
+   "dur": 2.44,
+   "effect": "吸血：2 敏捷：1"
+  },
+  {
+   "name": "毯毯鼠皮",
+   "category": "無底洞",
+   "atk": 1.02,
+   "def": 3.89,
+   "lck": 8.43,
+   "wgt": 0.8,
+   "dur": 2.97,
+   "effect": null
+  },
+  {
+   "name": "黑魯加角",
+   "category": "黑洞",
+   "atk": 15.08,
+   "def": 4.96,
+   "lck": 2,
+   "wgt": 1.86,
+   "dur": 4.49,
+   "effect": "火焰：2"
+  },
+  {
+   "name": "汎合金",
+   "category": "黑洞",
+   "atk": 12.17,
+   "def": 12.74,
+   "lck": 0.11,
+   "wgt": 2.27,
+   "dur": 7.2,
+   "effect": "格檔：2"
+  },
+  {
+   "name": "強力毒藥",
+   "category": "黑洞",
+   "atk": 8.32,
+   "def": 1.83,
+   "lck": 2.28,
+   "wgt": 0.91,
+   "dur": 0.62,
+   "effect": "毒：8 麻痹毒：5 邪惡力量：1"
+  },
+  {
+   "name": "黑暗鴉毛",
+   "category": "黑洞",
+   "atk": 7.22,
+   "def": 4.12,
+   "lck": 0.33,
+   "wgt": 0.37,
+   "dur": 3.33,
+   "effect": "敏捷：2"
+  },
+  {
+   "name": "黑熊皮",
+   "category": "黑洞",
+   "atk": 5.07,
+   "def": 7.09,
+   "lck": 3.84,
+   "wgt": 1.47,
+   "dur": 4.25,
+   "effect": null
+  },
+  {
+   "name": "鑲黃旗",
+   "category": "圓明園",
+   "atk": 5,
+   "def": 2.65,
+   "lck": 2.61,
+   "wgt": 1.51,
+   "dur": 1.45,
+   "effect": "士氣：4",
+   "qualityNeed": {
+    "屎一般": 10
+   }
+  },
+  {
+   "name": "一日喪命散",
+   "category": "圓明園",
+   "atk": 4.96,
+   "def": 0,
+   "lck": 0.85,
+   "wgt": 0.15,
+   "dur": 0.49,
+   "effect": "毒：6"
+  },
+  {
+   "name": "綠營軍軍旗",
+   "category": "圓明園",
+   "atk": 2.02,
+   "def": 1.98,
+   "lck": 0.81,
+   "wgt": 0.73,
+   "dur": 1.53,
+   "effect": "士氣：1",
+   "qualityNeed": {
+    "屎一般": 2,
+    "高級": 3
+   }
+  },
+  {
+   "name": "喇牙腳",
+   "category": "盤絲洞",
+   "atk": 7.14,
+   "def": 2,
+   "lck": 2.51,
+   "wgt": 0.44,
+   "dur": 1.46,
+   "effect": "威嚇：1 毒：1",
+   "qualityNeed": {
+    "次等": 6
+   }
+  },
+  {
+   "name": "漏斗網蛛牙",
+   "category": "盤絲洞",
+   "atk": 7.05,
+   "def": 1.27,
+   "lck": 1.72,
+   "wgt": 0.63,
+   "dur": 2.28,
+   "effect": "毒：6 麻痹毒：3 人型傷害：2"
+  },
+  {
+   "name": "藍寶石華麗雨林腳",
+   "category": "盤絲洞",
+   "atk": 6.53,
+   "def": 2.83,
+   "lck": 5.94,
+   "wgt": 0.67,
+   "dur": 1.88,
+   "effect": "毒：1"
+  },
+  {
+   "name": "化學蛛絲",
+   "category": "盤絲洞",
+   "atk": 6.19,
+   "def": 9.56,
+   "lck": 0,
+   "wgt": 0.79,
+   "dur": 2.63,
+   "effect": null
+  },
+  {
+   "name": "巴西流浪蛛牙",
+   "category": "盤絲洞",
+   "atk": 6.16,
+   "def": 1.88,
+   "lck": 2.4,
+   "wgt": 0.67,
+   "dur": 2.6,
+   "effect": "毒：7 麻痹毒：4"
+  },
+  {
+   "name": "蜘蛛精絲",
+   "category": "盤絲洞",
+   "atk": 4.11,
+   "def": 8.41,
+   "lck": 1.72,
+   "wgt": 0.21,
+   "dur": 4.04,
+   "effect": null
+  },
+  {
+   "name": "毒絲",
+   "category": "盤絲洞",
+   "atk": 3,
+   "def": 5.7,
+   "lck": 0.86,
+   "wgt": 0.07,
+   "dur": 5.32,
+   "effect": "毒：4 麻痹毒：1",
+   "qualityNeed": {
+    "屎一般": 2
+   }
+  },
+  {
+   "name": "蜘蛛絲",
+   "category": "盤絲洞",
+   "atk": 1.01,
+   "def": 7.14,
+   "lck": 2.46,
+   "wgt": 0.01,
+   "dur": 6.26,
+   "effect": null,
+   "qualityNeed": {
+    "次等": 6
+   }
+  },
+  {
+   "name": "究極吸血魔獸爪",
+   "category": "蝙蝠洞",
+   "atk": 14.88,
+   "def": 7.83,
+   "lck": 0,
+   "wgt": 2.9,
+   "dur": 4.68,
+   "effect": "吸血：1 邪惡力量：3"
+  },
+  {
+   "name": "究極吸血魔獸牙",
+   "category": "蝙蝠洞",
+   "atk": 10.79,
+   "def": 2.02,
+   "lck": 0,
+   "wgt": 1.31,
+   "dur": 2.69,
+   "effect": "吸血：2 邪惡力量：3"
+  },
+  {
+   "name": "音波龍翅膀",
+   "category": "蝙蝠洞",
+   "atk": 10.23,
+   "def": 4.58,
+   "lck": 1.64,
+   "wgt": 0.8,
+   "dur": 3.76,
+   "effect": "敏捷：1"
+  },
+  {
+   "name": "吸血魔獸爪",
+   "category": "蝙蝠洞",
+   "atk": 9.48,
+   "def": 5.14,
+   "lck": 0,
+   "wgt": 1.53,
+   "dur": 2.68,
+   "effect": "吸血：1 邪惡力量：2"
+  },
+  {
+   "name": "吸血魔獸牙",
+   "category": "蝙蝠洞",
+   "atk": 8.39,
+   "def": 2.57,
+   "lck": 0.4,
+   "wgt": 0.67,
+   "dur": 3.18,
+   "effect": "吸血：3 邪惡力量：1"
+  },
+  {
+   "name": "究極吸血魔獸翅膀",
+   "category": "蝙蝠洞",
+   "atk": 8.39,
+   "def": 8.43,
+   "lck": 0,
+   "wgt": 1.67,
+   "dur": 3.09,
+   "effect": "邪惡力量：4 格檔：1"
+  },
+  {
+   "name": "吸血蝠牙",
+   "category": "蝙蝠洞",
+   "atk": 5.96,
+   "def": 2.73,
+   "lck": 0.86,
+   "wgt": 0.63,
+   "dur": 3.03,
+   "effect": "吸血：1",
+   "qualityNeed": {
+    "普通": 6
+   }
+  },
+  {
+   "name": "克維拉",
+   "category": "蝙蝠洞",
+   "atk": 5.91,
+   "def": 9.75,
+   "lck": 1.69,
+   "wgt": 0.77,
+   "dur": 4.73,
+   "effect": "格擋：1"
+  },
+  {
+   "name": "叉字蝠翅膀",
+   "category": "蝙蝠洞",
+   "atk": 5.47,
+   "def": 2.52,
+   "lck": 3.06,
+   "wgt": 0.62,
+   "dur": 2.88,
+   "effect": "敏捷：2 閃避：2 毒：2 精準攻擊：1"
+  },
+  {
+   "name": "大嘴蝠牙",
+   "category": "蝙蝠洞",
+   "atk": 5.11,
+   "def": 2.03,
+   "lck": 1.67,
+   "wgt": 0.72,
+   "dur": 2.03,
+   "effect": "吸血：2 毒：1",
+   "qualityNeed": {
+    "屎一般": 8
+   }
+  },
+  {
+   "name": "音波龍耳朵",
+   "category": "蝙蝠洞",
+   "atk": 5.1,
+   "def": 3.8,
+   "lck": 3.36,
+   "wgt": 0.69,
+   "dur": 3.3,
+   "effect": "混亂：1 精準攻擊：1"
+  },
+  {
+   "name": "愛心",
+   "category": "蝙蝠洞",
+   "atk": 2.1,
+   "def": 1.95,
+   "lck": 6.35,
+   "wgt": 1.12,
+   "dur": 0.95,
+   "effect": "吸血：1"
+  },
+  {
+   "name": "蝙蝠翅膀",
+   "category": "蝙蝠洞",
+   "atk": 2.02,
+   "def": 3.31,
+   "lck": 1.66,
+   "wgt": 0.87,
+   "dur": 2.51,
+   "effect": "敏捷：1",
+   "qualityNeed": {
+    "屎一般": 5,
+    "劣質": 6,
+    "次等": 6,
+    "普通": 6,
+    "精良": 7
+   }
+  },
+  {
+   "name": "夜明砂",
+   "category": "蝙蝠洞",
+   "atk": 1.97,
+   "def": 2.01,
+   "lck": 1.62,
+   "wgt": 1.17,
+   "dur": 1.53,
+   "effect": "毒：2",
+   "qualityNeed": {
+    "屎一般": 8
+   }
+  },
+  {
+   "name": "黑色布料",
+   "category": "蝙蝠洞",
+   "atk": 1.95,
+   "def": 4.16,
+   "lck": 1.08,
+   "wgt": 0.29,
+   "dur": 2.4,
+   "effect": "閃避：1"
+  },
+  {
+   "name": "脊椎骨",
+   "category": "骷髏墓園",
+   "atk": 12.03,
+   "def": 4.56,
+   "lck": 0.8,
+   "wgt": 2.01,
+   "dur": 3.67,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 8
+   }
+  },
+  {
+   "name": "頭骨",
+   "category": "骷髏墓園",
+   "atk": 5.88,
+   "def": 4.07,
+   "lck": 0.83,
+   "wgt": 2.45,
+   "dur": 3.91,
+   "effect": null,
+   "qualityNeed": {
+    "高級": 24
+   }
+  },
+  {
+   "name": "喇叭",
+   "category": "骷髏墓園",
+   "atk": 5.76,
+   "def": 1.25,
+   "lck": 1.6,
+   "wgt": 0.8,
+   "dur": 2.25,
+   "effect": "毒：2 麻痹毒：3"
+  },
+  {
+   "name": "喪屍肉",
+   "category": "骷髏墓園",
+   "atk": 4,
+   "def": 2.01,
+   "lck": 0.17,
+   "wgt": 0.73,
+   "dur": 1.49,
+   "effect": "詛咒：1 毒：3",
+   "qualityNeed": {
+    "精良": 3
+   }
+  },
+  {
+   "name": "死人骨頭",
+   "category": "骷髏墓園",
+   "atk": 3.93,
+   "def": 2.67,
+   "lck": 0,
+   "wgt": 1.5,
+   "dur": 3,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 8,
+    "上等": 9,
+    "高級": 10,
+    "頂級": 11
+   }
+  },
+  {
+   "name": "靈魂",
+   "category": "骷髏墓園",
+   "atk": 3.05,
+   "def": 0.68,
+   "lck": 1.62,
+   "wgt": 0.22,
+   "dur": 0.51,
+   "effect": "詛咒：4"
+  },
+  {
+   "name": "十氧化四磷",
+   "category": "骷髏墓園",
+   "atk": 2.03,
+   "def": 0.15,
+   "lck": 0.91,
+   "wgt": 0.44,
+   "dur": 0.48,
+   "effect": "火焰：1",
+   "qualityNeed": {
+    "屎一般": 2
+   }
+  },
+  {
+   "name": "超級噴火龍Ｘ尾巴",
+   "category": "龍洞",
+   "atk": 15.75,
+   "def": 4.5,
+   "lck": 0.95,
+   "wgt": 1.81,
+   "dur": 4.18,
+   "effect": "敏捷：1 火焰：3"
+  },
+  {
+   "name": "黑龍之角",
+   "category": "龍洞",
+   "atk": 14.73,
+   "def": 7.26,
+   "lck": 0.83,
+   "wgt": 2.59,
+   "dur": 4.88,
+   "effect": null
+  },
+  {
+   "name": "化石翼龍尾巴",
+   "category": "龍洞",
+   "atk": 13.57,
+   "def": 8.32,
+   "lck": 2.62,
+   "wgt": 2.92,
+   "dur": 4.75,
+   "effect": null
+  },
+  {
+   "name": "化石翼龍翅膀",
+   "category": "龍洞",
+   "atk": 13.47,
+   "def": 6.75,
+   "lck": 1.6,
+   "wgt": 1.8,
+   "dur": 3.83,
+   "effect": null
+  },
+  {
+   "name": "暴龍的頭骨",
+   "category": "龍洞",
+   "atk": 12.15,
+   "def": 7.41,
+   "lck": 3.25,
+   "wgt": 2.83,
+   "dur": 5.4,
+   "effect": null
+  },
+  {
+   "name": "超級噴火龍Ｘ角",
+   "category": "龍洞",
+   "atk": 12,
+   "def": 6.27,
+   "lck": 0.75,
+   "wgt": 1.35,
+   "dur": 4.47,
+   "effect": "敏捷：1 火焰：1"
+  },
+  {
+   "name": "寒冰背部骨",
+   "category": "龍洞",
+   "atk": 10.36,
+   "def": 8.85,
+   "lck": 1.56,
+   "wgt": 2.47,
+   "dur": 4,
+   "effect": "冰結：1.5"
+  },
+  {
+   "name": "龍之鱗片",
+   "category": "龍洞",
+   "atk": 9.14,
+   "def": 7.88,
+   "lck": 3.48,
+   "wgt": 1.16,
+   "dur": 4.9,
+   "effect": null
+  },
+  {
+   "name": "龍皮",
+   "category": "龍洞",
+   "atk": 6.36,
+   "def": 9.08,
+   "lck": 2.71,
+   "wgt": 1.82,
+   "dur": 4.86,
+   "effect": null
+  },
+  {
+   "name": "生日蛋糕",
+   "category": "龍洞",
+   "atk": 6.01,
+   "def": 2.63,
+   "lck": 5.63,
+   "wgt": 1.12,
+   "dur": 2.93,
+   "effect": "生命恢復：6 體力恢復：6 火焰：1"
+  },
+  {
+   "name": "脂肪",
+   "category": "龍洞",
+   "atk": 5.4,
+   "def": 9.43,
+   "lck": 1.39,
+   "wgt": 1.23,
+   "dur": 3.63,
+   "effect": "敏捷：-1 守護：1 格擋：3"
+  },
+  {
+   "name": "鐮刀",
+   "category": "藍洞",
+   "atk": 20.82,
+   "def": 5.02,
+   "lck": 0.64,
+   "wgt": 1.92,
+   "dur": 4.55,
+   "effect": "精準攻擊：1"
+  },
+  {
+   "name": "深海閻王鰲肢",
+   "category": "藍洞",
+   "atk": 17.29,
+   "def": 8.45,
+   "lck": 0.37,
+   "wgt": 2.41,
+   "dur": 5.37,
+   "effect": "詛咒：1 邪惡力量：2 威嚇：1 精準攻擊：2"
+  },
+  {
+   "name": "櫛齒鋸鰩鋸",
+   "category": "藍洞",
+   "atk": 16.04,
+   "def": 5,
+   "lck": 4.55,
+   "wgt": 1.5,
+   "dur": 3.7,
+   "effect": null
+  },
+  {
+   "name": "克拉肯腳",
+   "category": "藍洞",
+   "atk": 12.07,
+   "def": 9.71,
+   "lck": 0,
+   "wgt": 2.69,
+   "dur": 4.44,
+   "effect": "邪惡力量：1 噴墨：3 格檔：2"
+  },
+  {
+   "name": "深海閻王心臟",
+   "category": "藍洞",
+   "atk": 11.49,
+   "def": 8,
+   "lck": 3.5,
+   "wgt": 1.6,
+   "dur": 5.31,
+   "effect": "詛咒：4 邪惡力量：4 攝魂：2"
+  },
+  {
+   "name": "多刺菊石獸殼",
+   "category": "藍洞",
+   "atk": 10.67,
+   "def": 8.39,
+   "lck": 1.92,
+   "wgt": 1.86,
+   "dur": 5.28,
+   "effect": "格檔：1"
+  },
+  {
+   "name": "深海閻王觸手",
+   "category": "藍洞",
+   "atk": 9.2,
+   "def": 9.11,
+   "lck": 1.64,
+   "wgt": 1.42,
+   "dur": 4.16,
+   "effect": "詛咒：3 邪惡力量：2 威嚇：2 格檔：2"
+  },
+  {
+   "name": "大王烏賊腳",
+   "category": "藍洞",
+   "atk": 9.15,
+   "def": 7.1,
+   "lck": 1.7,
+   "wgt": 1.9,
+   "dur": 3.93,
+   "effect": "噴墨：2 格檔：1"
+  },
+  {
+   "name": "太陽珊瑚枝",
+   "category": "藍洞",
+   "atk": 8.33,
+   "def": 3.32,
+   "lck": 3.58,
+   "wgt": 1.5,
+   "dur": 2.68,
+   "effect": null
+  },
+  {
+   "name": "電鱝發電器",
+   "category": "藍洞",
+   "atk": 7.88,
+   "def": 2.7,
+   "lck": 2.55,
+   "wgt": 0.76,
+   "dur": 2.74,
+   "effect": "麻痹：2"
+  },
+  {
+   "name": "海星",
+   "category": "藍洞",
+   "atk": 7.05,
+   "def": 5.25,
+   "lck": 4.47,
+   "wgt": 3.23,
+   "dur": 3.56,
+   "effect": "動物傷害：3 人型傷害：3 生命恢復：3 體力恢復：5"
+  },
+  {
+   "name": "鱷魚皮",
+   "category": "藍洞",
+   "atk": 6.7,
+   "def": 7.02,
+   "lck": 2.68,
+   "wgt": 2.11,
+   "dur": 5.34,
+   "effect": null
+  },
+  {
+   "name": "美人魚尾鰭",
+   "category": "藍洞",
+   "atk": 6.51,
+   "def": 5.11,
+   "lck": 5.36,
+   "wgt": 1.92,
+   "dur": 3.62,
+   "effect": "閃避：1"
+  },
+  {
+   "name": "藍環章魚腳",
+   "category": "藍洞",
+   "atk": 6.48,
+   "def": 2.69,
+   "lck": 2.74,
+   "wgt": 1.24,
+   "dur": 2.35,
+   "effect": "毒：8 麻痹毒：3"
+  },
+  {
+   "name": "龜殼",
+   "category": "藍洞",
+   "atk": 4.98,
+   "def": 9.96,
+   "lck": 3.26,
+   "wgt": 2.11,
+   "dur": 5.92,
+   "effect": "格檔：2"
+  },
+  {
+   "name": "刺甲貝殼",
+   "category": "藍洞",
+   "atk": 4.98,
+   "def": 11.88,
+   "lck": 0.96,
+   "wgt": 2.3,
+   "dur": 5.59,
+   "effect": "格檔：3 冰結：1"
+  },
+  {
+   "name": "大王具足蟲殼",
+   "category": "藍洞",
+   "atk": 2.68,
+   "def": 5.79,
+   "lck": 3.45,
+   "wgt": 1.07,
+   "dur": 3.18,
+   "effect": null
+  },
+  {
+   "name": "海綿",
+   "category": "藍洞",
+   "atk": 1,
+   "def": 10.99,
+   "lck": 3.5,
+   "wgt": 0.4,
+   "dur": 2.36,
+   "effect": "守護：3 格檔：4 生命恢復：4"
+  },
+  {
+   "name": "超巨大蘑菇王傘",
+   "category": "蘑菇園",
+   "atk": 17.43,
+   "def": 8.38,
+   "lck": 4.38,
+   "wgt": 3.16,
+   "dur": 2.99,
+   "effect": null
+  },
+  {
+   "name": "毒蠅傘",
+   "category": "蘑菇園",
+   "atk": 9.04,
+   "def": 1.31,
+   "lck": 2.11,
+   "wgt": 0.58,
+   "dur": 1,
+   "effect": "毒：1 麻痹毒：1",
+   "qualityNeed": {
+    "屎一般": 8
+   }
+  },
+  {
+   "name": "刺菇菇傘",
+   "category": "蘑菇園",
+   "atk": 8.09,
+   "def": 2.18,
+   "lck": 0.85,
+   "wgt": 0.72,
+   "dur": 2.28,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 2
+   }
+  },
+  {
+   "name": "巨大道符",
+   "category": "蘑菇園",
+   "atk": 7.79,
+   "def": 2.78,
+   "lck": 3.5,
+   "wgt": 0.39,
+   "dur": 2.3,
+   "effect": "魔物傷害：5"
+  },
+  {
+   "name": "藍菇菇傘",
+   "category": "蘑菇園",
+   "atk": 7.45,
+   "def": 2.72,
+   "lck": 1.3,
+   "wgt": 1,
+   "dur": 2.83,
+   "effect": null,
+   "qualityNeed": {
+    "上等": 13
+   }
+  },
+  {
+   "name": "毒鵝膏",
+   "category": "蘑菇園",
+   "atk": 6.6,
+   "def": 1.35,
+   "lck": 1.64,
+   "wgt": 0.72,
+   "dur": 0.5,
+   "effect": "毒：6",
+   "qualityNeed": {
+    "屎一般": 2
+   }
+  },
+  {
+   "name": "菇菇寶貝傘",
+   "category": "蘑菇園",
+   "atk": 6.16,
+   "def": 2.65,
+   "lck": 1.66,
+   "wgt": 0.44,
+   "dur": 2,
+   "effect": null,
+   "qualityNeed": {
+    "次等": 9,
+    "普通": 9,
+    "高級": 10,
+    "精良": 10,
+    "傳說": 12
+   }
+  },
+  {
+   "name": "白毒傘",
+   "category": "蘑菇園",
+   "atk": 5.96,
+   "def": 1.94,
+   "lck": 0.86,
+   "wgt": 0.73,
+   "dur": 0.53,
+   "effect": "毒：5",
+   "qualityNeed": {
+    "屎一般": 10
+   }
+  },
+  {
+   "name": "道符",
+   "category": "蘑菇園",
+   "atk": 5.27,
+   "def": 0.66,
+   "lck": 2.48,
+   "wgt": 0.15,
+   "dur": 1.5,
+   "effect": "魔物傷害：2",
+   "qualityNeed": {
+    "破爛": 14
+   }
+  },
+  {
+   "name": "鱗柄白鵝膏",
+   "category": "蘑菇園",
+   "atk": 4.87,
+   "def": 2.62,
+   "lck": 2.57,
+   "wgt": 0.74,
+   "dur": 1.07,
+   "effect": "毒：5",
+   "qualityNeed": {
+    "屎一般": 5
+   }
+  },
+  {
+   "name": "綠菇菇傘",
+   "category": "蘑菇園",
+   "atk": 4.76,
+   "def": 3.97,
+   "lck": 1.24,
+   "wgt": 0.78,
+   "dur": 3.31,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 5
+   }
+  },
+  {
+   "name": "滑菇黏液",
+   "category": "蘑菇園",
+   "atk": 2.82,
+   "def": 4.96,
+   "lck": 1.25,
+   "wgt": 0.73,
+   "dur": 2.47,
+   "effect": null,
+   "qualityNeed": {
+    "屎一般": 8
+   }
+  },
+  {
+   "name": "墨汁",
+   "category": "蘑菇園",
+   "atk": 2.01,
+   "def": 2.02,
+   "lck": 2.5,
+   "wgt": 0.44,
+   "dur": 1.04,
+   "effect": "噴墨：1",
+   "qualityNeed": {
+    "屎一般": 10
+   }
+  },
+  {
+   "name": "睡蓮",
+   "category": "蘑菇園",
+   "atk": 1.99,
+   "def": 2.88,
+   "lck": 4.19,
+   "wgt": 0.6,
+   "dur": 1.51,
+   "effect": "睡眠：3",
+   "qualityNeed": {
+    "破爛": 5
+   }
+  },
+  {
+   "name": "仙桃",
+   "category": "蘑菇園",
+   "atk": 1.49,
+   "def": 2.73,
+   "lck": 3.41,
+   "wgt": 0.87,
+   "dur": 1.01,
+   "effect": "生命恢復：8",
+   "qualityNeed": {
+    "劣質": 6
+   }
+  },
+  {
+   "name": "山銅",
+   "category": "鐵礦山",
+   "atk": 15.43,
+   "def": 6.28,
+   "lck": 2.26,
+   "wgt": 4.26,
+   "dur": 7.22,
+   "effect": "減傷：1 格檔：2 解暈：2"
+  },
+  {
+   "name": "鉑",
+   "category": "鐵礦山",
+   "atk": 15.02,
+   "def": 7,
+   "lck": 1.6,
+   "wgt": 9.2,
+   "dur": 4.83,
+   "effect": null,
+   "qualityNeed": {
+    "精良": 7,
+    "頂級": 7
+   }
+  },
+  {
+   "name": "精金",
+   "category": "鐵礦山",
+   "atk": 13.8,
+   "def": 13.84,
+   "lck": 3.59,
+   "wgt": 4.72,
+   "dur": 7.7,
+   "effect": "減傷：3 破甲：1"
+  },
+  {
+   "name": "金",
+   "category": "鐵礦山",
+   "atk": 13.12,
+   "def": 1.33,
+   "lck": 3.35,
+   "wgt": 7.88,
+   "dur": 1.27,
+   "effect": null,
+   "qualityNeed": {
+    "高級": 8,
+    "精良": 9,
+    "史詩": 10
+   }
+  },
+  {
+   "name": "銥",
+   "category": "鐵礦山",
+   "atk": 12.19,
+   "def": 6.26,
+   "lck": 0.81,
+   "wgt": 9.34,
+   "dur": 3.1,
+   "effect": null,
+   "qualityNeed": {
+    "劣質": 6
+   }
+  },
+  {
+   "name": "鋨",
+   "category": "鐵礦山",
+   "atk": 11.33,
+   "def": 10.53,
+   "lck": 2.26,
+   "wgt": 10.36,
+   "dur": 2.8,
+   "effect": null
+  },
+  {
+   "name": "釕",
+   "category": "鐵礦山",
+   "atk": 11.25,
+   "def": 5.63,
+   "lck": 4.02,
+   "wgt": 5.61,
+   "dur": 4.37,
+   "effect": null
+  },
+  {
+   "name": "秘銀",
+   "category": "鐵礦山",
+   "atk": 10.27,
+   "def": 12.5,
+   "lck": 4.75,
+   "wgt": 2.55,
+   "dur": 6.23,
+   "effect": "減傷：3 解毒：2"
+  },
+  {
+   "name": "銠",
+   "category": "鐵礦山",
+   "atk": 9.29,
+   "def": 6.05,
+   "lck": 2.47,
+   "wgt": 4.95,
+   "dur": 5.35,
+   "effect": null
+  },
+  {
+   "name": "鋼",
+   "category": "鐵礦山",
+   "atk": 7.88,
+   "def": 4.66,
+   "lck": 0.24,
+   "wgt": 3.24,
+   "dur": 4.03,
+   "effect": null,
+   "qualityNeed": {
+    "上等": 3
+   }
+  },
+  {
+   "name": "銀",
+   "category": "鐵礦山",
+   "atk": 7.76,
+   "def": 2.02,
+   "lck": 2.52,
+   "wgt": 4.62,
+   "dur": 2,
+   "effect": null,
+   "qualityNeed": {
+    "上等": 4,
+    "高級": 5,
+    "精良": 5,
+    "頂級": 5,
+    "完美": 5
+   }
+  },
+  {
+   "name": "鉿",
+   "category": "鐵礦山",
+   "atk": 6.07,
+   "def": 2.79,
+   "lck": 0.94,
+   "wgt": 5.61,
+   "dur": 2.7,
+   "effect": null
+  },
+  {
+   "name": "黃銅",
+   "category": "鐵礦山",
+   "atk": 6.05,
+   "def": 4.35,
+   "lck": 0.84,
+   "wgt": 3.29,
+   "dur": 5.62,
+   "effect": null,
+   "qualityNeed": {
+    "劣質": 1,
+    "次等": 1,
+    "普通": 1,
+    "上等": 1,
+    "高級": 1,
+    "精良": 1
+   }
+  },
+  {
+   "name": "鈀",
+   "category": "鐵礦山",
+   "atk": 5.88,
+   "def": 2.19,
+   "lck": 1.67,
+   "wgt": 4.84,
+   "dur": 1.94,
+   "effect": null
+  },
+  {
+   "name": "鐵",
+   "category": "鐵礦山",
+   "atk": 5.58,
+   "def": 3.27,
+   "lck": 0,
+   "wgt": 3.38,
+   "dur": 3.42,
+   "effect": null,
+   "qualityNeed": {
+    "次等": 1,
+    "普通": 1,
+    "上等": 1,
+    "高級": 1,
+    "精良": 1,
+    "頂級": 1,
+    "完美": 1
+   }
+  },
+  {
+   "name": "鉻",
+   "category": "鐵礦山",
+   "atk": 4.87,
+   "def": 3.54,
+   "lck": 0.87,
+   "wgt": 2.9,
+   "dur": 0.53,
+   "effect": null,
+   "qualityNeed": {
+    "精良": 7
+   }
+  },
+  {
+   "name": "鉛",
+   "category": "鐵礦山",
+   "atk": 4.63,
+   "def": 1.86,
+   "lck": 0.34,
+   "wgt": 4.95,
+   "dur": 1.63,
+   "effect": "鉛毒：1",
+   "qualityNeed": {
+    "普通": 3
+   }
+  },
+  {
+   "name": "鈹",
+   "category": "鐵礦山",
+   "atk": 4.58,
+   "def": 1.97,
+   "lck": 1.25,
+   "wgt": 0.59,
+   "dur": 1.23,
+   "effect": "毒：1"
+  },
+  {
+   "name": "銅",
+   "category": "鐵礦山",
+   "atk": 4.27,
+   "def": 3,
+   "lck": 0,
+   "wgt": 3.68,
+   "dur": 4.57,
+   "effect": null,
+   "qualityNeed": {
+    "次等": 1,
+    "普通": 1,
+    "上等": 1,
+    "高級": 1,
+    "精良": 1
+   }
+  },
+  {
+   "name": "鉍",
+   "category": "鐵礦山",
+   "atk": 3.96,
+   "def": 1.32,
+   "lck": 1.69,
+   "wgt": 4.07,
+   "dur": 1.5,
+   "effect": null,
+   "qualityNeed": {
+    "精良": 21
+   }
+  },
+  {
+   "name": "鋁",
+   "category": "鐵礦山",
+   "atk": 3.48,
+   "def": 3.39,
+   "lck": 0.34,
+   "wgt": 1.19,
+   "dur": 2.71,
+   "effect": null
+  },
+  {
+   "name": "鎂",
+   "category": "鐵礦山",
+   "atk": 3,
+   "def": 2.43,
+   "lck": 0.25,
+   "wgt": 1,
+   "dur": 2,
+   "effect": null,
+   "qualityNeed": {
+    "精良": 10
+   }
+  },
+  {
+   "name": "銻",
+   "category": "鐵礦山",
+   "atk": 2.98,
+   "def": 1.62,
+   "lck": 2.41,
+   "wgt": 2.58,
+   "dur": 0.75,
+   "effect": null,
+   "qualityNeed": {
+    "普通": 3
+   }
+  },
+  {
+   "name": "鉈",
+   "category": "鐵礦山",
+   "atk": 2.75,
+   "def": 1.43,
+   "lck": 0,
+   "wgt": 4,
+   "dur": 1.27,
+   "effect": "毒：7"
+  },
+  {
+   "name": "鋅",
+   "category": "鐵礦山",
+   "atk": 2.04,
+   "def": 1.39,
+   "lck": 0.86,
+   "wgt": 2.93,
+   "dur": 1.05,
+   "effect": null
+  },
+  {
+   "name": "錫",
+   "category": "鐵礦山",
+   "atk": 1.67,
+   "def": 1.51,
+   "lck": 0,
+   "wgt": 3.03,
+   "dur": 2.04,
+   "effect": null
+  },
+  {
+   "name": "鎳",
+   "category": "鐵礦山",
+   "atk": 1.53,
+   "def": 1.39,
+   "lck": 0,
+   "wgt": 4.02,
+   "dur": 1.61,
+   "effect": null
+  },
+  {
+   "name": "汞",
+   "category": "鐵礦山",
+   "atk": 1.41,
+   "def": 0.26,
+   "lck": 1.23,
+   "wgt": 5.56,
+   "dur": 1.03,
+   "effect": "毒：3",
+   "qualityNeed": {
+    "完美": 11
+   }
+  },
+  {
+   "name": "金雕爪",
+   "category": "鷹洞",
+   "atk": 14,
+   "def": 2.47,
+   "lck": 2.1,
+   "wgt": 0.84,
+   "dur": 3.5,
+   "effect": "精準攻擊：1 動物傷害：1",
+   "qualityNeed": {
+    "破爛": 2
+   }
+  },
+  {
+   "name": "風暴獅鷲爪",
+   "category": "鷹洞",
+   "atk": 13.79,
+   "def": 3.29,
+   "lck": 0,
+   "wgt": 1.67,
+   "dur": 4.09,
+   "effect": "人型傷害：1 破甲：1"
+  },
+  {
+   "name": "角雕爪",
+   "category": "鷹洞",
+   "atk": 13.02,
+   "def": 1.89,
+   "lck": 0.87,
+   "wgt": 1.18,
+   "dur": 4.06,
+   "effect": "精準攻擊：1 破甲：1",
+   "qualityNeed": {
+    "劣質": 3
+   }
+  },
+  {
+   "name": "烈箭鷹爪",
+   "category": "鷹洞",
+   "atk": 8.89,
+   "def": 3.4,
+   "lck": 1.6,
+   "wgt": 0.14,
+   "dur": 3.48,
+   "effect": "精準攻擊：1 火焰：1",
+   "qualityNeed": {
+    "屎一般": 2
+   }
+  },
+  {
+   "name": "姆克鷹毛",
+   "category": "鷹洞",
+   "atk": 8.75,
+   "def": 5.26,
+   "lck": 1.26,
+   "wgt": 0.47,
+   "dur": 3.33,
+   "effect": null,
+   "qualityNeed": {
+    "精良": 7
+   }
+  },
+  {
+   "name": "白頭海鵰毛",
+   "category": "鷹洞",
+   "atk": 7.93,
+   "def": 2.67,
+   "lck": 1.25,
+   "wgt": 0.3,
+   "dur": 2.48,
+   "effect": "精準攻擊：1",
+   "qualityNeed": {
+    "屎一般": 8,
+    "劣質": 9,
+    "次等": 9,
+    "普通": 9,
+    "上等": 9,
+    "高級": 10
+   }
+  },
+  {
+   "name": "鷹眼",
+   "category": "鷹洞",
+   "atk": 7.52,
+   "def": 1.32,
+   "lck": 1.22,
+   "wgt": 0.44,
+   "dur": 3.02,
+   "effect": "精準攻擊：2",
+   "qualityNeed": {
+    "次等": 9
+   }
+  },
+  {
+   "name": "烈箭鷹毛",
+   "category": "鷹洞",
+   "atk": 6.49,
+   "def": 3.83,
+   "lck": 0.82,
+   "wgt": 0.15,
+   "dur": 4.03,
+   "effect": "敏捷：1 火焰：2",
+   "qualityNeed": {
+    "劣質": 3
+   }
+  },
+  {
+   "name": "蒼鷹毛",
+   "category": "鷹洞",
+   "atk": 4.95,
+   "def": 4.7,
+   "lck": 0.83,
+   "wgt": 0.15,
+   "dur": 1.95,
+   "effect": "敏捷：1",
+   "qualityNeed": {
+    "屎一般": 5,
+    "劣質": 6,
+    "精良": 7
+   }
+  },
+  {
+   "name": "風暴獅鷲毛",
+   "category": "鷹洞",
+   "atk": 4.62,
+   "def": 5.88,
+   "lck": 0.77,
+   "wgt": 0.33,
+   "dur": 4.68,
+   "effect": "敏捷：1 格檔：1"
+  },
+  {
+   "name": "金鵰毛",
+   "category": "鷹洞",
+   "atk": 3.97,
+   "def": 3.87,
+   "lck": 2.07,
+   "wgt": 0.15,
+   "dur": 1.93,
+   "effect": "敏捷：2",
+   "qualityNeed": {
+    "屎一般": 2
+   }
+  },
+  {
+   "name": "安地斯神鷲毛",
+   "category": "鷹洞",
+   "atk": 2.98,
+   "def": 6.67,
+   "lck": 3.93,
+   "wgt": 0.29,
+   "dur": 4.55,
+   "effect": "守護：1",
+   "qualityNeed": {
+    "普通": 3
+   }
+  }
+ ]
+}

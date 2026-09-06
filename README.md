@@ -65,6 +65,7 @@
       node tools/build-messages.js                                     # 從戰報重建戰鬥文本模板
       node tools/build-forge-log.js                                    # 重建鍛造配方對成品的對照
       node tools/build-mining-log.js                                   # 重建礦區產出對照
+      node tools/parse-community-sheet.js <下載的 csv...>              # 解析社群共編試算表（素材係數／產地／品質門檻）
 
   規矩見 `capture/README.md`：戰報的我方那一半（暱稱、英雄名、自家裝備）**不上站**，
   可上站的只有敵人與地點。帳號 token 放 `.gao-state/`，已在 `.gitignore`。

@@ -13,6 +13,38 @@ const ROOT = path.resolve(__dirname, '..', '..');
 // materials.html 的欄位：0 名稱、1 攻、2 防、3 幸、4 重、5 耐、6 標籤、7 特效
 const COL = { name: 0, atk: 1, def: 2, lck: 3, wgt: 4, dur: 5, tags: 6, effects: 7 };
 
+// 社群表（capture/community-materials.json）用的是「泥土＝1.00」的相對係數，
+// 站上 materials.html 是絕對值。拿泥土、石頭、兔皮三種交叉比對，換算係數是固定的：
+//   攻 ×2.0、防 ×2.0、幸 ×0.6、重 ×5.0、耐 ×3.0
+// 所以社群表可以換算後補進來，站上沒收錄的素材（夜明砂、蝙蝠翅膀…）才用得上。
+const COMMUNITY_SCALE = { atk: 2.0, def: 2.0, lck: 0.6, wgt: 5.0, dur: 3.0 };
+
+function loadCommunity(table) {
+  const file = path.join(ROOT, 'capture', 'community-materials.json');
+  if (!fs.existsSync(file)) return 0;
+  let data;
+  try { data = JSON.parse(fs.readFileSync(file, 'utf8')); } catch { return 0; }
+  let added = 0;
+  for (const m of data.materials || []) {
+    if (table.has(m.name)) continue; // 站上有的以站上為準
+    table.set(m.name, {
+      name: m.name,
+      atk: (m.atk || 0) * COMMUNITY_SCALE.atk,
+      def: (m.def || 0) * COMMUNITY_SCALE.def,
+      lck: (m.lck || 0) * COMMUNITY_SCALE.lck,
+      wgt: m.wgt == null ? null : m.wgt * COMMUNITY_SCALE.wgt,
+      dur: (m.dur || 0) * COMMUNITY_SCALE.dur,
+      // 社群表的「類別」其實是產地（大草原、蝙蝠洞…），不是站上那種材質標籤，
+      // 所以不塞進 tags——泥土類／木頭類的判定仍以站上的標籤為準。
+      tags: [],
+      from: 'community',
+      qualityNeed: m.qualityNeed || null,
+    });
+    added++;
+  }
+  return added;
+}
+
 let cache = null;
 function loadMaterials() {
   if (cache) return cache;
@@ -32,6 +64,7 @@ function loadMaterials() {
       tags: String(r[COL.tags] || '').split('·').filter(Boolean),
     });
   }
+  loadCommunity(cache);
   return cache;
 }
 
@@ -221,4 +254,4 @@ function pickSoilWood(inventory, cands, cap, stat) {
   return best;
 }
 
-module.exports = { pickMines, loadMaterials, decay, FORGE_LIMIT, statFor, SOIL_BONUS, isSoil, isWood };
+module.exports = { pickMines, loadMaterials, decay, FORGE_LIMIT, statFor, SOIL_BONUS, isSoil, isWood, COMMUNITY_SCALE };
