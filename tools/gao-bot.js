@@ -23,7 +23,9 @@ const DEADLINE = Date.now() + RUN_MINUTES * 60 * 1000;
 const token = fs.readFileSync(args['token-file'], 'utf8').trim();
 fs.mkdirSync(STATE_DIR, { recursive: true });
 
-const store = new ReportStore(path.join(ROOT, 'capture', 'hunt-reports.jsonl'));
+// bot 只寫工作檔（.gao-state/，已忽略）。要入庫再跑 tools/gao-sync-capture.js
+// 併進 capture/——否則每隔幾秒就多一份戰報，工作區永遠是髒的。
+const store = new ReportStore(path.join(STATE_DIR, 'hunt-reports.jsonl'));
 const client = new Client({ token, stateDir: STATE_DIR, label: 'u140' });
 
 const PHASE_FILE = path.join(STATE_DIR, 'phase.json');
@@ -208,7 +210,7 @@ async function startForge(hero, smith) {
 }
 
 function appendWorkLog(entry) {
-  const f = path.join(ROOT, 'capture', 'work-log.jsonl');
+  const f = path.join(STATE_DIR, 'work-log.jsonl');
   fs.mkdirSync(path.dirname(f), { recursive: true });
   fs.appendFileSync(f, JSON.stringify({ time: new Date().toISOString(), ...entry }) + '\n');
 }

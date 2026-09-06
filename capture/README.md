@@ -8,8 +8,8 @@
 
 | 檔 | 內容 | 誰生成 |
 |---|---|---|
-| `hunt-reports.jsonl` | 一行一份狩獵戰報，原封不動 | `tools/gao-bot.js`、`tools/gao-fetch-reports.js` |
-| `work-log.jsonl` | 挖礦收穫與鍛造紀錄 | `tools/gao-bot.js` |
+| `hunt-reports.jsonl` | 一行一份狩獵戰報，原封不動 | `tools/gao-sync-capture.js`、`tools/gao-fetch-reports.js` |
+| `work-log.jsonl` | 挖礦收穫與鍛造紀錄 | `tools/gao-sync-capture.js` |
 | `bestiary.json` | 敵人／地點的彙整結果，機器讀 | `tools/build-bestiary.js` |
 | `bestiary.md` | 同上，人讀的一覽表 | `tools/build-bestiary.js` |
 | `message-templates.json` | 戰報文本模板與出現次數，機器讀 | `tools/build-messages.js` |
@@ -22,10 +22,15 @@
 
     node tools/gao-fetch-reports.js --token-file <放 token 的檔>   # 撈伺服器上還留著的歷史戰報（只保留最近 100 份）
     node tools/gao-bot.js --token-file <放 token 的檔> --minutes 60 # 照 tools/gao/plan.js 的劇本操作帳號並持續蒐戰報
+    node tools/gao-sync-capture.js                                  # 把 bot 的工作檔併進這個目錄（去重、按時間排序）
     node tools/build-bestiary.js                                    # 重建敵人／地點彙整
     node tools/build-messages.js                                    # 重建戰報文本模板
 
 token 放在 `.gao-state/`（已在 `.gitignore`），不要進版控。
+
+bot **不直接寫這個目錄**——它每隔幾秒就產一份戰報，直接寫的話工作區永遠是
+「有未提交的變更」，也挑不到乾淨的提交點。它只寫 `.gao-state/` 的同名工作檔，
+要入庫時跑 `gao-sync-capture.js` 併過來。
 
 ## 資料性質
 
