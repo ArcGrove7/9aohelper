@@ -1,6 +1,6 @@
 {
- "generatedAt": "2026-09-06T09:42:38.848Z",
- "count": 7,
+ "generatedAt": "2026-09-06T10:03:20.863Z",
+ "count": 9,
  "entries": [
   {
    "time": "2026-09-06T07:22:43.388Z",
@@ -415,6 +415,132 @@
      "name": "楊木",
      "quantity": 4,
      "value": 0
+    }
+   ]
+  },
+  {
+   "time": "2026-09-06T09:47:43.951Z",
+   "smith": "大火慢炒",
+   "equipType": "armor",
+   "quality": "劣質",
+   "product": {
+    "name": "白晝守護體",
+    "quality": "劣質",
+    "type": "盔甲",
+    "atk": 20,
+    "def": 125,
+    "int": 15,
+    "lck": 6,
+    "wgt": 543,
+    "dur": 301,
+    "slots": 5
+   },
+   "soilCount": 0,
+   "woodCount": 0,
+   "total": 16,
+   "mines": [
+    {
+     "name": "蝙蝠翅膀",
+     "quantity": 3,
+     "value": 6.62
+    },
+    {
+     "name": "石頭",
+     "quantity": 3,
+     "value": 6
+    },
+    {
+     "name": "嫩寶殼",
+     "quantity": 2,
+     "value": 6
+    },
+    {
+     "name": "藍黑寶殼",
+     "quantity": 2,
+     "value": 6
+    },
+    {
+     "name": "夜明砂",
+     "quantity": 2,
+     "value": 4.02
+    },
+    {
+     "name": "兔皮",
+     "quantity": 2,
+     "value": 3.3
+    },
+    {
+     "name": "黑兔皮",
+     "quantity": 1,
+     "value": 2.6
+    },
+    {
+     "name": "泥土",
+     "quantity": 1,
+     "value": 2
+    }
+   ]
+  },
+  {
+   "time": "2026-09-06T09:57:47.622Z",
+   "smith": "大火慢炒",
+   "equipType": "armor",
+   "quality": "劣質",
+   "product": {
+    "name": "沉沙衛胸甲",
+    "quality": "劣質",
+    "type": "盔甲",
+    "atk": 13,
+    "def": 102,
+    "int": 5,
+    "lck": 16,
+    "wgt": 171,
+    "dur": 161,
+    "slots": 3
+   },
+   "soilCount": 0,
+   "woodCount": 0,
+   "total": 16,
+   "mines": [
+    {
+     "name": "蝙蝠翅膀",
+     "quantity": 3,
+     "value": 6.62
+    },
+    {
+     "name": "S級兔皮",
+     "quantity": 2,
+     "value": 6
+    },
+    {
+     "name": "嫩寶殼",
+     "quantity": 3,
+     "value": 6
+    },
+    {
+     "name": "藍黑寶殼",
+     "quantity": 2,
+     "value": 6
+    },
+    {
+     "name": "夜明砂",
+     "quantity": 2,
+     "value": 4.02
+    },
+    {
+     "name": "兔皮",
+     "quantity": 2,
+     "value": 3.3
+    },
+    {
+     "name": "黑兔皮",
+     "quantity": 1,
+     "value": 2.6
+    },
+    {
+     "name": "泥土",
+     "quantity": 1,
+     "value": 2
     }
    ]
   }
