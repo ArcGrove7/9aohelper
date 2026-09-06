@@ -167,6 +167,36 @@ async function useConsumables(heroes) {
   return heroes;
 }
 
+// 顧任務。完成了就領獎，冷卻過了就接新的——不然任務欄會一直卡著同一批。
+// 這裡只做「領」與「接」，不會為了任務去改隊伍在做的事，那要人決定。
+async function tendQuests() {
+  if (plan.quests === false) return;
+  let q;
+  try { q = await client.get('/api/quests'); } catch (e) { log('看不到任務：', e.message); return; }
+
+  for (const t of q.active || []) {
+    if (t.isCompleted && !t.claimedAt) {
+      try {
+        await client.post(`/api/quests/${t.questId}/claim`);
+        log(`任務達成，已領獎：${t.desc}`);
+      } catch (e) { log(`領任務獎勵失敗（${t.desc}）：${e.message}`); }
+    }
+  }
+  if (q.cooldown && q.cooldown.canRoll) {
+    try {
+      const r = await client.post('/api/quests/take');
+      log('接了新任務：', (r.active || []).map((x) => x.desc).join('、') || '（沒回內容）');
+      q = r;
+    } catch (e) { log('接新任務失敗：', e.message); }
+  }
+  // 存起來給回報用
+  state.quests = (q.active || []).map((t) => ({
+    id: t.questId, desc: t.desc,
+    progress: t.progress != null ? `${t.progress}/${t.goal}` : (t.itemCount != null ? `${t.itemCount} 份` : ''),
+    done: !!t.isCompleted,
+  }));
+}
+
 // 增益類補品（戰鬥口糧那種：攻擊力 +10、三十分鐘）。
 // 人下的令：**這種東西只能留著打 BOSS**，練功時一律不准吃。
 // 所以劇本裡的 plan.useBuffs 預設是 false，這支只有打 BOSS 的劇本才會打開。
@@ -397,6 +427,7 @@ function appendWorkLog(entry) {
 async function main() {
   log(`開跑，預計 ${RUN_MINUTES} 分鐘；已存戰報 ${store.count} 份`);
   await resolveGrinders();
+  try { await tendQuests(); } catch (e) { log('tendQuests:', e.message); }
   // 沒有蒐證階段的劇本（例如純練功的帳號），別停在 probe 上
   if (!plan.probe && state.phase === 'probe') state.phase = 'travel';
   let info = await client.huntInfo();
@@ -407,6 +438,7 @@ async function main() {
     if (Date.now() - lastTend > 5 * 60 * 1000 && state.phase !== 'probe') {
       lastTend = Date.now();
       try { await tendWorkers(await client.heroes()); } catch (e) { log('tendWorkers:', e.message); }
+      try { await tendQuests(); } catch (e) { log('tendQuests:', e.message); }
     }
 
     try {

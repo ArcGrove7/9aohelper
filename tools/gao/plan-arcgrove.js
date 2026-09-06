@@ -6,11 +6,14 @@ module.exports = {
   // 不做原地蒐證階段——隊伍已經在練功點上了
   probe: null,
 
-  miners: {},
+  // 獨角獸（1189）退出戰鬥去挖砂石場——帳號有兩個任務卡著：
+  // 「交付 10 份礫石」與「消耗 30 點體力挖礦」，挖砂石場一趟兩個一起推進。
+  miners: { 1189: 1 },
   smiths: {},
+  miningMinutes: 20,
 
   // 用名字寫，bot 啟動時自己對應到 id
-  grinders: ['雷霆天降', '白人戰士', '獨角獸'],
+  grinders: ['雷霆天降', '白人戰士'],
 
   route: [
     { zoneId: 1, zoneName: '大草原', stage: 4, untilLevel: 10 },
