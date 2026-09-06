@@ -147,7 +147,14 @@ async function tendWorkers(heroes) {
     if (h.huntZone !== 0 || h.huntStage !== 0) continue; // 只能在城裡做
 
     try {
-      if (h.actionState === ActionState.Mining && h.canComplete) {
+      // 離隊的人不吃 restAllComplete，休息也得自己按「完成行動」收尾，
+      // 否則會一直卡在休息狀態，永遠輪不到下一輪挖礦。
+      if (h.actionState === ActionState.Resting && h.canComplete) {
+        const r = await client.completeAction(h.id);
+        log(`${h.name} 休息完成`);
+        h.actionState = ActionState.Idle;
+        if (r.hero) { h.hp = r.hero.hp; h.sp = r.hero.sp; }
+      } else if (h.actionState === ActionState.Mining && h.canComplete) {
         const r = await client.completeAction(h.id);
         const got = (r.miningResult || []).map((m) => m.m).join('；');
         log(`${h.name} 挖礦完成：${got || '（無收穫）'}`);
