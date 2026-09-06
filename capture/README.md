@@ -14,8 +14,10 @@
 | `bestiary.md` | 同上，人讀的一覽表 | `tools/build-bestiary.js` |
 | `message-templates.json` | 戰報文本模板與出現次數，機器讀 | `tools/build-messages.js` |
 | `message-templates.md` | 同上，依訊息顏色類別分組 | `tools/build-messages.js` |
+| `forge-log.json` | 鍛造配方對成品的數值，機器讀 | `tools/build-forge-log.js` |
+| `forge-log.md` | 同上，依裝備類型分組、依品質排序 | `tools/build-forge-log.js` |
 
-`bestiary.*` 與 `message-templates.*` 都是產物，**不要手改**——改了下次重跑就沒了。
+`bestiary.*`、`message-templates.*` 與 `forge-log.*` 都是產物，**不要手改**——改了下次重跑就沒了。
 要修正資料就去修戰報來源或彙整規則。
 
 ## 重跑
@@ -26,6 +28,7 @@
     node tools/gao-sync-capture.js                                  # 把 bot 的工作檔併進這個目錄（去重、按時間排序）
     node tools/build-bestiary.js                                    # 重建敵人／地點彙整
     node tools/build-messages.js                                    # 重建戰報文本模板
+    node tools/build-forge-log.js                                   # 重建鍛造配方對照
 
 token 放在 `.gao-state/`（已在 `.gitignore`），不要進版控。
 
@@ -45,6 +48,8 @@ bot **不直接寫這個目錄**——它每隔幾秒就產一份戰報，直接
 - 掉落訊息不寫是哪一隻怪掉的，只能歸到**樓層**。
   `bestiary.json` 的 `spots[].drops` 是該樓層的累計，不要當成單隻怪的掉落表。
 - 敵人技能是從戰報訊息「A 對 B 使出了 X」抓出來的，只記錄實際看過的。
+- `forge-log.*` 是「放了什麼 → 打出什麼」的實例。站上有素材數值與標籤加成規則，
+  但沒有這一段。同樣的配方每次結果仍有落差（品質有隨機成分），要看趨勢不是單筆。
 - `message-templates.*` 把訊息裡的角色名換成 `{我方}`／`{敵方}`、數字換成 `{n}`，
   剩下的骨架就是遊戲的文本模板。分組依據是遊戲自己標的顏色類別
   （`skill` 技能、`lucky` 幸運事件、`strong` 強力、`critical` 致命、`sub` 未命中…），

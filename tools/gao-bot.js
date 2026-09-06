@@ -280,9 +280,34 @@ async function tendWorkers(heroes) {
         h.actionState = ActionState.Idle;
         h.sp = (r.hero && r.hero.sp) != null ? r.hero.sp : h.sp;
       } else if (h.actionState === ActionState.Forging && h.canComplete) {
-        const r = await client.completeForge(h.id);
-        log(`${h.name} 鍛造完成`);
-        appendWorkLog({ kind: 'forge', hero: h.name, result: r.equipment || r.message || null });
+        await client.completeForge(h.id);
+        // completeForge 不回成品，自己去裝備欄把它撈出來——
+        // 名字是隨機生的所以認得出是哪一件。配方對成品的數值就是攻略素材本身。
+        let made = null;
+        const want = state.forging && state.forging[h.id];
+        if (want) {
+          try {
+            const es = await client.equipments();
+            made = es.find((e) => e.name === want.name && !e.equipped) || null;
+          } catch (e) { log('查成品失敗：', e.message); }
+        }
+        if (made) {
+          log(`${h.name} 鍛造完成：${made.quality}的${made.name}（攻${made.atk} 防${made.def} 智${made.int} 幸${made.lck} 重${made.wgt} 耐${made.fullDur} 孔${made.fullSlots}）`);
+        } else {
+          log(`${h.name} 鍛造完成`);
+        }
+        appendWorkLog({
+          kind: 'forge',
+          hero: h.name,
+          recipe: want ? want.recipe : null,
+          equipType: want ? want.type : null,
+          product: made && {
+            name: made.name, quality: made.quality, type: made.type,
+            atk: made.atk, def: made.def, int: made.int, lck: made.lck,
+            wgt: made.wgt, dur: made.fullDur, slots: made.fullSlots,
+          },
+        });
+        if (state.forging) delete state.forging[h.id];
         h.actionState = ActionState.Idle;
       }
     } catch (e) { log(`${h.name} 完成行動失敗：${e.message}`); }
@@ -352,6 +377,9 @@ async function startForge(hero, smith, known) {
     selectedMines: recipe.picks.map((p) => ({ itemId: p.itemId, quantity: p.quantity })),
   };
   await client.forge(body);
+  // 記著這一爐打的是什麼，完成時才對得起來
+  state.forging = state.forging || {};
+  state.forging[hero.id] = { name, type: smith.type, recipe };
   const detail = recipe.picks.map((p) => `${p.name}×${p.quantity}`).join('、');
   const bonus = recipe.soilCount ? `，泥土加成 +${recipe.soilBonus}%` : '';
   log(`${hero.name} 開始鍛造「${name}」（${smith.type}，${recipe.total} 份${bonus}：${detail}）`);
