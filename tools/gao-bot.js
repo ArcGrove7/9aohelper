@@ -292,8 +292,21 @@ async function ensureCrewIdle() {
       log('收尾休息:', (r.messages || []).join(' / ') || '（無）');
     } catch (e) { log('收尾休息失敗：', e.message); }
   }
+  if (crew.some((h) => h.actionState === ActionState.Reviving)) {
+    try {
+      await client.reviveAllComplete();
+      log('收尾重生');
+    } catch (e) { log('重生還沒好：', e.message); }
+  }
   if (crew.some((h) => h.actionState === ActionState.Moving)) {
-    try { await client.moveComplete(); log('收尾移動'); } catch (e) { log('收尾移動失敗：', e.message); }
+    try {
+      await client.moveComplete();
+      log('收尾移動');
+    } catch (e) {
+      // 移動還沒到時間就別急著再送一次 move，等一下比空轉划算
+      log('移動還沒到：', e.message);
+      await sleep(15000);
+    }
   }
   return crew;
 }
