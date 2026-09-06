@@ -290,7 +290,20 @@ async function tendWorkers(heroes) {
     if (h.actionState !== ActionState.Idle) continue;
 
     try {
-      if (mineTarget) {
+      // 兩種身分都掛著的人（工匠自己挖料自己打）：配方湊得齊就鍛造，湊不齊就去挖。
+      if (mineTarget && smith) {
+        const mines = ((await client.get('/api/items')).mines || []).filter((m) => m.available > 0);
+        const recipe = pickMines(mines, smith.type, FORGE_LIMIT[smith.type], { strategy: smith.recipe });
+        if (recipe.total && !recipe.note) {
+          await startForge(h, smith, mines);
+        } else if (h.sp <= 20) {
+          await client.rest(h.id);
+          log(`${h.name} 體力不足，休息`);
+        } else {
+          await client.mining(h.id, mineTarget);
+          log(`${h.name} 去挖料（礦區 ${mineTarget}）——${recipe.note || '素材不夠'}`);
+        }
+      } else if (mineTarget) {
         if (h.sp <= 20) { await client.rest(h.id); log(`${h.name} 體力不足，休息`); continue; }
         await client.mining(h.id, mineTarget);
         log(`${h.name} 開始挖礦（礦區 ${mineTarget}）`);
@@ -304,9 +317,8 @@ async function tendWorkers(heroes) {
 // 從庫存挑素材下去打。配方交給 gao/materials.js——它讀站上 materials.html 的
 // 素材數值表，武器看攻擊、防具看防禦，再照「同素材越堆越不划算」的衰減表分配，
 // 所以不會出現拿十六個兔皮去打劍這種事。
-async function startForge(hero, smith) {
-  const inv = await client.get('/api/items');
-  const mines = (inv.mines || []).filter((m) => m.available > 0);
+async function startForge(hero, smith, known) {
+  const mines = known || ((await client.get('/api/items')).mines || []).filter((m) => m.available > 0);
   if (!mines.length) { log(`${hero.name} 沒有素材可鍛造`); return; }
 
   const recipe = pickMines(mines, smith.type, FORGE_LIMIT[smith.type], { strategy: smith.recipe });
