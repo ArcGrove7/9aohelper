@@ -1,6 +1,6 @@
 {
- "generatedAt": "2026-09-06T09:12:33.037Z",
- "count": 6,
+ "generatedAt": "2026-09-06T09:37:15.059Z",
+ "count": 7,
  "entries": [
   {
    "time": "2026-09-06T07:22:43.388Z",
@@ -346,6 +346,74 @@
     {
      "name": "樺木",
      "quantity": 1,
+     "value": 0
+    }
+   ]
+  },
+  {
+   "time": "2026-09-06T09:37:03.787Z",
+   "smith": "大火慢炒",
+   "equipType": "armor",
+   "quality": "垃圾般",
+   "product": {
+    "name": "荒原盾戰甲",
+    "quality": "垃圾般",
+    "type": "盔甲",
+    "atk": 23,
+    "def": 176,
+    "int": 4,
+    "lck": 6,
+    "wgt": 515,
+    "dur": 238,
+    "slots": 7
+   },
+   "soilCount": 2,
+   "woodCount": 4,
+   "total": 16,
+   "mines": [
+    {
+     "name": "蝙蝠翅膀",
+     "quantity": 2,
+     "value": 6.62
+    },
+    {
+     "name": "鐵",
+     "quantity": 1,
+     "value": 6.5
+    },
+    {
+     "name": "石頭",
+     "quantity": 2,
+     "value": 6
+    },
+    {
+     "name": "嫩寶殼",
+     "quantity": 2,
+     "value": 6
+    },
+    {
+     "name": "藍黑寶殼",
+     "quantity": 1,
+     "value": 6
+    },
+    {
+     "name": "夜明砂",
+     "quantity": 1,
+     "value": 4.02
+    },
+    {
+     "name": "兔皮",
+     "quantity": 1,
+     "value": 3.3
+    },
+    {
+     "name": "泥土",
+     "quantity": 2,
+     "value": 2
+    },
+    {
+     "name": "楊木",
+     "quantity": 4,
      "value": 0
     }
    ]
