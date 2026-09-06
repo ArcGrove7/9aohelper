@@ -21,9 +21,12 @@
 | `mining-log.md` | 同上，一個礦區一節 | `tools/build-mining-log.js` |
 | `community-materials.json` | 社群表的素材係數、產地與品質門檻，機器讀 | `tools/parse-community-sheet.js` |
 | `community-materials.md` | 同上，一個產地一節 | `tools/parse-community-sheet.js` |
+| `level-ups.jsonl` | 一行一次升級：前後能力點、自然成長、期間行動 | `tools/gao-sync-capture.js` |
+| `levelup-log.json` | 升級成長的彙整（含各種族平均），機器讀 | `tools/build-levelup-log.js` |
+| `levelup-log.md` | 同上，人讀的表 | `tools/build-levelup-log.js` |
 | `forge-log.md` | 同上，依裝備類型分組、依品質排序 | `tools/build-forge-log.js` |
 
-`bestiary.*`、`message-templates.*`、`forge-log.*` 與 `mining-log.*` 都是產物，**不要手改**——改了下次重跑就沒了。
+`bestiary.*`、`message-templates.*`、`forge-log.*`、`mining-log.*` 與 `levelup-log.*` 都是產物，**不要手改**——改了下次重跑就沒了。
 要修正資料就去修戰報來源或彙整規則。
 
 ## 重跑
@@ -40,6 +43,7 @@
     node tools/build-messages.js                                    # 重建戰報文本模板
     node tools/build-forge-log.js                                   # 重建鍛造配方對照
     node tools/build-mining-log.js                                  # 重建礦區產出對照
+    node tools/build-levelup-log.js                                 # 重建升級能力點對照
 
 token 放在 `.gao-state/`（已在 `.gitignore`），不要進版控。
 
@@ -59,6 +63,11 @@ bot **不直接寫這個目錄**——它每隔幾秒就產一份戰報，直接
 - 掉落訊息不寫是哪一隻怪掉的，只能歸到**樓層**。
   `bestiary.json` 的 `spots[].drops` 是該樓層的累計，不要當成單隻怪的掉落表。
 - 敵人技能是從戰報訊息「A 對 B 使出了 X」抓出來的，只記錄實際看過的。
+- **升級的能力點成長是自然發生的，配點是另一回事**。`level-ups.jsonl` 記的成長量是
+  「升級後、配點前」減「上一級配完點之後」，所以不含我們自己配的點；
+  裝備加成（`equipmentPlus`）另外記，換裝備就會變，不算進成長。
+  每一筆還帶著**這一級期間的行動次數**（狩獵幾場、挖礦幾次、鍛造幾次）——
+  那是為了回答「行動會不會影響升級時長哪些能力」，以及之後的轉生點怎麼配。
 - **社群表與站上的數值是同一套，只差固定係數**。拿泥土、石頭、兔皮三種交叉比對：
   攻 ×2.0、防 ×2.0、幸 ×0.6、重 ×5.0、耐 ×3.0（社群係數 × 這個 ＝ 站上絕對值）。
   `tools/gao/materials.js` 就是照這組係數把社群表換算後補進來的——站上 241 種、

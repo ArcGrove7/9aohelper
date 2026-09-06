@@ -21,6 +21,7 @@ const CAPTURE = path.join(ROOT, 'capture');
 const PAIRS = [
   ['hunt-reports', 'hunt-reports.jsonl', (r) => r.id],
   ['work-log', 'work-log.jsonl', (r) => JSON.stringify(r)],
+  ['level-ups', 'level-ups.jsonl', (r) => `${r.heroId}-${r.toLv}`],
 ];
 
 function workFiles(prefix) {

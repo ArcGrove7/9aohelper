@@ -185,11 +185,17 @@ async function tendEquipment() {
 
   const score = (e) => e.atk + e.def;
 
+  // 「武器」是虛擬槽位：一個英雄只帶一把武器，但可以是九種裡的任何一種。
+  // 用類型名一個一個列會漏——先前 equipSlots 只寫了單手劍，
+  // 結果有人拿著雙手劍，bot 卻把他當成沒武器（幸好只是誤判，沒亂拆裝備）。
+  const WEAPON_TYPES = ['單手劍', '細劍', '短刀', '單手錘', '盾牌', '雙手劍', '太刀', '雙手斧', '長槍'];
+  const matches = (e, slot) => (slot === '武器' ? WEAPON_TYPES.includes(e.type) : e.type === slot);
+
   for (const heroId of plan.grinders) {
-    for (const type of plan.equipSlots || ['單手劍', '盔甲']) {
-      const worn = es.find((e) => e.equipped === heroId && e.type === type);
+    for (const type of plan.equipSlots || ['武器', '盔甲']) {
+      const worn = es.find((e) => e.equipped === heroId && matches(e, type));
       const best = es
-        .filter((e) => e.type === type && !e.equipped && e.state === 0)
+        .filter((e) => matches(e, type) && !e.equipped && e.state === 0)
         .sort((a, b) => score(b) - score(a))[0];
       if (!best) continue;
       // 只補空缺，不做升級換裝（人下的令，2026-09-06）：
@@ -210,6 +216,41 @@ async function tendEquipment() {
   }
 }
 
+// 升級紀錄用的：這隻英雄從上次升級到現在做了什麼。
+// 「行動會影響升級時長哪些能力」是要研究的題目，所以行動要跟成長一起記。
+function bumpAction(heroId, kind, n = 1) {
+  state.actionCount = state.actionCount || {};
+  const c = (state.actionCount[heroId] = state.actionCount[heroId] || { hunt: 0, mining: 0, forge: 0 });
+  c[kind] = (c[kind] || 0) + n;
+}
+
+// 能力點的完整快照。hp／sp 是當前值不是上限，所以另外記 fullHp／fullSp；
+// plus 是裝備給的加成，換裝備就會變，要跟基礎屬性分開看。
+const STAT_KEYS = ['str', 'tou', 'agi', 'tec', 'int', 'lck',
+  'hunt', 'forge', 'tailor', 'craft', 'mining', 'logging', 'efficiency'];
+
+function snapshotOf(d) {
+  const s = { lv: d.lv, fullHp: d.fullHp, fullSp: d.fullSp };
+  for (const k of STAT_KEYS) s[k] = d[k];
+  return s;
+}
+
+function diffOf(before, after) {
+  if (!before) return null;
+  const out = {};
+  for (const k of Object.keys(after)) {
+    const v = (after[k] || 0) - (before[k] || 0);
+    if (v) out[k] = v;
+  }
+  return out;
+}
+
+function appendLevelUp(entry) {
+  const f = path.join(STATE_DIR, `level-ups-${LABEL}.jsonl`);
+  fs.mkdirSync(path.dirname(f), { recursive: true });
+  fs.appendFileSync(f, JSON.stringify(entry) + '\n');
+}
+
 // 升級後把點數配掉。heroes 列表不帶 point 欄位，要查英雄詳情才看得到——
 // 所以只在等級真的變了才去查，平常不花額度。
 const BLANK_POINTS = {
@@ -218,23 +259,56 @@ const BLANK_POINTS = {
 };
 
 async function tendPoints(heroes) {
-  if (!plan.points) return;
   state.lastLv = state.lastLv || {};
+  state.snap = state.snap || {};
+  state.actionCount = state.actionCount || {};
+
   for (const h of heroes) {
-    if (!plan.grinders.includes(h.id)) continue;
-    if (state.lastLv[h.id] === h.lv) continue; // 沒升級就不查
+    const known = state.lastLv[h.id];
+    if (known === h.lv) continue; // 沒升級就不查，省額度
     state.lastLv[h.id] = h.lv;
 
     let detail;
     try { detail = await client.hero(h.id); } catch (e) { log(`查 ${h.name} 詳情失敗：${e.message}`); continue; }
-    if (!detail.point) continue;
 
+    // 這一刻的 detail 是「升級後、配點前」，成長要在這裡量才乾淨
+    const after = snapshotOf(detail);
+    const before = state.snap[h.id];
+    if (before && detail.lv > (before.lv || 0)) {
+      const acts = state.actionCount[h.id] || { hunt: 0, mining: 0, forge: 0 };
+      appendLevelUp({
+        time: twNow() + ' (UTC+8)',
+        heroId: h.id,
+        name: h.name,
+        type: h.type,
+        typeId: h.typeId,
+        tier: detail.tier,
+        potential: detail.potential,
+        reincarnated: detail.reincarnated,
+        fromLv: before.lv,
+        toLv: detail.lv,
+        before,
+        after,
+        growth: diffOf(before, after),
+        pointsGained: detail.point,
+        equipmentPlus: detail.plus || null,
+        actionsSince: { ...acts },
+      });
+      const g = diffOf(before, after) || {};
+      const summary = Object.entries(g).filter(([k]) => k !== 'lv')
+        .map(([k, v]) => `${k}+${v}`).join('、') || '（無變化）';
+      log(`${h.name} lv${before.lv}→${detail.lv} 自然成長：${summary}；期間狩獵 ${acts.hunt} 場、挖礦 ${acts.mining} 次、鍛造 ${acts.forge} 次`);
+      state.actionCount[h.id] = { hunt: 0, mining: 0, forge: 0 };
+    }
+    state.snap[h.id] = after;
+
+    // 配點（記錄完才配，免得把配點算進自然成長）
+    if (!plan.points || !detail.point) continue;
     const weights = plan.points[h.id] || plan.points.default;
     if (!weights) continue;
     const keys = Object.keys(weights).filter((k) => weights[k] > 0);
     if (!keys.length) continue;
 
-    // 照權重分，除不盡的餘數給第一個
     const totalW = keys.reduce((n, k) => n + weights[k], 0);
     const pts = { ...BLANK_POINTS };
     let left = detail.point;
@@ -245,8 +319,9 @@ async function tendPoints(heroes) {
     });
     try {
       await client.addPoints(h.id, pts);
-      const spent = keys.map((k) => `${k}+${pts[k]}`).join('、');
-      log(`${h.name} 升到 lv${h.lv}，${detail.point} 點配到 ${spent}`);
+      log(`${h.name} 升到 lv${h.lv}，${detail.point} 點配到 ${keys.map((k) => `${k}+${pts[k]}`).join('、')}`);
+      // 配掉的點也算進快照，下次才不會把它當成自然成長
+      for (const k of keys) if (state.snap[h.id][k] != null) state.snap[h.id][k] += pts[k];
     } catch (e) { log(`${h.name} 配點失敗：${e.message}`); }
   }
 }
@@ -413,6 +488,7 @@ async function tendWorkers(heroes) {
         const got = (r.miningResult || []).map((m) => m.m).join('；');
         log(`${h.name} 挖礦完成：${got || '（無收穫）'}`);
         appendWorkLog({ kind: 'mining', hero: h.name, target: mineTarget, messages: r.miningResult || [] });
+        bumpAction(h.id, 'mining');
         h.actionState = ActionState.Idle;
         h.sp = (r.hero && r.hero.sp) != null ? r.hero.sp : h.sp;
       } else if (h.actionState === ActionState.Forging && h.canComplete) {
@@ -443,6 +519,7 @@ async function tendWorkers(heroes) {
             wgt: made.wgt, dur: made.fullDur, slots: made.fullSlots,
           },
         });
+        bumpAction(h.id, 'forge');
         if (state.forging) delete state.forging[h.id];
         h.actionState = ActionState.Idle;
       }
@@ -764,6 +841,10 @@ async function stepGrind(info) {
     throw e;
   }
   keepReport(r.report);
+  for (const f of r.report.a || []) {
+    const hero = (r.huntInfo && r.huntInfo.heroes || []).find((x) => x.name === f.name);
+    if (hero) bumpAction(hero.id, 'hunt');
+  }
   const broken = (r.equipmentChanges && r.equipmentChanges.deletedIds) || [];
   if (broken.length) {
     log(`有 ${broken.length} 件裝備耐久見底壞掉了，下一輪維護會補上`);
