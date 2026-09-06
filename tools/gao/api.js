@@ -196,6 +196,18 @@ class Client {
   addPoints(heroId, points) { return this.post(`/api/heroes/${heroId}/addPoints`, points); }
   position(heroId, body) { return this.post(`/api/heroes/${heroId}/position`, body); }
 
+  // 背包：items 是補品／卷軸，mines 是鍛造素材，兩邊的 id 都吃 /api/items/:id/*
+  items() { return this.get('/api/items'); }
+  useItem(itemId, body) { return this.post(`/api/items/${itemId}/use`, body); }
+  // 上架到市集。price 是「整批」的價錢，不是單價。
+  sellItem(itemId, body) { return this.post(`/api/items/${itemId}/sell`, body); }
+  trades(type, own) { return this.get(`/api/trades?type=${type}${own ? '&own=true' : ''}`); }
+  buyTrade(tradeId) { return this.post(`/api/trades/${tradeId}/buy`); }
+  cancelTrade(tradeId, own) { return this.post(`/api/trades/${tradeId}/cancel${own ? '?own=true' : ''}`); }
+
+  equip(equipmentId, heroId) { return this.post(`/api/equipments/${equipmentId}/equip`, { heroId }); }
+  unequip(equipmentId) { return this.post(`/api/equipments/${equipmentId}/unequip`); }
+
   forgeInfo() { return this.get('/api/forge'); }
   forge(body) { return this.post('/api/forge', body); }
   completeForge(heroId) { return this.post(`/api/heroes/${heroId}/completeForge`); }

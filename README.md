@@ -55,12 +55,32 @@
 
 改了任何圖鑑內容後，兩支都重跑一次，產物進版控。
 
+- **自動遊玩**（`tools/gao-play.js`）：照 `tools/gao/roster.js` 的分工同時操作多個帳號，
+  順手把每一份戰報存進 `.gao-state/`。
+
+      # token 一個帳號一個檔，放進 .gao-state/（檔名對應 roster.js 的 tokenFile）
+      node tools/gao-play.js --minutes 600      # 跑十小時
+      node tools/gao-play.js --cap 300          # 把每小時請求上限壓更低
+
+  分工、練功路線、目標等級全部寫在 `tools/gao/roster.js`，主控迴圈不用動。
+  幾個模組各管一件事：
+
+  | 模組 | 管什麼 |
+  |---|---|
+  | `tools/gao/api.js` | HTTP 客戶端與請求額度 |
+  | `tools/gao/floors.js` | 樓層爬山：撐得住就往下探，會死人就退回來並記住 |
+  | `tools/gao/equip.js` | 誰該穿哪一件（武器吃型別天賦，雙手武器佔副手） |
+  | `tools/gao/forge-plan.js` | 下一爐打什麼給誰（先補空格，武器優先於防具） |
+  | `tools/gao/materials.js` | 一爐要放哪些素材（照素材數值表與衰減表配） |
+
+  舊的單帳號腳本 `tools/gao-bot.js`（劇本在 `tools/gao/plan.js`）還留著，但
+  **不要跟 `gao-play.js` 同時跑**：兩支共用同一份請求額度檔，也會互搶隊伍狀態。
+
 - **遊戲觀測素材**（`capture/`，不是網站內容，頁面不會讀它）：實際遊玩取回的戰報，
   用來替敵人圖鑑累積可查證的底料。
 
       node tools/gao-fetch-reports.js --token-file <放 token 的檔>    # 撈伺服器上還留著的歷史戰報
-      node tools/gao-bot.js --token-file <放 token 的檔> --minutes 60  # 照 tools/gao/plan.js 的劇本操作帳號
-      node tools/gao-sync-capture.js                                   # 把 bot 的工作檔併進 capture/
+      node tools/gao-sync-capture.js                                   # 把工作檔併進 capture/
       node tools/build-bestiary.js                                     # 從戰報重建敵人／地點彙整
       node tools/build-messages.js                                     # 從戰報重建戰鬥文本模板
 
