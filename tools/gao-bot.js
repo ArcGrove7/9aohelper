@@ -200,7 +200,12 @@ async function tendEquipment() {
         await client.post(`/api/equipments/${best.id}/equip`, { heroId });
         best.equipped = heroId;
         log(`補裝備：${best.quality}的${best.name}（${type} 攻${best.atk} 防${best.def} 耐${best.fullDur}）→ ${heroId}（原本空手）`);
-      } catch (e) { log(`補裝備失敗：${e.message}`); }
+      } catch (e) {
+        // 裝不上就把它從這一輪的候選裡剔除，否則下一個英雄／下一個部位
+        // 又會挑到同一件，變成一直失敗的空轉
+        best.equipped = -1;
+        log(`補裝備失敗（${best.quality}的${best.name}）：${e.message}`);
+      }
     }
   }
 }
