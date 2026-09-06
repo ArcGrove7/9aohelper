@@ -593,19 +593,29 @@ async function stepGrind(info) {
     log(`${hurt.map((h) => `${h.name}(HP ${Math.round((h.hp / (h.fullHp || 1)) * 100)}%/體 ${Math.round((h.sp / (h.fullSp || 1)) * 100)}%)`).join('、')} 低於門檻 → 全隊休息`);
     const until = plan.restUntil || 0.9;
     let latest = info;
-    // 已經在休息中的先收尾，否則 restAll 會回「沒有需要休息的英雄」，
-    // 這一輪就白跑，下一輪再來一次——每十幾秒燒一次額度什麼也沒做。
-    await ensureCrewIdle();
-    for (let round = 0; round < (plan.restRounds || 5); round++) {
+    // 已經在休息中就別再 restAll——那只會換來「沒有需要休息的英雄」然後空轉一輪。
+    // 恢復量看的是躺了多久，所以躺著的直接等時間到再收，不要打斷重來。
+    for (let round = 0; round < (plan.restRounds || 8); round++) {
+      const resting = (latest.heroes || []).some((h) => h.actionState === ActionState.Resting);
+      if (!resting) {
+        try {
+          await client.restAll();
+        } catch (e) {
+          // 「沒有需要休息的英雄」＝已經滿了，不是錯
+          if (!/沒有需要休息/.test(e.message)) { log('休息失敗：', e.message); break; }
+        }
+      }
+      await sleep(plan.restMs);
       try {
-        await client.restAll();
-        await sleep(plan.restMs);
         const r = await client.restAllComplete();
         log(`休息第 ${round + 1} 輪:`, (r.messages || []).join(' / ') || '（無）');
         latest = r.huntInfo || latest;
-      } catch (e) { log('休息失敗：', e.message); break; }
+      } catch (e) {
+        log('收尾休息失敗：', e.message);
+        try { latest = await client.huntInfo(); } catch { /* 下一輪再說 */ }
+      }
       const crew = (latest && latest.heroes) || [];
-      if (crew.every((h) => h.hp / (h.fullHp || 1) >= until && h.sp / (h.fullSp || 1) >= until)) break;
+      if (crew.length && crew.every((h) => h.hp / (h.fullHp || 1) >= until && h.sp / (h.fullSp || 1) >= until)) break;
     }
     return latest;
   }

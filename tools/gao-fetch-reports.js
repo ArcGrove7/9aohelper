@@ -3,7 +3,7 @@
 // 把伺服器上還留著的歷史戰報抓回來存進 capture/hunt-reports.jsonl。
 // 列表只保留最近 100 份，舊的會被新戰報擠掉，所以值得先撈一次。
 //
-//   node tools/gao-fetch-reports.js --token-file <檔> [--type hunt]
+//   node tools/gao-fetch-reports.js --token-file <檔> --label <帳號代號> [--type hunt|attack|defend|boss]
 
 const fs = require('fs');
 const path = require('path');
@@ -21,10 +21,12 @@ for (let i = 2; i < process.argv.length; i++) {
 const ROOT = path.resolve(__dirname, '..');
 const type = args.type || 'hunt';
 const token = fs.readFileSync(args['token-file'], 'utf8').trim();
+// 額度是按帳號算的，label 一定要跟著帳號走——寫死的話兩個帳號會共用同一份額度，
+// 其中一邊莫名其妙被扣光。
 const client = new Client({
   token,
   stateDir: args.state || path.join(ROOT, '.gao-state'),
-  label: 'u140',
+  label: args.label || 'u140',
 });
 const store = new ReportStore(path.join(ROOT, 'capture', `${type}-reports.jsonl`));
 

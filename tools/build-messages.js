@@ -16,7 +16,10 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const IN = path.join(ROOT, 'capture', 'hunt-reports.jsonl');
+// 狩獵與 PvP 的訊息共用同一套文本，所以三種戰報一起吃。
+// PvP 的 a／b 兩邊都是玩家英雄，模板化成 {我方}／{敵方} 之後語意一樣通順。
+const INPUTS = ['hunt-reports.jsonl', 'attack-reports.jsonl', 'defend-reports.jsonl']
+  .map((f) => path.join(ROOT, 'capture', f));
 const OUT_JSON = path.join(ROOT, 'capture', 'message-templates.json');
 const OUT_MD = path.join(ROOT, 'capture', 'message-templates.md');
 
@@ -30,14 +33,15 @@ const STYLE_LABEL = {
 function escapeRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
 
 function main() {
-  if (!fs.existsSync(IN)) {
-    console.error(`找不到 ${IN}，先跑 tools/gao-bot.js 蒐戰報`);
+  const files = INPUTS.filter((f) => fs.existsSync(f));
+  if (!files.length) {
+    console.error('capture/ 底下找不到任何戰報，先跑 tools/gao-bot.js');
     process.exit(1);
   }
-  const reports = fs.readFileSync(IN, 'utf8').split('\n')
+  const reports = files.flatMap((f) => fs.readFileSync(f, 'utf8').split('\n')
     .filter((l) => l.trim())
     .map((l) => { try { return JSON.parse(l); } catch { return null; } })
-    .filter(Boolean);
+    .filter(Boolean));
 
   const templates = new Map();
 
@@ -94,7 +98,7 @@ function main() {
   }
 
   const md = ['# 戰報文本模板', '',
-    `由 \`tools/build-messages.js\` 從 ${reports.length} 份狩獵戰報生成，請勿手改。`,
+    `由 \`tools/build-messages.js\` 從 ${reports.length} 份戰報（狩獵＋對戰）生成，請勿手改。`,
     `生成時間：${json.generatedAt}`, '',
     `共 ${json.templateCount} 種模板。角色名換成 \`{我方}\`／\`{敵方}\`，數字換成 \`{n}\`。`,
     '分組依據是遊戲自己給訊息標的顏色類別。', ''];

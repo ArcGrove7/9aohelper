@@ -29,5 +29,6 @@ module.exports = {
   // 增益補品（戰鬥口糧那種）**只能留著打 BOSS**（人下的令）——練功時一律不准吃
   useBuffs: false,
   restMs: 5 * 60 * 1000,
-  restRounds: 5,
+  // 一輪五分鐘大約回一百多點 HP，被打到剩一成要躺很久，所以給得寬一點
+  restRounds: 10,
 };

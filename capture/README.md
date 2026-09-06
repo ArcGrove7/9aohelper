@@ -9,6 +9,8 @@
 | 檔 | 內容 | 誰生成 |
 |---|---|---|
 | `hunt-reports.jsonl` | 一行一份狩獵戰報，原封不動 | `tools/gao-sync-capture.js`、`tools/gao-fetch-reports.js` |
+| `attack-reports.jsonl` | 對戰戰報（我方發起：劫掠／廝殺／友好切磋） | `tools/gao-fetch-reports.js --type attack` |
+| `defend-reports.jsonl` | 對戰戰報（被打的那一邊） | `tools/gao-fetch-reports.js --type defend` |
 | `work-log.jsonl` | 挖礦收穫與鍛造紀錄 | `tools/gao-sync-capture.js` |
 | `bestiary.json` | 敵人／地點的彙整結果，機器讀 | `tools/build-bestiary.js` |
 | `bestiary.md` | 同上，人讀的一覽表 | `tools/build-bestiary.js` |
@@ -22,7 +24,8 @@
 
 ## 重跑
 
-    node tools/gao-fetch-reports.js --token-file <放 token 的檔>   # 撈伺服器上還留著的歷史戰報（只保留最近 100 份）
+    node tools/gao-fetch-reports.js --token-file <檔> --label <帳號代號> [--type hunt|attack|defend]
+                                                                    # 撈伺服器上還留著的歷史戰報（每種只保留最近 100 份）
     node tools/gao-bot.js --token-file <放 token 的檔> --label <帳號代號> \
       [--plan tools/gao/plan-<誰>.js] --minutes 60                  # 照劇本操作帳號並持續蒐戰報
     node tools/gao-sync-capture.js                                  # 把 bot 的工作檔併進這個目錄（去重、按時間排序）
@@ -50,7 +53,7 @@ bot **不直接寫這個目錄**——它每隔幾秒就產一份戰報，直接
 - 敵人技能是從戰報訊息「A 對 B 使出了 X」抓出來的，只記錄實際看過的。
 - `forge-log.*` 是「放了什麼 → 打出什麼」的實例。站上有素材數值與標籤加成規則，
   但沒有這一段。同樣的配方每次結果仍有落差（品質有隨機成分），要看趨勢不是單筆。
-- `message-templates.*` 把訊息裡的角色名換成 `{我方}`／`{敵方}`、數字換成 `{n}`，
+- `message-templates.*` 吃狩獵與對戰三種戰報（文本是共用的），把角色名換成 `{我方}`／`{敵方}`、數字換成 `{n}`，
   剩下的骨架就是遊戲的文本模板。分組依據是遊戲自己標的顏色類別
   （`skill` 技能、`lucky` 幸運事件、`strong` 強力、`critical` 致命、`sub` 未命中…），
   拿來整理戰鬥機制頁很好用，而且完全不含我方資料。
