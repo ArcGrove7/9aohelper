@@ -1,6 +1,6 @@
 {
- "generatedAt": "2026-09-06T10:03:20.894Z",
- "runs": 7,
+ "generatedAt": "2026-09-06T10:14:46.720Z",
+ "runs": 8,
  "zones": [
   {
    "target": 1,
@@ -41,21 +41,21 @@
    "target": 2,
    "name": "森林區",
    "desc": "有各式各樣的樹木和肥沃的土壤，獲取木材的最佳地點",
-   "runs": 5,
+   "runs": 6,
    "emptyRuns": 1,
    "spPerRun": {
-    "avg": 18.2,
+    "avg": 19,
     "min": 2,
     "max": 27
    },
    "items": {
+    "泥土": {
+     "total": 24,
+     "seenInRuns": 4
+    },
     "安山岩": {
      "total": 20,
      "seenInRuns": 1
-    },
-    "泥土": {
-     "total": 19,
-     "seenInRuns": 3
     },
     "礫石": {
      "total": 14,

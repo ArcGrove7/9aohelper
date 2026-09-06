@@ -1,6 +1,6 @@
 {
- "generatedAt": "2026-09-06T10:03:20.863Z",
- "count": 9,
+ "generatedAt": "2026-09-06T10:14:46.691Z",
+ "count": 10,
  "entries": [
   {
    "time": "2026-09-06T07:22:43.388Z",
@@ -535,6 +535,69 @@
     {
      "name": "黑兔皮",
      "quantity": 1,
+     "value": 2.6
+    },
+    {
+     "name": "泥土",
+     "quantity": 1,
+     "value": 2
+    }
+   ]
+  },
+  {
+   "time": "2026-09-06T10:07:46.564Z",
+   "smith": "大火慢炒",
+   "equipType": "armor",
+   "quality": "屎一般",
+   "product": {
+    "name": "厚土護體",
+    "quality": "屎一般",
+    "type": "盔甲",
+    "atk": 8,
+    "def": 95,
+    "int": 2,
+    "lck": 4,
+    "wgt": 606,
+    "dur": 86,
+    "slots": 2
+   },
+   "soilCount": 0,
+   "woodCount": 0,
+   "total": 16,
+   "mines": [
+    {
+     "name": "藍寶殼",
+     "quantity": 1,
+     "value": 7
+    },
+    {
+     "name": "蝙蝠翅膀",
+     "quantity": 3,
+     "value": 6.62
+    },
+    {
+     "name": "嫩寶殼",
+     "quantity": 2,
+     "value": 6
+    },
+    {
+     "name": "藍黑寶殼",
+     "quantity": 3,
+     "value": 6
+    },
+    {
+     "name": "夜明砂",
+     "quantity": 2,
+     "value": 4.02
+    },
+    {
+     "name": "兔皮",
+     "quantity": 2,
+     "value": 3.3
+    },
+    {
+     "name": "黑兔皮",
+     "quantity": 2,
      "value": 2.6
     },
     {
