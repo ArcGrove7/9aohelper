@@ -38,7 +38,6 @@ function loadCommunity(table) {
       // 所以不塞進 tags——泥土類／木頭類的判定仍以站上的標籤為準。
       tags: [],
       from: 'community',
-      qualityNeed: m.qualityNeed || null,
     });
     added++;
   }

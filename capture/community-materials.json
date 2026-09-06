@@ -1,7 +1,7 @@
 {
  "source": "玩家共編的 GAO 資料庫試算表（人於 2026-09-06 提供）",
- "note": "數值是以泥土＝1.00 為基準的相對係數，與站上 materials.html 的絕對值不同單位，不要混用。品質欄位的意義尚未確認——原樣收錄，不要照字面解讀。",
- "generatedAt": "2026-09-06T09:22:38.711Z",
+ "note": "數值是以泥土＝1.00 為基準的相對係數，與站上 materials.html 的絕對值不同單位，不要混用。原表的 14 個品質欄位是網友筆誤，未收錄。",
+ "generatedAt": "2026-09-06T09:27:19.749Z",
  "qualities": [
   "屎一般",
   "垃圾般",
@@ -61,13 +61,7 @@
    "lck": 0.43,
    "wgt": 1.17,
    "dur": 1.75,
-   "effect": "毒：1",
-   "qualityNeed": {
-    "普通": 4,
-    "上等": 4,
-    "高級": 5,
-    "精良": 5
-   }
+   "effect": "毒：1"
   },
   {
    "name": "藍黑土",
@@ -87,10 +81,7 @@
    "lck": 2.46,
    "wgt": 1.09,
    "dur": 2.25,
-   "effect": null,
-   "qualityNeed": {
-    "次等": 3
-   }
+   "effect": null
   },
   {
    "name": "黑土",
@@ -100,10 +91,7 @@
    "lck": 1.69,
    "wgt": 0.72,
    "dur": 1.63,
-   "effect": null,
-   "qualityNeed": {
-    "次等": 6
-   }
+   "effect": null
   },
   {
    "name": "泥土",
@@ -113,21 +101,7 @@
    "lck": 1,
    "wgt": 1,
    "dur": 1,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 2,
-    "垃圾般": 2,
-    "破爛": 2,
-    "劣質": 3,
-    "次等": 3,
-    "普通": 3,
-    "上等": 3,
-    "高級": 3,
-    "精良": 3,
-    "頂級": 3,
-    "完美": 3,
-    "史詩": 4
-   }
+   "effect": null
   },
   {
    "name": "赫拉克羅斯的角",
@@ -137,12 +111,7 @@
    "lck": 2.16,
    "wgt": 1.43,
    "dur": 3.92,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 8,
-    "垃圾般": 8,
-    "精良": 10
-   }
+   "effect": null
   },
   {
    "name": "狗頭人爪",
@@ -162,15 +131,7 @@
    "lck": 0.83,
    "wgt": 0.37,
    "dur": 2.97,
-   "effect": "毒：4",
-   "qualityNeed": {
-    "屎一般": 2,
-    "劣質": 3,
-    "次等": 3,
-    "普通": 3,
-    "上等": 3,
-    "高級": 3
-   }
+   "effect": "毒：4"
   },
   {
    "name": "草原狼牙",
@@ -180,10 +141,7 @@
    "lck": 1.27,
    "wgt": 0.59,
    "dur": 2.49,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 3
-   }
+   "effect": null
   },
   {
    "name": "大黃蜂的針",
@@ -193,13 +151,7 @@
    "lck": 0.83,
    "wgt": 0.07,
    "dur": 1.48,
-   "effect": "毒：1 麻痹毒：2",
-   "qualityNeed": {
-    "屎一般": 5,
-    "垃圾般": 5,
-    "劣質": 6,
-    "次等": 6
-   }
+   "effect": "毒：1 麻痹毒：2"
   },
   {
    "name": "山豬獠牙",
@@ -219,10 +171,7 @@
    "lck": 5.03,
    "wgt": 0.58,
    "dur": 3,
-   "effect": null,
-   "qualityNeed": {
-    "精良": 10
-   }
+   "effect": null
   },
   {
    "name": "青竹絲牙",
@@ -232,11 +181,7 @@
    "lck": 2.08,
    "wgt": 0.3,
    "dur": 2.5,
-   "effect": "毒：2",
-   "qualityNeed": {
-    "屎一般": 2,
-    "精良": 3
-   }
+   "effect": "毒：2"
   },
   {
    "name": "狗牙",
@@ -246,11 +191,7 @@
    "lck": 0,
    "wgt": 0.44,
    "dur": 2.27,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 2,
-    "普通": 3
-   }
+   "effect": null
   },
   {
    "name": "綠水靈珠",
@@ -260,10 +201,7 @@
    "lck": 4.29,
    "wgt": 0.23,
    "dur": 1.97,
-   "effect": null,
-   "qualityNeed": {
-    "精良": 3
-   }
+   "effect": null
   },
   {
    "name": "蘑菇芽孢",
@@ -273,10 +211,7 @@
    "lck": 1.22,
    "wgt": 0.07,
    "dur": 0.98,
-   "effect": null,
-   "qualityNeed": {
-    "精良": 3
-   }
+   "effect": null
   },
   {
    "name": "綠液球",
@@ -286,13 +221,7 @@
    "lck": 1.63,
    "wgt": 0.87,
    "dur": 3.49,
-   "effect": null,
-   "qualityNeed": {
-    "次等": 15,
-    "普通": 16,
-    "高級": 17,
-    "神話": 20
-   }
+   "effect": null
   },
   {
    "name": "赫拉克羅斯的殼",
@@ -302,18 +231,7 @@
    "lck": 0,
    "wgt": 1.31,
    "dur": 3.61,
-   "effect": null,
-   "qualityNeed": {
-    "破爛": 2,
-    "劣質": 3,
-    "次等": 3,
-    "普通": 3,
-    "上等": 3,
-    "高級": 3,
-    "史詩": 4,
-    "神話": 4,
-    "傳說": 4
-   }
+   "effect": null
   },
   {
    "name": "藍黑寶殼",
@@ -323,11 +241,7 @@
    "lck": 1.67,
    "wgt": 0.44,
    "dur": 2.88,
-   "effect": null,
-   "qualityNeed": {
-    "上等": 6,
-    "精良": 7
-   }
+   "effect": null
   },
   {
    "name": "狗眼",
@@ -337,10 +251,7 @@
    "lck": 1.67,
    "wgt": 0.29,
    "dur": 1.48,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 2
-   }
+   "effect": null
   },
   {
    "name": "草原狼皮",
@@ -350,10 +261,7 @@
    "lck": 0.87,
    "wgt": 0.49,
    "dur": 2.89,
-   "effect": null,
-   "qualityNeed": {
-    "普通": 3
-   }
+   "effect": null
   },
   {
    "name": "狗頭人尾巴",
@@ -363,10 +271,7 @@
    "lck": 1.76,
    "wgt": 0.44,
    "dur": 1.99,
-   "effect": null,
-   "qualityNeed": {
-    "上等": 9
-   }
+   "effect": null
   },
   {
    "name": "黑兔皮",
@@ -376,14 +281,7 @@
    "lck": 1.6,
    "wgt": 0.36,
    "dur": 1.99,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 2,
-    "垃圾般": 2,
-    "次等": 3,
-    "普通": 3,
-    "上等": 3
-   }
+   "effect": null
   },
   {
    "name": "藍寶殼",
@@ -393,10 +291,7 @@
    "lck": 1.28,
    "wgt": 0.65,
    "dur": 2.63,
-   "effect": null,
-   "qualityNeed": {
-    "高級": 3
-   }
+   "effect": null
   },
   {
    "name": "S級兔皮",
@@ -406,10 +301,7 @@
    "lck": 4.95,
    "wgt": 0.2,
    "dur": 2.63,
-   "effect": null,
-   "qualityNeed": {
-    "精良": 5
-   }
+   "effect": null
   },
   {
    "name": "嫩寶殼",
@@ -419,11 +311,7 @@
    "lck": 1.36,
    "wgt": 0.51,
    "dur": 2.27,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 2,
-    "劣質": 3
-   }
+   "effect": null
   },
   {
    "name": "兔皮",
@@ -433,16 +321,7 @@
    "lck": 2.46,
    "wgt": 0.29,
    "dur": 1.73,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 2,
-    "垃圾般": 2,
-    "破爛": 2,
-    "劣質": 3,
-    "次等": 3,
-    "普通": 3,
-    "上等": 3
-   }
+   "effect": null
   },
   {
    "name": "重型廢鐵",
@@ -532,10 +411,7 @@
    "lck": 1.68,
    "wgt": 1.19,
    "dur": 1.76,
-   "effect": null,
-   "qualityNeed": {
-    "次等": 10
-   }
+   "effect": null
   },
   {
    "name": "石頭",
@@ -545,11 +421,7 @@
    "lck": 3.7,
    "wgt": 2.36,
    "dur": 2.47,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 8,
-    "精良": 10
-   }
+   "effect": null
   },
   {
    "name": "好運石",
@@ -559,10 +431,7 @@
    "lck": 5.09,
    "wgt": 2.46,
    "dur": 1.92,
-   "effect": null,
-   "qualityNeed": {
-    "破爛": 2
-   }
+   "effect": null
   },
   {
    "name": "天金",
@@ -692,10 +561,7 @@
    "lck": 1.67,
    "wgt": 0.72,
    "dur": 1.02,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 2
-   }
+   "effect": null
   },
   {
    "name": "西伯利亞棕熊骨",
@@ -735,10 +601,7 @@
    "lck": 0,
    "wgt": 0.74,
    "dur": 3.08,
-   "effect": null,
-   "qualityNeed": {
-    "劣質": 6
-   }
+   "effect": null
   },
   {
    "name": "頭髮",
@@ -748,10 +611,7 @@
    "lck": 0.39,
    "wgt": 0.29,
    "dur": 1.47,
-   "effect": "詛咒：1",
-   "qualityNeed": {
-    "屎一般": 8
-   }
+   "effect": "詛咒：1"
   },
   {
    "name": "彈珠",
@@ -761,10 +621,7 @@
    "lck": 3.57,
    "wgt": 0.44,
    "dur": 2.33,
-   "effect": null,
-   "qualityNeed": {
-    "上等": 9
-   }
+   "effect": null
   },
   {
    "name": "紅色布料",
@@ -774,10 +631,7 @@
    "lck": 0,
    "wgt": 0.43,
    "dur": 2.04,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 8
-   }
+   "effect": null
   },
   {
    "name": "紅鼻子",
@@ -787,10 +641,7 @@
    "lck": 1.71,
    "wgt": 0.3,
    "dur": 1.53,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 8
-   }
+   "effect": null
   },
   {
    "name": "紅色氣球",
@@ -800,10 +651,7 @@
    "lck": 3.22,
    "wgt": 0,
    "dur": 0.27,
-   "effect": "（可以讓裝備0重）",
-   "qualityNeed": {
-    "屎一般": 5
-   }
+   "effect": "（可以讓裝備0重）"
   },
   {
    "name": "人皮",
@@ -813,10 +661,7 @@
    "lck": 0,
    "wgt": 0.73,
    "dur": 2.9,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 19
-   }
+   "effect": null
   },
   {
    "name": "白色面具",
@@ -826,10 +671,7 @@
    "lck": 7.19,
    "wgt": 0.39,
    "dur": 0.96,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 2
-   }
+   "effect": null
   },
   {
    "name": "安眠藥",
@@ -879,10 +721,7 @@
    "lck": 1.71,
    "wgt": 2.75,
    "dur": 4.31,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 2
-   }
+   "effect": null
   },
   {
    "name": "拳頭",
@@ -892,11 +731,7 @@
    "lck": 2.5,
    "wgt": 2.2,
    "dur": 3.46,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 5,
-    "頂級": 7
-   }
+   "effect": null
   },
   {
    "name": "佛烈托斯殼",
@@ -986,10 +821,7 @@
    "lck": 1.67,
    "wgt": 0.59,
    "dur": 2.5,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 5
-   }
+   "effect": null
   },
   {
    "name": "怒蛇尾",
@@ -1009,10 +841,7 @@
    "lck": 1.7,
    "wgt": 0.76,
    "dur": 2.9,
-   "effect": null,
-   "qualityNeed": {
-    "上等": 6
-   }
+   "effect": null
   },
   {
    "name": "黑肥尾蠍尾",
@@ -1022,10 +851,7 @@
    "lck": 1.7,
    "wgt": 0.45,
    "dur": 1.9,
-   "effect": "毒：2 麻痹毒：3",
-   "qualityNeed": {
-    "屎一般": 2
-   }
+   "effect": "毒：2 麻痹毒：3"
   },
   {
    "name": "怒蛇鱗",
@@ -1035,10 +861,7 @@
    "lck": 0,
    "wgt": 0.59,
    "dur": 3.52,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 6
-   }
+   "effect": null
   },
   {
    "name": "藤蔓",
@@ -1048,10 +871,7 @@
    "lck": 0.82,
    "wgt": 0.3,
    "dur": 2.3,
-   "effect": null,
-   "qualityNeed": {
-    "破爛": 5
-   }
+   "effect": null
   },
   {
    "name": "鷹毛",
@@ -1061,10 +881,7 @@
    "lck": 1.57,
    "wgt": 0.15,
    "dur": 2.01,
-   "effect": null,
-   "qualityNeed": {
-    "精良": 7
-   }
+   "effect": null
   },
   {
    "name": "黑肥尾蠍殼",
@@ -1074,10 +891,7 @@
    "lck": 1.7,
    "wgt": 0.74,
    "dur": 2.82,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 5
-   }
+   "effect": null
   },
   {
    "name": "椰棗葉",
@@ -1087,10 +901,7 @@
    "lck": 2.13,
    "wgt": 0.74,
    "dur": 2.48,
-   "effect": null,
-   "qualityNeed": {
-    "普通": 3
-   }
+   "effect": null
   },
   {
    "name": "藍黑曜石",
@@ -1100,10 +911,7 @@
    "lck": 0.87,
    "wgt": 1.15,
    "dur": 2.68,
-   "effect": "敏捷：1",
-   "qualityNeed": {
-    "屎一般": 13
-   }
+   "effect": "敏捷：1"
   },
   {
    "name": "黑曜石",
@@ -1113,11 +921,7 @@
    "lck": 0.72,
    "wgt": 1.21,
    "dur": 3.45,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 13,
-    "垃圾般": 14
-   }
+   "effect": null
   },
   {
    "name": "燚之石",
@@ -1157,10 +961,7 @@
    "lck": 2.77,
    "wgt": 0.7,
    "dur": 3.38,
-   "effect": "（可以讓裝備0重）",
-   "qualityNeed": {
-    "精良": 21
-   }
+   "effect": "（可以讓裝備0重）"
   },
   {
    "name": "炎之石",
@@ -1180,10 +981,7 @@
    "lck": 6.42,
    "wgt": 2,
    "dur": 3.91,
-   "effect": null,
-   "qualityNeed": {
-    "上等": 13
-   }
+   "effect": null
   },
   {
    "name": "鋯石",
@@ -1203,10 +1001,7 @@
    "lck": 1.12,
    "wgt": 1.98,
    "dur": 5.32,
-   "effect": null,
-   "qualityNeed": {
-    "高級": 13
-   }
+   "effect": null
   },
   {
    "name": "血鑽石",
@@ -1216,10 +1011,7 @@
    "lck": 5.17,
    "wgt": 2,
    "dur": 5.83,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 13
-   }
+   "effect": null
   },
   {
    "name": "白冰冰石",
@@ -1259,10 +1051,7 @@
    "lck": 3.6,
    "wgt": 1.55,
    "dur": 7.12,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 16
-   }
+   "effect": null
   },
   {
    "name": "琥珀",
@@ -1282,10 +1071,7 @@
    "lck": 6.79,
    "wgt": 1.6,
    "dur": 1.33,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 5
-   }
+   "effect": null
   },
   {
    "name": "莫桑石",
@@ -1295,10 +1081,7 @@
    "lck": 2.7,
    "wgt": 1.32,
    "dur": 6.24,
-   "effect": null,
-   "qualityNeed": {
-    "普通": 19
-   }
+   "effect": null
   },
   {
    "name": "冰之石",
@@ -1318,10 +1101,7 @@
    "lck": 2.46,
    "wgt": 0.88,
    "dur": 3.88,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 10
-   }
+   "effect": null
   },
   {
    "name": "白冰石",
@@ -1361,10 +1141,7 @@
    "lck": 5.57,
    "wgt": 0.71,
    "dur": 2,
-   "effect": "（可以讓裝備0重）",
-   "qualityNeed": {
-    "屎一般": 9
-   }
+   "effect": "（可以讓裝備0重）"
   },
   {
    "name": "白髮",
@@ -1384,10 +1161,7 @@
    "lck": 1.62,
    "wgt": 1.14,
    "dur": 3.65,
-   "effect": "火焰：1",
-   "qualityNeed": {
-    "屎一般": 2
-   }
+   "effect": "火焰：1"
   },
   {
    "name": "黑肥肥尖牙",
@@ -1397,10 +1171,7 @@
    "lck": 0.84,
    "wgt": 1.15,
    "dur": 3.57,
-   "effect": null,
-   "qualityNeed": {
-    "普通": 9
-   }
+   "effect": null
   },
   {
    "name": "雪人牙",
@@ -1410,10 +1181,7 @@
    "lck": 2.5,
    "wgt": 0.71,
    "dur": 3.31,
-   "effect": "冰結：2",
-   "qualityNeed": {
-    "屎一般": 2
-   }
+   "effect": "冰結：2"
   },
   {
    "name": "西藏棕熊骨",
@@ -1423,10 +1191,7 @@
    "lck": 1.7,
    "wgt": 2.39,
    "dur": 5.13,
-   "effect": null,
-   "qualityNeed": {
-    "上等": 9
-   }
+   "effect": null
   },
   {
    "name": "黑木妖樹枝",
@@ -1436,10 +1201,7 @@
    "lck": 0.86,
    "wgt": 0.96,
    "dur": 2.73,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 2
-   }
+   "effect": null
   },
   {
    "name": "幼魔精靈的角",
@@ -1449,10 +1211,7 @@
    "lck": 2.55,
    "wgt": 0.9,
    "dur": 3.6,
-   "effect": "詛咒：1 攝魂：1",
-   "qualityNeed": {
-    "傳說": 12
-   }
+   "effect": "詛咒：1 攝魂：1"
   },
   {
    "name": "鋼之黑肥肥盔甲碎片",
@@ -1462,10 +1221,7 @@
    "lck": 1.22,
    "wgt": 3.77,
    "dur": 3.31,
-   "effect": "格檔：0.33",
-   "qualityNeed": {
-    "劣質": 7
-   }
+   "effect": "格檔：0.33"
   },
   {
    "name": "木妖樹枝",
@@ -1475,10 +1231,7 @@
    "lck": 1.65,
    "wgt": 0.74,
    "dur": 2.56,
-   "effect": null,
-   "qualityNeed": {
-    "上等": 3
-   }
+   "effect": null
   },
   {
    "name": "禿鷲毛",
@@ -1488,14 +1241,7 @@
    "lck": 1.63,
    "wgt": 0.15,
    "dur": 2.47,
-   "effect": "毒：1",
-   "qualityNeed": {
-    "屎一般": 8,
-    "垃圾般": 8,
-    "破爛": 8,
-    "劣質": 9,
-    "次等": 9
-   }
+   "effect": "毒：1"
   },
   {
    "name": "火肥肥皮",
@@ -1505,10 +1251,7 @@
    "lck": 1.69,
    "wgt": 1.02,
    "dur": 4.38,
-   "effect": "火焰：2",
-   "qualityNeed": {
-    "屎一般": 2
-   }
+   "effect": "火焰：2"
   },
   {
    "name": "西藏棕熊皮",
@@ -1518,10 +1261,7 @@
    "lck": 2.45,
    "wgt": 1.57,
    "dur": 4.95,
-   "effect": "冰結：0.4",
-   "qualityNeed": {
-    "神話": 4
-   }
+   "effect": "冰結：0.4"
   },
   {
    "name": "黑肥肥皮",
@@ -1531,10 +1271,7 @@
    "lck": 0.39,
    "wgt": 1.07,
    "dur": 4.4,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 5
-   }
+   "effect": null
   },
   {
    "name": "雪人毛髮",
@@ -1544,10 +1281,7 @@
    "lck": 3.3,
    "wgt": 0.3,
    "dur": 2.74,
-   "effect": "冰結：1.5",
-   "qualityNeed": {
-    "屎一般": 5
-   }
+   "effect": "冰結：1.5"
   },
   {
    "name": "舍利子",
@@ -1567,13 +1301,7 @@
    "lck": 2.03,
    "wgt": 2.76,
    "dur": 3.84,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 5,
-    "垃圾般": 5,
-    "破爛": 5,
-    "普通": 6
-   }
+   "effect": null
   },
   {
    "name": "羚羊角",
@@ -1593,10 +1321,7 @@
    "lck": 2.11,
    "wgt": 2.2,
    "dur": 3.84,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 8
-   }
+   "effect": null
   },
   {
    "name": "獅子牙",
@@ -1606,12 +1331,7 @@
    "lck": 0,
    "wgt": 1.03,
    "dur": 3.39,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 5,
-    "垃圾般": 5,
-    "普通": 6
-   }
+   "effect": null
   },
   {
    "name": "狒狒牙",
@@ -1621,11 +1341,7 @@
    "lck": 0.16,
    "wgt": 0.88,
    "dur": 2.99,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 10,
-    "高級": 13
-   }
+   "effect": null
   },
   {
    "name": "鬣狗牙",
@@ -1635,10 +1351,7 @@
    "lck": 0,
    "wgt": 0.68,
    "dur": 3.47,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 10
-   }
+   "effect": null
   },
   {
    "name": "牛羚角",
@@ -1648,15 +1361,7 @@
    "lck": 0.83,
    "wgt": 1.76,
    "dur": 3.49,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 8,
-    "垃圾般": 8,
-    "破爛": 8,
-    "普通": 9,
-    "上等": 9,
-    "精良": 10
-   }
+   "effect": null
   },
   {
    "name": "狒狒骨",
@@ -1666,12 +1371,7 @@
    "lck": 0.42,
    "wgt": 1.59,
    "dur": 3.5,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 8,
-    "上等": 9,
-    "精良": 10
-   }
+   "effect": null
   },
   {
    "name": "象鼻",
@@ -1681,10 +1381,7 @@
    "lck": 4.23,
    "wgt": 1.13,
    "dur": 2.16,
-   "effect": null,
-   "qualityNeed": {
-    "普通": 16
-   }
+   "effect": null
   },
   {
    "name": "豹子膽",
@@ -1704,10 +1401,7 @@
    "lck": 1.33,
    "wgt": 1,
    "dur": 3.99,
-   "effect": null,
-   "qualityNeed": {
-    "破爛": 5
-   }
+   "effect": null
   },
   {
    "name": "長頸鹿頸椎",
@@ -1717,10 +1411,7 @@
    "lck": 2.11,
    "wgt": 2.02,
    "dur": 3.43,
-   "effect": null,
-   "qualityNeed": {
-    "普通": 8
-   }
+   "effect": null
   },
   {
    "name": "皮骨角",
@@ -1730,10 +1421,7 @@
    "lck": 3.36,
    "wgt": 1.18,
    "dur": 2,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 13
-   }
+   "effect": null
   },
   {
    "name": "豹皮",
@@ -1743,10 +1431,7 @@
    "lck": 1.64,
    "wgt": 0.42,
    "dur": 3.52,
-   "effect": null,
-   "qualityNeed": {
-    "劣質": 9
-   }
+   "effect": null
   },
   {
    "name": "狒狒之魂",
@@ -1766,10 +1451,7 @@
    "lck": 0.42,
    "wgt": 0.6,
    "dur": 3.52,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 2
-   }
+   "effect": null
   },
   {
    "name": "猩猩毛",
@@ -1789,10 +1471,7 @@
    "lck": 2.57,
    "wgt": 0.29,
    "dur": 1.97,
-   "effect": null,
-   "qualityNeed": {
-    "劣質": 3
-   }
+   "effect": null
   },
   {
    "name": "獅子的鬃毛",
@@ -1802,10 +1481,7 @@
    "lck": 3.42,
    "wgt": 0.43,
    "dur": 1.47,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 10
-   }
+   "effect": null
   },
   {
    "name": "巴洛古的指甲",
@@ -1815,11 +1491,7 @@
    "lck": 0,
    "wgt": 1.14,
    "dur": 3.27,
-   "effect": "詛咒：2 邪惡力量：2",
-   "qualityNeed": {
-    "屎一般": 5,
-    "垃圾般": 5
-   }
+   "effect": "詛咒：2 邪惡力量：2"
   },
   {
    "name": "金牛角",
@@ -1829,10 +1501,7 @@
    "lck": 2.5,
    "wgt": 3.63,
    "dur": 1.77,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 5
-   }
+   "effect": null
   },
   {
    "name": "長槍牛魔王之角",
@@ -1842,12 +1511,7 @@
    "lck": 0.87,
    "wgt": 2.17,
    "dur": 3.5,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 5,
-    "垃圾般": 5,
-    "破爛": 5
-   }
+   "effect": null
   },
   {
    "name": "月牙",
@@ -1857,10 +1521,7 @@
    "lck": 0,
    "wgt": 3.24,
    "dur": 3.42,
-   "effect": "月牙：1",
-   "qualityNeed": {
-    "上等": 16
-   }
+   "effect": "月牙：1"
   },
   {
    "name": "巴洛古之眼",
@@ -1880,10 +1541,7 @@
    "lck": 0,
    "wgt": 1.3,
    "dur": 3.71,
-   "effect": null,
-   "qualityNeed": {
-    "精良": 7
-   }
+   "effect": null
   },
   {
    "name": "青藍合金",
@@ -1893,10 +1551,7 @@
    "lck": 0,
    "wgt": 2.87,
    "dur": 4.31,
-   "effect": null,
-   "qualityNeed": {
-    "精良": 7
-   }
+   "effect": null
   },
   {
    "name": "爆炸頭水牛角",
@@ -1906,12 +1561,7 @@
    "lck": 0.83,
    "wgt": 1.81,
    "dur": 3.92,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 8,
-    "劣質": 9,
-    "精良": 10
-   }
+   "effect": null
   },
   {
    "name": "月牙牛魔王之角",
@@ -1921,12 +1571,7 @@
    "lck": 0,
    "wgt": 2.7,
    "dur": 5.14,
-   "effect": null,
-   "qualityNeed": {
-    "破爛": 8,
-    "次等": 9,
-    "精良": 10
-   }
+   "effect": null
   },
   {
    "name": "獨角犀牛角",
@@ -1936,15 +1581,7 @@
    "lck": 0.82,
    "wgt": 1.72,
    "dur": 3.28,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 8,
-    "垃圾般": 8,
-    "破爛": 8,
-    "劣質": 9,
-    "次等": 9,
-    "普通": 9
-   }
+   "effect": null
   },
   {
    "name": "水牛角",
@@ -1954,14 +1591,7 @@
    "lck": 1.67,
    "wgt": 1,
    "dur": 3.22,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 5,
-    "垃圾般": 5,
-    "破爛": 5,
-    "劣質": 6,
-    "次等": 6
-   }
+   "effect": null
   },
   {
    "name": "魔龍之眼",
@@ -1971,11 +1601,7 @@
    "lck": 4.13,
    "wgt": 0.44,
    "dur": 1.48,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 10,
-    "精良": 14
-   }
+   "effect": null
   },
   {
    "name": "肯泰羅尾巴",
@@ -1985,12 +1611,7 @@
    "lck": 1.13,
    "wgt": 0.73,
    "dur": 2.97,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 8,
-    "上等": 9,
-    "精良": 10
-   }
+   "effect": null
   },
   {
    "name": "獨角犀牛皮",
@@ -2000,14 +1621,7 @@
    "lck": 0,
    "wgt": 2.02,
    "dur": 3.42,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 2,
-    "次等": 3,
-    "普通": 3,
-    "上等": 3,
-    "高級": 3
-   }
+   "effect": null
   },
   {
    "name": "水牛皮",
@@ -2017,12 +1631,7 @@
    "lck": 0,
    "wgt": 0.74,
    "dur": 3.11,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 5,
-    "垃圾般": 5,
-    "次等": 6
-   }
+   "effect": null
   },
   {
    "name": "沙茶醬",
@@ -2032,10 +1641,7 @@
    "lck": 1.63,
    "wgt": 0.28,
    "dur": 0.49,
-   "effect": "動物傷害：1 生命恢復：1 體力恢復：1",
-   "qualityNeed": {
-    "次等": 3
-   }
+   "effect": "動物傷害：1 生命恢復：1 體力恢復：1"
   },
   {
    "name": "爆炸頭水牛頭毛",
@@ -2045,11 +1651,7 @@
    "lck": 0.45,
    "wgt": 0.74,
    "dur": 3.45,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 8,
-    "傳說": 12
-   }
+   "effect": null
   },
   {
    "name": "大奶罐尾巴",
@@ -2059,10 +1661,7 @@
    "lck": 3.45,
    "wgt": 0.64,
    "dur": 1.23,
-   "effect": "生命恢復：2",
-   "qualityNeed": {
-    "屎一般": 10
-   }
+   "effect": "生命恢復：2"
   },
   {
    "name": "肯泰羅鬃毛",
@@ -2072,12 +1671,7 @@
    "lck": 2.47,
    "wgt": 0.58,
    "dur": 2.49,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 5,
-    "次等": 6,
-    "精良": 7
-   }
+   "effect": null
   },
   {
    "name": "千里眼眼",
@@ -2137,10 +1731,7 @@
    "lck": 0.87,
    "wgt": 1.86,
    "dur": 4.49,
-   "effect": null,
-   "qualityNeed": {
-    "劣質": 12
-   }
+   "effect": null
   },
   {
    "name": "黃花梨",
@@ -2150,10 +1741,7 @@
    "lck": 0.83,
    "wgt": 1.48,
    "dur": 3.52,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 8
-   }
+   "effect": null
   },
   {
    "name": "紫檀木",
@@ -2163,10 +1751,7 @@
    "lck": 4.26,
    "wgt": 1.77,
    "dur": 3.9,
-   "effect": "生命恢復：3",
-   "qualityNeed": {
-    "劣質": 6
-   }
+   "effect": "生命恢復：3"
   },
   {
    "name": "大紅酸枝",
@@ -2176,10 +1761,7 @@
    "lck": 3.33,
    "wgt": 1.16,
    "dur": 4.07,
-   "effect": "守護：0.5",
-   "qualityNeed": {
-    "屎一般": 10
-   }
+   "effect": "守護：0.5"
   },
   {
    "name": "柚木",
@@ -2189,10 +1771,7 @@
    "lck": 2.43,
    "wgt": 1,
    "dur": 4.91,
-   "effect": null,
-   "qualityNeed": {
-    "完美": 3
-   }
+   "effect": null
   },
   {
    "name": "香楠木",
@@ -2202,10 +1781,7 @@
    "lck": 1.72,
    "wgt": 2.24,
    "dur": 4.82,
-   "effect": "生命恢復：1 體力恢復：2",
-   "qualityNeed": {
-    "高級": 3
-   }
+   "effect": "生命恢復：1 體力恢復：2"
   },
   {
    "name": "白楓木",
@@ -2215,10 +1791,7 @@
    "lck": 2.45,
    "wgt": 0.97,
    "dur": 3.9,
-   "effect": null,
-   "qualityNeed": {
-    "破爛": 5
-   }
+   "effect": null
   },
   {
    "name": "紅楓木",
@@ -2228,10 +1801,7 @@
    "lck": 3.28,
    "wgt": 0.91,
    "dur": 3.52,
-   "effect": null,
-   "qualityNeed": {
-    "精良": 10
-   }
+   "effect": null
   },
   {
    "name": "癒創木",
@@ -2241,10 +1811,7 @@
    "lck": 1.73,
    "wgt": 1.07,
    "dur": 3.34,
-   "effect": "生命恢復：2 體力恢復：1",
-   "qualityNeed": {
-    "破爛": 5
-   }
+   "effect": "生命恢復：2 體力恢復：1"
   },
   {
    "name": "橡木",
@@ -2254,10 +1821,7 @@
    "lck": 0.84,
    "wgt": 1.12,
    "dur": 1.97,
-   "effect": null,
-   "qualityNeed": {
-    "次等": 1
-   }
+   "effect": null
   },
   {
    "name": "檜木",
@@ -2267,10 +1831,7 @@
    "lck": 0.84,
    "wgt": 0.77,
    "dur": 2.81,
-   "effect": "體力恢復：1",
-   "qualityNeed": {
-    "普通": 3
-   }
+   "effect": "體力恢復：1"
   },
   {
    "name": "胡桃木",
@@ -2280,10 +1841,7 @@
    "lck": 4.96,
    "wgt": 1.04,
    "dur": 2.27,
-   "effect": null,
-   "qualityNeed": {
-    "上等": 9
-   }
+   "effect": null
   },
   {
    "name": "杉木",
@@ -2293,13 +1851,7 @@
    "lck": 0.83,
    "wgt": 0.65,
    "dur": 2.23,
-   "effect": null,
-   "qualityNeed": {
-    "普通": 6,
-    "上等": 6,
-    "高級": 6,
-    "精良": 7
-   }
+   "effect": null
   },
   {
    "name": "桐木",
@@ -2309,14 +1861,7 @@
    "lck": 2.14,
    "wgt": 0.55,
    "dur": 2.51,
-   "effect": null,
-   "qualityNeed": {
-    "上等": 3,
-    "高級": 3,
-    "精良": 3,
-    "頂級": 3,
-    "完美": 3
-   }
+   "effect": null
   },
   {
    "name": "桂櫻",
@@ -2326,14 +1871,7 @@
    "lck": 1.6,
    "wgt": 0.22,
    "dur": 0.52,
-   "effect": "毒：1",
-   "qualityNeed": {
-    "劣質": 6,
-    "次等": 6,
-    "普通": 6,
-    "上等": 6,
-    "精良": 7
-   }
+   "effect": "毒：1"
   },
   {
    "name": "棉花",
@@ -2343,13 +1881,7 @@
    "lck": 0.8,
    "wgt": 0.18,
    "dur": 2.29,
-   "effect": null,
-   "qualityNeed": {
-    "上等": 3,
-    "精良": 3,
-    "神話": 4,
-    "傳說": 4
-   }
+   "effect": null
   },
   {
    "name": "雜草",
@@ -2359,15 +1891,7 @@
    "lck": 2.48,
    "wgt": 0.15,
    "dur": 1.01,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 8,
-    "上等": 9,
-    "高級": 10,
-    "頂級": 11,
-    "完美": 11,
-    "史詩": 12
-   }
+   "effect": null
   },
   {
    "name": "穿彈獸針",
@@ -2517,10 +2041,7 @@
    "lck": 2.61,
    "wgt": 1.51,
    "dur": 1.45,
-   "effect": "士氣：4",
-   "qualityNeed": {
-    "屎一般": 10
-   }
+   "effect": "士氣：4"
   },
   {
    "name": "一日喪命散",
@@ -2540,11 +2061,7 @@
    "lck": 0.81,
    "wgt": 0.73,
    "dur": 1.53,
-   "effect": "士氣：1",
-   "qualityNeed": {
-    "屎一般": 2,
-    "高級": 3
-   }
+   "effect": "士氣：1"
   },
   {
    "name": "喇牙腳",
@@ -2554,10 +2071,7 @@
    "lck": 2.51,
    "wgt": 0.44,
    "dur": 1.46,
-   "effect": "威嚇：1 毒：1",
-   "qualityNeed": {
-    "次等": 6
-   }
+   "effect": "威嚇：1 毒：1"
   },
   {
    "name": "漏斗網蛛牙",
@@ -2617,10 +2131,7 @@
    "lck": 0.86,
    "wgt": 0.07,
    "dur": 5.32,
-   "effect": "毒：4 麻痹毒：1",
-   "qualityNeed": {
-    "屎一般": 2
-   }
+   "effect": "毒：4 麻痹毒：1"
   },
   {
    "name": "蜘蛛絲",
@@ -2630,10 +2141,7 @@
    "lck": 2.46,
    "wgt": 0.01,
    "dur": 6.26,
-   "effect": null,
-   "qualityNeed": {
-    "次等": 6
-   }
+   "effect": null
   },
   {
    "name": "究極吸血魔獸爪",
@@ -2703,10 +2211,7 @@
    "lck": 0.86,
    "wgt": 0.63,
    "dur": 3.03,
-   "effect": "吸血：1",
-   "qualityNeed": {
-    "普通": 6
-   }
+   "effect": "吸血：1"
   },
   {
    "name": "克維拉",
@@ -2736,10 +2241,7 @@
    "lck": 1.67,
    "wgt": 0.72,
    "dur": 2.03,
-   "effect": "吸血：2 毒：1",
-   "qualityNeed": {
-    "屎一般": 8
-   }
+   "effect": "吸血：2 毒：1"
   },
   {
    "name": "音波龍耳朵",
@@ -2769,14 +2271,7 @@
    "lck": 1.66,
    "wgt": 0.87,
    "dur": 2.51,
-   "effect": "敏捷：1",
-   "qualityNeed": {
-    "屎一般": 5,
-    "劣質": 6,
-    "次等": 6,
-    "普通": 6,
-    "精良": 7
-   }
+   "effect": "敏捷：1"
   },
   {
    "name": "夜明砂",
@@ -2786,10 +2281,7 @@
    "lck": 1.62,
    "wgt": 1.17,
    "dur": 1.53,
-   "effect": "毒：2",
-   "qualityNeed": {
-    "屎一般": 8
-   }
+   "effect": "毒：2"
   },
   {
    "name": "黑色布料",
@@ -2809,10 +2301,7 @@
    "lck": 0.8,
    "wgt": 2.01,
    "dur": 3.67,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 8
-   }
+   "effect": null
   },
   {
    "name": "頭骨",
@@ -2822,10 +2311,7 @@
    "lck": 0.83,
    "wgt": 2.45,
    "dur": 3.91,
-   "effect": null,
-   "qualityNeed": {
-    "高級": 24
-   }
+   "effect": null
   },
   {
    "name": "喇叭",
@@ -2845,10 +2331,7 @@
    "lck": 0.17,
    "wgt": 0.73,
    "dur": 1.49,
-   "effect": "詛咒：1 毒：3",
-   "qualityNeed": {
-    "精良": 3
-   }
+   "effect": "詛咒：1 毒：3"
   },
   {
    "name": "死人骨頭",
@@ -2858,13 +2341,7 @@
    "lck": 0,
    "wgt": 1.5,
    "dur": 3,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 8,
-    "上等": 9,
-    "高級": 10,
-    "頂級": 11
-   }
+   "effect": null
   },
   {
    "name": "靈魂",
@@ -2884,10 +2361,7 @@
    "lck": 0.91,
    "wgt": 0.44,
    "dur": 0.48,
-   "effect": "火焰：1",
-   "qualityNeed": {
-    "屎一般": 2
-   }
+   "effect": "火焰：1"
   },
   {
    "name": "超級噴火龍Ｘ尾巴",
@@ -3197,10 +2671,7 @@
    "lck": 2.11,
    "wgt": 0.58,
    "dur": 1,
-   "effect": "毒：1 麻痹毒：1",
-   "qualityNeed": {
-    "屎一般": 8
-   }
+   "effect": "毒：1 麻痹毒：1"
   },
   {
    "name": "刺菇菇傘",
@@ -3210,10 +2681,7 @@
    "lck": 0.85,
    "wgt": 0.72,
    "dur": 2.28,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 2
-   }
+   "effect": null
   },
   {
    "name": "巨大道符",
@@ -3233,10 +2701,7 @@
    "lck": 1.3,
    "wgt": 1,
    "dur": 2.83,
-   "effect": null,
-   "qualityNeed": {
-    "上等": 13
-   }
+   "effect": null
   },
   {
    "name": "毒鵝膏",
@@ -3246,10 +2711,7 @@
    "lck": 1.64,
    "wgt": 0.72,
    "dur": 0.5,
-   "effect": "毒：6",
-   "qualityNeed": {
-    "屎一般": 2
-   }
+   "effect": "毒：6"
   },
   {
    "name": "菇菇寶貝傘",
@@ -3259,14 +2721,7 @@
    "lck": 1.66,
    "wgt": 0.44,
    "dur": 2,
-   "effect": null,
-   "qualityNeed": {
-    "次等": 9,
-    "普通": 9,
-    "高級": 10,
-    "精良": 10,
-    "傳說": 12
-   }
+   "effect": null
   },
   {
    "name": "白毒傘",
@@ -3276,10 +2731,7 @@
    "lck": 0.86,
    "wgt": 0.73,
    "dur": 0.53,
-   "effect": "毒：5",
-   "qualityNeed": {
-    "屎一般": 10
-   }
+   "effect": "毒：5"
   },
   {
    "name": "道符",
@@ -3289,10 +2741,7 @@
    "lck": 2.48,
    "wgt": 0.15,
    "dur": 1.5,
-   "effect": "魔物傷害：2",
-   "qualityNeed": {
-    "破爛": 14
-   }
+   "effect": "魔物傷害：2"
   },
   {
    "name": "鱗柄白鵝膏",
@@ -3302,10 +2751,7 @@
    "lck": 2.57,
    "wgt": 0.74,
    "dur": 1.07,
-   "effect": "毒：5",
-   "qualityNeed": {
-    "屎一般": 5
-   }
+   "effect": "毒：5"
   },
   {
    "name": "綠菇菇傘",
@@ -3315,10 +2761,7 @@
    "lck": 1.24,
    "wgt": 0.78,
    "dur": 3.31,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 5
-   }
+   "effect": null
   },
   {
    "name": "滑菇黏液",
@@ -3328,10 +2771,7 @@
    "lck": 1.25,
    "wgt": 0.73,
    "dur": 2.47,
-   "effect": null,
-   "qualityNeed": {
-    "屎一般": 8
-   }
+   "effect": null
   },
   {
    "name": "墨汁",
@@ -3341,10 +2781,7 @@
    "lck": 2.5,
    "wgt": 0.44,
    "dur": 1.04,
-   "effect": "噴墨：1",
-   "qualityNeed": {
-    "屎一般": 10
-   }
+   "effect": "噴墨：1"
   },
   {
    "name": "睡蓮",
@@ -3354,10 +2791,7 @@
    "lck": 4.19,
    "wgt": 0.6,
    "dur": 1.51,
-   "effect": "睡眠：3",
-   "qualityNeed": {
-    "破爛": 5
-   }
+   "effect": "睡眠：3"
   },
   {
    "name": "仙桃",
@@ -3367,10 +2801,7 @@
    "lck": 3.41,
    "wgt": 0.87,
    "dur": 1.01,
-   "effect": "生命恢復：8",
-   "qualityNeed": {
-    "劣質": 6
-   }
+   "effect": "生命恢復：8"
   },
   {
    "name": "山銅",
@@ -3390,11 +2821,7 @@
    "lck": 1.6,
    "wgt": 9.2,
    "dur": 4.83,
-   "effect": null,
-   "qualityNeed": {
-    "精良": 7,
-    "頂級": 7
-   }
+   "effect": null
   },
   {
    "name": "精金",
@@ -3414,12 +2841,7 @@
    "lck": 3.35,
    "wgt": 7.88,
    "dur": 1.27,
-   "effect": null,
-   "qualityNeed": {
-    "高級": 8,
-    "精良": 9,
-    "史詩": 10
-   }
+   "effect": null
   },
   {
    "name": "銥",
@@ -3429,10 +2851,7 @@
    "lck": 0.81,
    "wgt": 9.34,
    "dur": 3.1,
-   "effect": null,
-   "qualityNeed": {
-    "劣質": 6
-   }
+   "effect": null
   },
   {
    "name": "鋨",
@@ -3482,10 +2901,7 @@
    "lck": 0.24,
    "wgt": 3.24,
    "dur": 4.03,
-   "effect": null,
-   "qualityNeed": {
-    "上等": 3
-   }
+   "effect": null
   },
   {
    "name": "銀",
@@ -3495,14 +2911,7 @@
    "lck": 2.52,
    "wgt": 4.62,
    "dur": 2,
-   "effect": null,
-   "qualityNeed": {
-    "上等": 4,
-    "高級": 5,
-    "精良": 5,
-    "頂級": 5,
-    "完美": 5
-   }
+   "effect": null
   },
   {
    "name": "鉿",
@@ -3522,15 +2931,7 @@
    "lck": 0.84,
    "wgt": 3.29,
    "dur": 5.62,
-   "effect": null,
-   "qualityNeed": {
-    "劣質": 1,
-    "次等": 1,
-    "普通": 1,
-    "上等": 1,
-    "高級": 1,
-    "精良": 1
-   }
+   "effect": null
   },
   {
    "name": "鈀",
@@ -3550,16 +2951,7 @@
    "lck": 0,
    "wgt": 3.38,
    "dur": 3.42,
-   "effect": null,
-   "qualityNeed": {
-    "次等": 1,
-    "普通": 1,
-    "上等": 1,
-    "高級": 1,
-    "精良": 1,
-    "頂級": 1,
-    "完美": 1
-   }
+   "effect": null
   },
   {
    "name": "鉻",
@@ -3569,10 +2961,7 @@
    "lck": 0.87,
    "wgt": 2.9,
    "dur": 0.53,
-   "effect": null,
-   "qualityNeed": {
-    "精良": 7
-   }
+   "effect": null
   },
   {
    "name": "鉛",
@@ -3582,10 +2971,7 @@
    "lck": 0.34,
    "wgt": 4.95,
    "dur": 1.63,
-   "effect": "鉛毒：1",
-   "qualityNeed": {
-    "普通": 3
-   }
+   "effect": "鉛毒：1"
   },
   {
    "name": "鈹",
@@ -3605,14 +2991,7 @@
    "lck": 0,
    "wgt": 3.68,
    "dur": 4.57,
-   "effect": null,
-   "qualityNeed": {
-    "次等": 1,
-    "普通": 1,
-    "上等": 1,
-    "高級": 1,
-    "精良": 1
-   }
+   "effect": null
   },
   {
    "name": "鉍",
@@ -3622,10 +3001,7 @@
    "lck": 1.69,
    "wgt": 4.07,
    "dur": 1.5,
-   "effect": null,
-   "qualityNeed": {
-    "精良": 21
-   }
+   "effect": null
   },
   {
    "name": "鋁",
@@ -3645,10 +3021,7 @@
    "lck": 0.25,
    "wgt": 1,
    "dur": 2,
-   "effect": null,
-   "qualityNeed": {
-    "精良": 10
-   }
+   "effect": null
   },
   {
    "name": "銻",
@@ -3658,10 +3031,7 @@
    "lck": 2.41,
    "wgt": 2.58,
    "dur": 0.75,
-   "effect": null,
-   "qualityNeed": {
-    "普通": 3
-   }
+   "effect": null
   },
   {
    "name": "鉈",
@@ -3711,10 +3081,7 @@
    "lck": 1.23,
    "wgt": 5.56,
    "dur": 1.03,
-   "effect": "毒：3",
-   "qualityNeed": {
-    "完美": 11
-   }
+   "effect": "毒：3"
   },
   {
    "name": "金雕爪",
@@ -3724,10 +3091,7 @@
    "lck": 2.1,
    "wgt": 0.84,
    "dur": 3.5,
-   "effect": "精準攻擊：1 動物傷害：1",
-   "qualityNeed": {
-    "破爛": 2
-   }
+   "effect": "精準攻擊：1 動物傷害：1"
   },
   {
    "name": "風暴獅鷲爪",
@@ -3747,10 +3111,7 @@
    "lck": 0.87,
    "wgt": 1.18,
    "dur": 4.06,
-   "effect": "精準攻擊：1 破甲：1",
-   "qualityNeed": {
-    "劣質": 3
-   }
+   "effect": "精準攻擊：1 破甲：1"
   },
   {
    "name": "烈箭鷹爪",
@@ -3760,10 +3121,7 @@
    "lck": 1.6,
    "wgt": 0.14,
    "dur": 3.48,
-   "effect": "精準攻擊：1 火焰：1",
-   "qualityNeed": {
-    "屎一般": 2
-   }
+   "effect": "精準攻擊：1 火焰：1"
   },
   {
    "name": "姆克鷹毛",
@@ -3773,10 +3131,7 @@
    "lck": 1.26,
    "wgt": 0.47,
    "dur": 3.33,
-   "effect": null,
-   "qualityNeed": {
-    "精良": 7
-   }
+   "effect": null
   },
   {
    "name": "白頭海鵰毛",
@@ -3786,15 +3141,7 @@
    "lck": 1.25,
    "wgt": 0.3,
    "dur": 2.48,
-   "effect": "精準攻擊：1",
-   "qualityNeed": {
-    "屎一般": 8,
-    "劣質": 9,
-    "次等": 9,
-    "普通": 9,
-    "上等": 9,
-    "高級": 10
-   }
+   "effect": "精準攻擊：1"
   },
   {
    "name": "鷹眼",
@@ -3804,10 +3151,7 @@
    "lck": 1.22,
    "wgt": 0.44,
    "dur": 3.02,
-   "effect": "精準攻擊：2",
-   "qualityNeed": {
-    "次等": 9
-   }
+   "effect": "精準攻擊：2"
   },
   {
    "name": "烈箭鷹毛",
@@ -3817,10 +3161,7 @@
    "lck": 0.82,
    "wgt": 0.15,
    "dur": 4.03,
-   "effect": "敏捷：1 火焰：2",
-   "qualityNeed": {
-    "劣質": 3
-   }
+   "effect": "敏捷：1 火焰：2"
   },
   {
    "name": "蒼鷹毛",
@@ -3830,12 +3171,7 @@
    "lck": 0.83,
    "wgt": 0.15,
    "dur": 1.95,
-   "effect": "敏捷：1",
-   "qualityNeed": {
-    "屎一般": 5,
-    "劣質": 6,
-    "精良": 7
-   }
+   "effect": "敏捷：1"
   },
   {
    "name": "風暴獅鷲毛",
@@ -3855,10 +3191,7 @@
    "lck": 2.07,
    "wgt": 0.15,
    "dur": 1.93,
-   "effect": "敏捷：2",
-   "qualityNeed": {
-    "屎一般": 2
-   }
+   "effect": "敏捷：2"
   },
   {
    "name": "安地斯神鷲毛",
@@ -3868,10 +3201,7 @@
    "lck": 3.93,
    "wgt": 0.29,
    "dur": 4.55,
-   "effect": "守護：1",
-   "qualityNeed": {
-    "普通": 3
-   }
+   "effect": "守護：1"
   }
  ]
 }

@@ -6,11 +6,9 @@
 //
 // 表的排法是「每 21 欄一組」：
 //   類別名（同時是該組第一列的欄名）、攻擊、防禦、幸運、重量、耐久、特效，
-//   然後是 14 個品質等級的欄位——**這些數字的意義還沒確認**。
-//   我先前猜是「打出該品質所需的數量」，人說完全錯了，所以先照原樣收著，
-//   等問清楚再補上正確的解讀，不要留錯的說明誤導後面建站的人。
-//
-// 站上 materials.html 沒有的是：完整的 14 級品質階梯，以及這組品質欄位。
+//   然後是 14 個品質等級的欄位——**那些格子是網友筆誤，一律不收**（人確認，2026-09-06）。
+//   品質階梯本身（屎一般…神話、傳說共 14 級）是有用的，站上 materials.html 沒有，
+//   所以欄名留著；格子裡的數字丟掉。
 // 數值本身也跟站上不同單位——這張表以泥土＝1.00 當基準做相對係數，
 // 站上是絕對值，兩者不能直接混用，所以分開存。
 //
@@ -98,16 +96,8 @@ function main() {
           dur: num(row[base + 5]),
           effect: (row[base + 6] || '').trim().replace(/\s+/g, ' ') || null,
         };
-        if (meta.hasQuality) {
-          const need = {};
-          QUALITIES.forEach((q, i) => {
-            const v = num(row[base + 7 + i]);
-            if (v != null && v > 0) need[q] = v;
-          });
-          if (Object.keys(need).length) entry.qualityNeed = need;
-        }
-        const old = materials.get(first);
-        if (!old || (!old.qualityNeed && entry.qualityNeed)) materials.set(first, entry);
+        // 品質那 14 欄是網友筆誤，不收
+        if (!materials.has(first)) materials.set(first, entry);
       }
     }
   }
@@ -118,7 +108,7 @@ function main() {
   const json = {
     source: '玩家共編的 GAO 資料庫試算表（人於 2026-09-06 提供）',
     note: '數值是以泥土＝1.00 為基準的相對係數，與站上 materials.html 的絕對值不同單位，不要混用。'
-      + '品質欄位的意義尚未確認——原樣收錄，不要照字面解讀。',
+      + '原表的 14 個品質欄位是網友筆誤，未收錄。',
     generatedAt: new Date().toISOString(),
     qualities: QUALITIES,
     categories: [...categories],
@@ -133,22 +123,16 @@ function main() {
     `生成時間：${tw} (UTC+8)`, '',
     '**數值是以泥土＝1.00 為基準的相對係數**，跟站上 `materials.html` 的絕對值不是同一個單位，兩者不要混用。',
     '', '品質由低到高共 14 級：' + QUALITIES.join(' → '), '',
-    '**品質欄位的數字意義尚未確認**——原樣收錄，先不要照字面解讀。',
-    '（曾經猜成「打出該品質所需的數量」，這個解讀是錯的。）空白表示該格沒有資料。', ''];
+    '原表在每個類別後面還有 14 個品質欄位，那些格子是網友筆誤，這裡沒有收。', ''];
 
   for (const cat of json.categories) {
     const rows = list.filter((m) => m.category === cat);
     if (!rows.length) continue;
     md.push(`## ${cat}`, '');
-    const anyQ = rows.some((m) => m.qualityNeed);
-    md.push('| 素材 | 攻 | 防 | 幸 | 重 | 耐 | 特效 |' + (anyQ ? ' 品質欄（意義待確認） |' : ''));
-    md.push('|---|---|---|---|---|---|---|' + (anyQ ? '---|' : ''));
+    md.push('| 素材 | 攻 | 防 | 幸 | 重 | 耐 | 特效 |');
+    md.push('|---|---|---|---|---|---|---|');
     for (const m of rows) {
-      const q = m.qualityNeed
-        ? Object.entries(m.qualityNeed).map(([k, v]) => `${k} ${v}`).join('、')
-        : '';
-      md.push(`| ${m.name} | ${m.atk} | ${m.def} | ${m.lck} | ${m.wgt} | ${m.dur} | ${m.effect || ''} |`
-        + (anyQ ? ` ${q} |` : ''));
+      md.push(`| ${m.name} | ${m.atk} | ${m.def} | ${m.lck} | ${m.wgt} | ${m.dur} | ${m.effect || ''} |`);
     }
     md.push('');
   }
