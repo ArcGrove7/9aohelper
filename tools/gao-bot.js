@@ -139,6 +139,16 @@ async function setParty(keepIds) {
   return client.heroes();
 }
 
+// 挖礦收穫看消耗的體力，所以別一到最低時間（3 分鐘）就按完成——
+// 那樣拿到的是「消耗了 2 點體力，什麼也沒挖到」。挖滿 plan.miningMinutes
+// 或體力見底才收。
+function minedLongEnough(h) {
+  if (h.sp <= 30) return true;
+  const started = h.actionStart ? new Date(h.actionStart).getTime() : 0;
+  if (!started) return true;
+  return client.now() - started >= (plan.miningMinutes || 20) * 60 * 1000;
+}
+
 // 挖礦組／鍛造組的例行維護：完成了就再開一輪
 async function tendWorkers(heroes) {
   for (const h of heroes) {
@@ -156,7 +166,7 @@ async function tendWorkers(heroes) {
         log(`${h.name} 休息完成`);
         h.actionState = ActionState.Idle;
         if (r.hero) { h.hp = r.hero.hp; h.sp = r.hero.sp; }
-      } else if (h.actionState === ActionState.Mining && h.canComplete) {
+      } else if (h.actionState === ActionState.Mining && h.canComplete && minedLongEnough(h)) {
         const r = await client.completeAction(h.id);
         const got = (r.miningResult || []).map((m) => m.m).join('；');
         log(`${h.name} 挖礦完成：${got || '（無收穫）'}`);
