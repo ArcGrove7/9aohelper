@@ -281,12 +281,19 @@ async function useBuffs(heroes) {
 async function resolveGrinders() {
   if (!plan.grinders.some((g) => typeof g === 'string')) return;
   const heroes = await client.heroes();
-  plan.grinders = plan.grinders.map((g) => {
-    if (typeof g !== 'string') return g;
-    const hit = heroes.find((h) => h.name === g);
-    if (!hit) throw new Error(`劇本裡的「${g}」在這個帳號找不到`);
-    return hit.id;
-  });
+  // 找不到就跳過那一隻，不要整支 bot 倒掉——英雄是可以改名的，
+  // 半夜因為一個名字對不上就全部停擺不划算。全部都對不上才算真的錯。
+  const missing = [];
+  plan.grinders = plan.grinders
+    .map((g) => {
+      if (typeof g !== 'string') return g;
+      const hit = heroes.find((h) => h.name === g);
+      if (!hit) { missing.push(g); return null; }
+      return hit.id;
+    })
+    .filter((id) => id != null);
+  if (missing.length) log(`劇本裡這幾個名字找不到（可能改名了，建議改用 id）：${missing.join('、')}`);
+  if (!plan.grinders.length) throw new Error('劇本裡的練功隊一個都對不上，請改用英雄 id');
   log('練功隊:', plan.grinders.join('、'));
 }
 
