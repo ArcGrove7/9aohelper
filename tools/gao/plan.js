@@ -17,6 +17,7 @@ module.exports = {
   //   recipe 'soilWood': 泥土類的加成可以重複疊，但要有木頭類素材才會啟動
   smiths: {
     537: { type: 'armor', randomName: true, recipe: 'soilWood', forgeSlot: 1 },
+    // requireRecipe 預設 true：配方條件湊不齊就停手等素材，不退回一般配方燒素材
   },
 
   // 練功組：這幾隻留在隊伍裡

@@ -311,6 +311,12 @@ async function startForge(hero, smith) {
 
   const recipe = pickMines(mines, smith.type, FORGE_LIMIT[smith.type], { strategy: smith.recipe });
   if (!recipe.total) { log(`${hero.name} 庫存裡沒有對 ${smith.type} 有加成的素材`); return; }
+  // 指定了配方就照配方打。條件湊不齊（例如泥土用完了）寧可停手等素材，
+  // 也不要退回一般配方——那樣只是把素材燒成廢裝備。
+  if (smith.recipe && smith.requireRecipe !== false && recipe.note) {
+    log(`${hero.name} 先不打：${recipe.note}`);
+    return;
+  }
 
   const name = smith.randomName ? randomEquipmentName(smith.type) : smith.name;
   const body = {

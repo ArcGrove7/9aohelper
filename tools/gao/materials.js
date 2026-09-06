@@ -171,7 +171,8 @@ function pickSoilWood(inventory, cands, cap, stat) {
 
   if (!soils.length || !woods.length) {
     // 缺任何一邊，泥土加成就啟動不了，退回一般貪心
-    return assemble(greedy(cands, cap), cands, stat, { note: '沒有泥土或木頭，用一般配方' });
+    const missing = !soils.length ? '沒有泥土類素材' : '沒有木頭類素材';
+    return assemble(greedy(cands, cap), cands, stat, { note: `${missing}，泥土加成啟動不了` });
   }
 
   const soilStock = soils.reduce((n, s) => n + s.available, 0);
