@@ -9,7 +9,7 @@
 //
 //   node tools/gao-transfer.js --from <token檔> --from-label <代號> \
 //     --to <token檔> --to-label <代號> --kind mines|equipments \
-//     [--exclude 泥土,兔皮] [--only 鐵,石頭] [--unit-price 2] [--top 3] [--gap 2500]
+//     [--exclude 泥土,兔皮] [--only 鐵,石頭] [--unit-price 2] [--floor-price 30] [--top 3] [--gap 2500]
 //
 // --top 只對 equipments 有意義：挑攻＋防最高的前 N 件。
 
@@ -30,6 +30,10 @@ const STATE = path.join(ROOT, '.gao-state');
 const kind = args.kind || 'mines';
 const gap = Number(args.gap || 2500);
 const unitPrice = Number(args['unit-price'] || 2);
+// 每筆的最低價。小額品項照單價算會變成個位數，那種價格路過的人會順手撿走
+// （轉一批礦物時「藍寶殼 ×2 掛 4 元」就這樣沒了，暴露不到十秒）。
+// 錢是自己人左手換右手，寧可掛貴一點也別讓東西飛掉。
+const floorPrice = Number(args['floor-price'] || 30);
 const exclude = new Set(String(args.exclude || '').split(',').filter(Boolean));
 const only = new Set(String(args.only || '').split(',').filter(Boolean));
 
@@ -55,7 +59,7 @@ async function pickSource() {
       label: `${e.quality}的${e.name}（${e.type} 攻${e.atk} 防${e.def} 耐${e.fullDur}）`,
       quantity: 1,
       // 裝備照回收價掛，這是遊戲自己給的估值，不會賤賣
-      price: Math.max(1, e.recyclePrice || 1),
+      price: Math.max(floorPrice, e.recyclePrice || 1),
     }));
   }
   const inv = await from.get('/api/items');
@@ -67,7 +71,7 @@ async function pickSource() {
     label: `${m.name} ×${m.available}`,
     name: m.name,
     quantity: m.available,
-    price: Math.max(1, Math.round(m.available * unitPrice)),
+    price: Math.max(floorPrice, Math.round(m.available * unitPrice)),
   }));
 }
 
