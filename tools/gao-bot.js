@@ -210,6 +210,47 @@ async function tendEquipment() {
   }
 }
 
+// 升級後把點數配掉。heroes 列表不帶 point 欄位，要查英雄詳情才看得到——
+// 所以只在等級真的變了才去查，平常不花額度。
+const BLANK_POINTS = {
+  hp: 0, sp: 0, str: 0, tou: 0, agi: 0, tec: 0, int: 0, lck: 0,
+  hunt: 0, forge: 0, tailor: 0, craft: 0, mining: 0, logging: 0, efficiency: 0,
+};
+
+async function tendPoints(heroes) {
+  if (!plan.points) return;
+  state.lastLv = state.lastLv || {};
+  for (const h of heroes) {
+    if (!plan.grinders.includes(h.id)) continue;
+    if (state.lastLv[h.id] === h.lv) continue; // 沒升級就不查
+    state.lastLv[h.id] = h.lv;
+
+    let detail;
+    try { detail = await client.hero(h.id); } catch (e) { log(`查 ${h.name} 詳情失敗：${e.message}`); continue; }
+    if (!detail.point) continue;
+
+    const weights = plan.points[h.id] || plan.points.default;
+    if (!weights) continue;
+    const keys = Object.keys(weights).filter((k) => weights[k] > 0);
+    if (!keys.length) continue;
+
+    // 照權重分，除不盡的餘數給第一個
+    const totalW = keys.reduce((n, k) => n + weights[k], 0);
+    const pts = { ...BLANK_POINTS };
+    let left = detail.point;
+    keys.forEach((k, i) => {
+      const give = i === keys.length - 1 ? left : Math.floor((detail.point * weights[k]) / totalW);
+      pts[k] = give;
+      left -= give;
+    });
+    try {
+      await client.addPoints(h.id, pts);
+      const spent = keys.map((k) => `${k}+${pts[k]}`).join('、');
+      log(`${h.name} 升到 lv${h.lv}，${detail.point} 點配到 ${spent}`);
+    } catch (e) { log(`${h.name} 配點失敗：${e.message}`); }
+  }
+}
+
 // 顧任務。完成了就領獎，冷卻過了就接新的——不然任務欄會一直卡著同一批。
 // 這裡只做「領」與「接」，不會為了任務去改隊伍在做的事，那要人決定。
 async function tendQuests() {
@@ -505,6 +546,7 @@ async function main() {
       try { await tendWorkers(await client.heroes()); } catch (e) { log('tendWorkers:', e.message); }
       try { await tendQuests(); } catch (e) { log('tendQuests:', e.message); }
       try { await tendEquipment(); } catch (e) { log('tendEquipment:', e.message); }
+      try { await tendPoints(await client.heroes()); } catch (e) { log('tendPoints:', e.message); }
     }
 
     try {
