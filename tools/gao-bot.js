@@ -12,6 +12,7 @@ const path = require('path');
 const { Client, ApiError, ActionState, sleep } = require('./gao/api.js');
 const { ReportStore } = require('./gao/capture.js');
 const plan = require('./gao/plan.js');
+const { pickMines, FORGE_LIMIT } = require('./gao/materials.js');
 
 const args = parseArgs(process.argv.slice(2));
 const ROOT = path.resolve(__dirname, '..');
@@ -64,6 +65,7 @@ const isDown = (h) => h.hp <= 0;
 async function backToTown() {
   const info = await client.huntInfo();
   if (info.huntZone === 0 && info.huntStage === 0) return info;
+  await ensureCrewIdle();
   log('回城');
   await client.move(0);
   for (let i = 0; i < 40; i++) {
@@ -105,6 +107,23 @@ async function reviveAndRest() {
     return r.huntInfo;
   } catch (e) { log('restAll:', e.message); }
   return null;
+}
+
+// 移動要求全隊閒置。休息、移動這種「做完還要按一下完成」的狀態，
+// 不收尾就會一直被擋在「隊伍中有英雄在非閒置狀態」。
+async function ensureCrewIdle() {
+  const heroes = await client.heroes();
+  const crew = heroes.filter((h) => h.selected);
+  if (crew.some((h) => h.actionState === ActionState.Resting)) {
+    try {
+      const r = await client.restAllComplete();
+      log('收尾休息:', (r.messages || []).join(' / ') || '（無）');
+    } catch (e) { log('收尾休息失敗：', e.message); }
+  }
+  if (crew.some((h) => h.actionState === ActionState.Moving)) {
+    try { await client.moveComplete(); log('收尾移動'); } catch (e) { log('收尾移動失敗：', e.message); }
+  }
+  return crew;
 }
 
 // 把不該跟著跑的人踢出隊伍
@@ -157,42 +176,29 @@ async function tendWorkers(heroes) {
   }
 }
 
-// 從庫存挑素材下去打。挑法：同種素材優先湊滿該武器的素材上限。
+// 從庫存挑素材下去打。配方交給 gao/materials.js——它讀站上 materials.html 的
+// 素材數值表，武器看攻擊、防具看防禦，再照「同素材越堆越不划算」的衰減表分配，
+// 所以不會出現拿十六個兔皮去打劍這種事。
 async function startForge(hero, smith) {
   const inv = await client.get('/api/items');
   const mines = (inv.mines || []).filter((m) => m.available > 0);
   if (!mines.length) { log(`${hero.name} 沒有素材可鍛造`); return; }
-  const limit = FORGE_LIMIT[smith.type] || 16;
 
-  // 挑數量最多的素材墊底，湊到上限為止
-  const sorted = mines.slice().sort((a, b) => b.available - a.available);
-  const picked = [];
-  let total = 0;
-  for (const m of sorted) {
-    if (total >= limit) break;
-    const take = Math.min(m.available, limit - total);
-    picked.push({ itemId: m.id, quantity: take });
-    total += take;
-  }
-  if (!total) { log(`${hero.name} 素材不足`); return; }
+  const recipe = pickMines(mines, smith.type, FORGE_LIMIT[smith.type]);
+  if (!recipe.total) { log(`${hero.name} 庫存裡沒有對 ${smith.type} 有加成的素材`); return; }
+
   const body = {
     heroId: hero.id,
     target: smith.forgeSlot || 1,
     name: smith.name,
     type: smith.type,
-    selectedMines: picked,
+    selectedMines: recipe.picks.map((p) => ({ itemId: p.itemId, quantity: p.quantity })),
   };
   await client.forge(body);
-  log(`${hero.name} 開始鍛造「${smith.name}」（${smith.type}，素材 ${total} 份）`);
-  appendWorkLog({ kind: 'forge-start', hero: hero.name, body });
+  const detail = recipe.picks.map((p) => `${p.name}×${p.quantity}`).join('、');
+  log(`${hero.name} 開始鍛造「${smith.name}」（${smith.type}，${recipe.total} 份：${detail}）`);
+  appendWorkLog({ kind: 'forge-start', hero: hero.name, recipe, body });
 }
-
-// 各武器/防具的素材上限（拆自前端）
-const FORGE_LIMIT = {
-  sword: 16, rapier: 14, dagger: 11, hammer: 16, shield: 16,
-  thsword: 22, katana: 20, axe: 22, spear: 18,
-  helmet: 10, hat: 10, armor: 16, coat: 12,
-};
 
 function appendWorkLog(entry) {
   const f = path.join(ROOT, 'capture', 'work-log.jsonl');
@@ -285,6 +291,7 @@ async function stepSplit() {
   const heroes = await setParty(plan.grinders);
   await tendWorkers(heroes);
   // 練功隊出發前先補滿——這時隊伍裡只剩他們，不會吵到挖礦與鍛造的人
+  await ensureCrewIdle();
   const crew = heroes.filter((h) => plan.grinders.includes(h.id));
   if (crew.some((h) => h.hp < h.fullHp || h.sp < h.fullSp)) {
     try {
@@ -307,6 +314,7 @@ async function stepTravel(info) {
 
   if (info.huntZone !== leg.zoneId) {
     await backToTown();
+    await ensureCrewIdle();
     log(`前往 ${leg.zoneName}`);
     await client.move(leg.zoneId);
     for (let i = 0; i < 40; i++) {
