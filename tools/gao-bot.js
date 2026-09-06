@@ -168,6 +168,8 @@ async function useConsumables(heroes) {
 }
 
 // 增益類補品（戰鬥口糧那種：攻擊力 +10、三十分鐘）。
+// 人下的令：**這種東西只能留著打 BOSS**，練功時一律不准吃。
+// 所以劇本裡的 plan.useBuffs 預設是 false，這支只有打 BOSS 的劇本才會打開。
 // 到期時間記在 state 裡，沒到期就不打擾伺服器——不然每打一場都要多抓一次道具欄。
 async function useBuffs(heroes) {
   if (!plan.useBuffs) return;

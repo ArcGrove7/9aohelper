@@ -22,7 +22,8 @@ module.exports = {
   restUntil: 0.9,
   healUntil: 0.65,
   useItems: true,
-  useBuffs: true,
+  // 增益補品（戰鬥口糧那種）**只能留著打 BOSS**（人下的令）——練功時一律不准吃
+  useBuffs: false,
   restMs: 5 * 60 * 1000,
   restRounds: 5,
 };

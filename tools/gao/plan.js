@@ -38,8 +38,8 @@ module.exports = {
   healUntil: 0.65,
   // 要不要吃補品（補 HP／體力的）
   useItems: true,
-  // 要不要吃增益補品（戰鬥口糧那種）
-  useBuffs: true,
+  // 增益補品（戰鬥口糧那種）**只能留著打 BOSS**（人下的令）——練功時一律不准吃
+  useBuffs: false,
   // 一輪休息多久（毫秒）——最低休息時間是 1 分鐘
   restMs: 5 * 60 * 1000,
   // 一次最多連休幾輪，免得補不上來時卡死在休息
