@@ -13,8 +13,10 @@ module.exports = {
   miningMinutes: 20,
 
   // 鍛造組：英雄 id → 要打的東西
+  //   randomName: 每次隨機取名（遊戲說名稱會影響成品好壞，總之不能空著）
+  //   recipe 'soilWood': 泥土類的加成可以重複疊，但要有木頭類素材才會啟動
   smiths: {
-    537: { type: 'sword', name: '雷霆天降', forgeSlot: 1 },
+    537: { type: 'armor', randomName: true, recipe: 'soilWood', forgeSlot: 1 },
   },
 
   // 練功組：這幾隻留在隊伍裡

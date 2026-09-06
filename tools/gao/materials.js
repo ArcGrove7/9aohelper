@@ -55,6 +55,28 @@ function decay(n) {
   return vb + ((vb - va) / (nb - na)) * (n - nb);
 }
 
+// 泥土類的標籤加成（站上「標籤加成完整數值表」）。
+// 觸發規則寫的是「同素材會重複加成 需要木頭類素材啟動」——所以泥土放幾個就疊幾份，
+// 但整組裡沒有木頭類素材的話一份都不算。
+const SOIL_BONUS = {
+  黑土: { atk: 0.2, def: 0.3, dur: 0.3 },
+  藍黑土: { atk: 0.15, def: 0.25, dur: 0.25 },
+  泥土: { atk: 0.1, def: 0.2, dur: 0.2 },
+  紅土: { atk: 0.1, def: 0.2, dur: 0.05 },
+  沙子: { atk: 0.01, def: 0.01, dur: 0.01 },
+};
+
+function isSoil(name) {
+  return Object.prototype.hasOwnProperty.call(SOIL_BONUS, name);
+}
+
+// 站上沒收錄的素材（楊木、樺木…）用名字兜底：只要能啟動泥土加成就夠，
+// 基礎數值算 0，不會因此被誤選進高分格。
+function isWood(name, meta) {
+  if (meta && meta.tags.includes('木頭')) return true;
+  return /木$/.test(name);
+}
+
 const WEAPONS = new Set(['sword', 'rapier', 'dagger', 'hammer', 'thsword', 'katana', 'axe', 'spear']);
 
 // 武器看攻擊，防具（含盾牌）看防禦
@@ -76,7 +98,7 @@ const FORGE_LIMIT = {
  * @param {number} [limit] 素材上限，不給就用該類型的預設
  * @returns {{ picks: Array<{itemId:number, quantity:number, name:string, value:number}>, total:number, score:number, stat:string }}
  */
-function pickMines(inventory, type, limit) {
+function pickMines(inventory, type, limit, opts = {}) {
   const cap = limit || FORGE_LIMIT[type] || 16;
   const table = loadMaterials();
   const stat = statFor(type);
@@ -92,9 +114,16 @@ function pickMines(inventory, type, limit) {
   }
   if (!cands.length) return { picks: [], total: 0, score: 0, stat };
 
-  // 一格一格加，每次挑「多放這一個能多拿到的加成」最大的那種
-  const counts = new Map();
-  for (let slot = 0; slot < cap; slot++) {
+  if (opts.strategy === 'soilWood') return pickSoilWood(inventory, cands, cap, stat);
+  return assemble(greedy(cands, cap), cands, stat);
+}
+
+// 一格一格加，每次挑「多放這一個能多拿到的加成」最大的那種
+function greedy(cands, cap, preset) {
+  const counts = new Map(preset || []);
+  let used = 0;
+  for (const n of counts.values()) used += n;
+  for (let slot = used; slot < cap; slot++) {
     let best = null;
     let bestGain = 0;
     for (const c of cands) {
@@ -106,7 +135,10 @@ function pickMines(inventory, type, limit) {
     if (!best) break;
     counts.set(best.name, (counts.get(best.name) || 0) + 1);
   }
+  return counts;
+}
 
+function assemble(counts, cands, stat, extra) {
   const picks = [];
   let total = 0;
   let score = 0;
@@ -118,7 +150,60 @@ function pickMines(inventory, type, limit) {
     score += c.value * decay(n);
   }
   picks.sort((a, b) => b.value - a.value);
-  return { picks, total, score: Math.round(score * 100) / 100, stat };
+  return { picks, total, score: Math.round(score * 100) / 100, stat, ...extra };
 }
 
-module.exports = { pickMines, loadMaterials, decay, FORGE_LIMIT, statFor };
+// 泥土＋木頭配方：泥土的加成是百分比又可以重複疊，但沒有木頭類素材就一份都不算。
+// 泥土本身基礎值很低（泥土只有防 2），所以放幾個是個取捨——
+// 逐一試算「放 k 個泥土」，剩下的格子照一般貪心補滿，取
+// 基礎分 ×（1 ＋ 泥土加成）最高的那個 k。
+function pickSoilWood(inventory, cands, cap, stat) {
+  const table = loadMaterials();
+  const byName = new Map(cands.map((c) => [c.name, c]));
+
+  const soils = inventory
+    .filter((m) => m.available > 0 && isSoil(m.name))
+    .map((m) => ({ ...m, bonus: SOIL_BONUS[m.name][stat] || 0 }))
+    .sort((a, b) => b.bonus - a.bonus);
+  const woods = inventory
+    .filter((m) => m.available > 0 && isWood(m.name, table.get(m.name)))
+    .sort((a, b) => ((table.get(b.name) || {})[stat] || 0) - ((table.get(a.name) || {})[stat] || 0));
+
+  if (!soils.length || !woods.length) {
+    // 缺任何一邊，泥土加成就啟動不了，退回一般貪心
+    return assemble(greedy(cands, cap), cands, stat, { note: '沒有泥土或木頭，用一般配方' });
+  }
+
+  const soilStock = soils.reduce((n, s) => n + s.available, 0);
+  const wood = woods[0];
+  let best = null;
+
+  for (let k = 0; k <= Math.min(soilStock, cap - 1); k++) {
+    const preset = new Map();
+    let bonus = 0;
+    let left = k;
+    // 加成高的泥土先放滿
+    for (const s of soils) {
+      if (left <= 0) break;
+      const take = Math.min(s.available, left);
+      preset.set(s.name, take);
+      bonus += s.bonus * take;
+      left -= take;
+      if (!byName.has(s.name)) byName.set(s.name, { id: s.id, name: s.name, available: s.available, value: (table.get(s.name) || {})[stat] || 0 });
+    }
+    // 一個木頭就夠啟動
+    preset.set(wood.name, (preset.get(wood.name) || 0) + 1);
+    if (!byName.has(wood.name)) byName.set(wood.name, { id: wood.id, name: wood.name, available: wood.available, value: (table.get(wood.name) || {})[stat] || 0 });
+
+    const pool = [...byName.values()];
+    const counts = greedy(pool, cap, preset);
+    const r = assemble(counts, pool, stat);
+    const effective = r.score * (1 + bonus);
+    if (!best || effective > best.effective) {
+      best = { ...r, soilCount: k, soilBonus: Math.round(bonus * 100), effective: Math.round(effective * 100) / 100 };
+    }
+  }
+  return best;
+}
+
+module.exports = { pickMines, loadMaterials, decay, FORGE_LIMIT, statFor, SOIL_BONUS, isSoil, isWood };

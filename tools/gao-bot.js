@@ -12,6 +12,7 @@ const path = require('path');
 const { Client, ApiError, ActionState, sleep } = require('./gao/api.js');
 const { ReportStore } = require('./gao/capture.js');
 const { pickMines, FORGE_LIMIT } = require('./gao/materials.js');
+const { randomEquipmentName } = require('./gao/names.js');
 
 const args = parseArgs(process.argv.slice(2));
 const ROOT = path.resolve(__dirname, '..');
@@ -219,20 +220,22 @@ async function startForge(hero, smith) {
   const mines = (inv.mines || []).filter((m) => m.available > 0);
   if (!mines.length) { log(`${hero.name} 沒有素材可鍛造`); return; }
 
-  const recipe = pickMines(mines, smith.type, FORGE_LIMIT[smith.type]);
+  const recipe = pickMines(mines, smith.type, FORGE_LIMIT[smith.type], { strategy: smith.recipe });
   if (!recipe.total) { log(`${hero.name} 庫存裡沒有對 ${smith.type} 有加成的素材`); return; }
 
+  const name = smith.randomName ? randomEquipmentName(smith.type) : smith.name;
   const body = {
     heroId: hero.id,
     target: smith.forgeSlot || 1,
-    name: smith.name,
+    name,
     type: smith.type,
     selectedMines: recipe.picks.map((p) => ({ itemId: p.itemId, quantity: p.quantity })),
   };
   await client.forge(body);
   const detail = recipe.picks.map((p) => `${p.name}×${p.quantity}`).join('、');
-  log(`${hero.name} 開始鍛造「${smith.name}」（${smith.type}，${recipe.total} 份：${detail}）`);
-  appendWorkLog({ kind: 'forge-start', hero: hero.name, recipe, body });
+  const bonus = recipe.soilCount ? `，泥土加成 +${recipe.soilBonus}%` : '';
+  log(`${hero.name} 開始鍛造「${name}」（${smith.type}，${recipe.total} 份${bonus}：${detail}）`);
+  appendWorkLog({ kind: 'forge-start', hero: hero.name, name, recipe, body });
 }
 
 function appendWorkLog(entry) {

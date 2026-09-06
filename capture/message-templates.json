@@ -1,13 +1,13 @@
 {
- "generatedAt": "2026-09-06T05:48:55.764Z",
- "reportCount": 166,
- "templateCount": 137,
+ "generatedAt": "2026-09-06T05:52:08.064Z",
+ "reportCount": 191,
+ "templateCount": 141,
  "templates": [
   {
    "template": "{我方}還剩下 {n} 點生命值",
-   "count": 533,
+   "count": 608,
    "styles": {
-    "info": 533
+    "info": 608
    },
    "crucial": 0,
    "damaged": {},
@@ -15,21 +15,21 @@
   },
   {
    "template": "{我方}攻擊{敵方}，造成 {n} 傷害",
-   "count": 425,
+   "count": 473,
    "styles": {
-    "default": 425
+    "default": 473
    },
-   "crucial": 324,
+   "crucial": 372,
    "damaged": {
-    "b": 425
+    "b": 473
    },
    "sample": "體育老師攻擊小白兔1，造成 110 傷害"
   },
   {
    "template": "{敵方}被擊殺死亡了",
-   "count": 370,
+   "count": 422,
    "styles": {
-    "critical": 370
+    "critical": 422
    },
    "crucial": 0,
    "damaged": {},
@@ -37,9 +37,9 @@
   },
   {
    "template": "每位英雄獲得了 {n} 點經驗值",
-   "count": 165,
+   "count": 190,
    "styles": {
-    "exp": 165
+    "exp": 190
    },
    "crucial": 0,
    "damaged": {},
@@ -47,15 +47,25 @@
   },
   {
    "template": "{敵方}攻擊{我方}，造成 {n} 傷害",
-   "count": 85,
+   "count": 87,
    "styles": {
-    "default": 85
+    "default": 87
    },
    "crucial": 0,
    "damaged": {
-    "a": 85
+    "a": 87
    },
    "sample": "小白兔2攻擊黑色獠牙，造成 22 傷害"
+  },
+  {
+   "template": "獲得了兔皮",
+   "count": 62,
+   "styles": {
+    "info": 62
+   },
+   "crucial": 0,
+   "damaged": {},
+   "sample": "獲得了兔皮"
   },
   {
    "template": "{我方}開始有點喘",
@@ -68,6 +78,18 @@
    "sample": "大火慢炒開始有點喘"
   },
   {
+   "template": "{我方}攻擊{敵方}，命中要害，造成 {n} 傷害",
+   "count": 59,
+   "styles": {
+    "strong": 59
+   },
+   "crucial": 49,
+   "damaged": {
+    "b": 59
+   },
+   "sample": "黑色獠牙攻擊小黑兔，命中要害，造成 195 傷害"
+  },
+  {
    "template": "{我方}對{敵方}使出了搖尾巴，暫時降低了{敵方}的防禦力",
    "count": 53,
    "styles": {
@@ -78,26 +100,14 @@
    "sample": "黑色獠牙對小白兔1使出了搖尾巴，暫時降低了小白兔1的防禦力"
   },
   {
-   "template": "獲得了兔皮",
+   "template": "獲得了兔肉",
    "count": 53,
    "styles": {
     "info": 53
    },
    "crucial": 0,
    "damaged": {},
-   "sample": "獲得了兔皮"
-  },
-  {
-   "template": "{我方}攻擊{敵方}，命中要害，造成 {n} 傷害",
-   "count": 52,
-   "styles": {
-    "strong": 52
-   },
-   "crucial": 42,
-   "damaged": {
-    "b": 52
-   },
-   "sample": "黑色獠牙攻擊小黑兔，命中要害，造成 195 傷害"
+   "sample": "獲得了兔肉"
   },
   {
    "template": "{我方}對{敵方}使出咬咬，造成 {n} 傷害",
@@ -112,20 +122,10 @@
    "sample": "黑色獠牙對小白兔使出咬咬，造成 391 傷害"
   },
   {
-   "template": "獲得了兔肉",
+   "template": "{敵方}攻擊{我方}，但是沒有造成任何傷害",
    "count": 42,
    "styles": {
-    "info": 42
-   },
-   "crucial": 0,
-   "damaged": {},
-   "sample": "獲得了兔肉"
-  },
-  {
-   "template": "{敵方}攻擊{我方}，但是沒有造成任何傷害",
-   "count": 40,
-   "styles": {
-    "sub": 40
+    "sub": 42
    },
    "crucial": 0,
    "damaged": {},
@@ -133,9 +133,9 @@
   },
   {
    "template": "獲得了兔肉 × {n}",
-   "count": 32,
+   "count": 36,
    "styles": {
-    "info": 32
+    "info": 36
    },
    "crucial": 0,
    "damaged": {},
@@ -143,51 +143,51 @@
   },
   {
    "template": "{我方} {n} 連擊，對{敵方}造成 {n} 傷害",
-   "count": 31,
+   "count": 34,
    "styles": {
-    "default": 31
+    "default": 34
    },
-   "crucial": 17,
+   "crucial": 20,
    "damaged": {
-    "b": 31
+    "b": 34
    },
    "sample": "體育老師 2 連擊，對小黑兔造成 114 傷害"
   },
   {
    "template": "獲得了兔皮 × {n}",
-   "count": 29,
+   "count": 34,
    "styles": {
-    "info": 29
+    "info": 34
    },
    "crucial": 0,
    "damaged": {},
    "sample": "獲得了兔皮 × 2"
   },
   {
-   "template": "{敵方}朝{我方}發動攻擊，但是被閃開了",
-   "count": 24,
-   "styles": {
-    "sub": 24
-   },
-   "crucial": 0,
-   "damaged": {},
-   "sample": "小黑兔朝黑色獠牙發動攻擊，但是被閃開了"
-  },
-  {
    "template": "獲得了黑兔皮",
-   "count": 23,
+   "count": 27,
    "styles": {
-    "info": 23
+    "info": 27
    },
    "crucial": 0,
    "damaged": {},
    "sample": "獲得了黑兔皮"
   },
   {
-   "template": "{我方}朝{敵方}發動攻擊，但是被閃開了",
-   "count": 21,
+   "template": "{敵方}朝{我方}發動攻擊，但是被閃開了",
+   "count": 25,
    "styles": {
-    "sub": 21
+    "sub": 25
+   },
+   "crucial": 0,
+   "damaged": {},
+   "sample": "小黑兔朝黑色獠牙發動攻擊，但是被閃開了"
+  },
+  {
+   "template": "{我方}朝{敵方}發動攻擊，但是被閃開了",
+   "count": 23,
+   "styles": {
+    "sub": 23
    },
    "crucial": 0,
    "damaged": {},
@@ -195,22 +195,22 @@
   },
   {
    "template": "{敵方}朝{我方}發動攻擊，{我方}上前保護受到 {n} 傷害",
-   "count": 21,
+   "count": 22,
    "styles": {
     "sub": 13,
-    "default": 8
+    "default": 9
    },
    "crucial": 0,
    "damaged": {
-    "a": 8
+    "a": 9
    },
    "sample": "小白兔3朝黑色獠牙發動攻擊，讓黑人再次偉大上前保護受到 0 傷害"
   },
   {
    "template": "{我方}朝{敵方}發動攻擊，但是被格擋了",
-   "count": 20,
+   "count": 21,
    "styles": {
-    "sub": 20
+    "sub": 21
    },
    "crucial": 0,
    "damaged": {},
@@ -228,9 +228,9 @@
   },
   {
    "template": "{敵方}朝{我方}發動攻擊，但是被格擋了",
-   "count": 15,
+   "count": 16,
    "styles": {
-    "sub": 15
+    "sub": 16
    },
    "crucial": 0,
    "damaged": {},
@@ -303,6 +303,18 @@
     "b": 7
    },
    "sample": "黑色獠牙 2 連擊，命中要害，對小黑兔造成 232 傷害"
+  },
+  {
+   "template": "{敵方}踢到石頭摔倒受到 {n} 點傷害",
+   "count": 6,
+   "styles": {
+    "lucky": 6
+   },
+   "crucial": 3,
+   "damaged": {
+    "b": 6
+   },
+   "sample": "小白兔2踢到石頭摔倒受到 66 點傷害"
   },
   {
    "template": "{敵方}右腳滑了一下被{我方}趁勢攻擊受到 {n} 點傷害",
@@ -385,16 +397,16 @@
    "sample": "小黑兔左腳踩到釘子受到 111 點傷害"
   },
   {
-   "template": "{敵方}踢到石頭摔倒受到 {n} 點傷害",
+   "template": "{我方}隨意一擊不小心命中{敵方}，造成 {n} 點傷害",
    "count": 5,
    "styles": {
     "lucky": 5
    },
-   "crucial": 2,
+   "crucial": 4,
    "damaged": {
     "b": 5
    },
-   "sample": "小白兔2踢到石頭摔倒受到 66 點傷害"
+   "sample": "讓黑人再次偉大隨意一擊不小心命中小白兔2，造成 192 點傷害"
   },
   {
    "template": "突然傳來打雷聲嚇到{敵方}，{我方}趁勢攻擊造成 {n} 點傷害",
@@ -433,6 +445,40 @@
    "sample": "小黑兔踩到坑洞重心不穩被體育老師趁勢攻擊受到 104 點傷害"
   },
   {
+   "template": "{敵方}踩到坑洞扭傷右腳受到 {n} 點傷害",
+   "count": 5,
+   "styles": {
+    "lucky": 5
+   },
+   "crucial": 2,
+   "damaged": {
+    "b": 5
+   },
+   "sample": "小白兔1踩到坑洞扭傷右腳受到 63 點傷害"
+  },
+  {
+   "template": "{敵方}滑倒自摔受到 {n} 點傷害",
+   "count": 5,
+   "styles": {
+    "lucky": 5
+   },
+   "crucial": 2,
+   "damaged": {
+    "b": 5
+   },
+   "sample": "小黑兔2滑倒自摔受到 48 點傷害"
+  },
+  {
+   "template": "{敵方}朝{我方}發動攻擊，{我方}上前格擋住了攻擊",
+   "count": 5,
+   "styles": {
+    "sub": 5
+   },
+   "crucial": 0,
+   "damaged": {},
+   "sample": "小黑兔朝體育老師發動攻擊，大火慢炒上前格擋住了攻擊"
+  },
+  {
    "template": "{敵方}踩到坑洞扭傷左腳受到 {n} 點傷害",
    "count": 5,
    "styles": {
@@ -455,18 +501,6 @@
     "b": 4
    },
    "sample": "小黑兔踩到水坑嚇到被大火慢炒趁機攻擊受到 134 點傷害"
-  },
-  {
-   "template": "{我方}隨意一擊不小心命中{敵方}，造成 {n} 點傷害",
-   "count": 4,
-   "styles": {
-    "lucky": 4
-   },
-   "crucial": 3,
-   "damaged": {
-    "b": 4
-   },
-   "sample": "讓黑人再次偉大隨意一擊不小心命中小白兔2，造成 192 點傷害"
   },
   {
    "template": "{敵方}左腳滑了一下被{我方}趁勢攻擊受到 {n} 點傷害",
@@ -539,40 +573,6 @@
     "b": 4
    },
    "sample": "一顆棒球飛來擊中小黑兔的臉造成 33 點傷害"
-  },
-  {
-   "template": "{敵方}踩到坑洞扭傷右腳受到 {n} 點傷害",
-   "count": 4,
-   "styles": {
-    "lucky": 4
-   },
-   "crucial": 1,
-   "damaged": {
-    "b": 4
-   },
-   "sample": "小白兔1踩到坑洞扭傷右腳受到 63 點傷害"
-  },
-  {
-   "template": "{敵方}滑倒自摔受到 {n} 點傷害",
-   "count": 4,
-   "styles": {
-    "lucky": 4
-   },
-   "crucial": 1,
-   "damaged": {
-    "b": 4
-   },
-   "sample": "小黑兔2滑倒自摔受到 48 點傷害"
-  },
-  {
-   "template": "{敵方}朝{我方}發動攻擊，{我方}上前格擋住了攻擊",
-   "count": 4,
-   "styles": {
-    "sub": 4
-   },
-   "crucial": 0,
-   "damaged": {},
-   "sample": "小黑兔朝體育老師發動攻擊，大火慢炒上前格擋住了攻擊"
   },
   {
    "template": "獲得了狗眼",
@@ -801,6 +801,18 @@
    "sample": "一輛公車急駛而來撞飛小白兔4，造成 630 點傷害"
   },
   {
+   "template": "一隻蟲子飛進{敵方}的左眼，{我方}趁勢攻擊造成 {n} 點傷害",
+   "count": 2,
+   "styles": {
+    "lucky": 2
+   },
+   "crucial": 2,
+   "damaged": {
+    "b": 2
+   },
+   "sample": "一隻蟲子飛進小白兔3的左眼，大火慢炒趁勢攻擊造成 122 點傷害"
+  },
+  {
    "template": "{敵方}使出了影分身，提高了自身的迴避率",
    "count": 2,
    "styles": {
@@ -924,6 +936,50 @@
    "sample": "野狗2朝大火慢炒發動攻擊，但是因為右眼飛進砂子沒有打中"
   },
   {
+   "template": "{我方}朝{敵方}發動攻擊，但是因為爆ping沒有打中",
+   "count": 2,
+   "styles": {
+    "sub": 2
+   },
+   "crucial": 0,
+   "damaged": {},
+   "sample": "黑色獠牙朝野狗2發動攻擊，但是因為爆ping沒有打中"
+  },
+  {
+   "template": "{我方}左小腿抽筋，被{敵方}攻擊造成 {n} 點傷害",
+   "count": 2,
+   "styles": {
+    "lucky": 2
+   },
+   "crucial": 0,
+   "damaged": {
+    "a": 2
+   },
+   "sample": "黑色獠牙左小腿抽筋，被小黑兔攻擊造成 23 點傷害"
+  },
+  {
+   "template": "一隻巨大山豬衝過來猛撞{敵方}，造成 {n} 點傷害",
+   "count": 2,
+   "styles": {
+    "lucky": 2
+   },
+   "crucial": 2,
+   "damaged": {
+    "b": 2
+   },
+   "sample": "一隻巨大山豬衝過來猛撞小白兔2，造成 64 點傷害"
+  },
+  {
+   "template": "{我方}朝{敵方}發動攻擊，但是因為左眼飛進砂子沒有打中",
+   "count": 2,
+   "styles": {
+    "sub": 2
+   },
+   "crucial": 0,
+   "damaged": {},
+   "sample": "黑色獠牙朝嫩寶發動攻擊，但是因為左眼飛進砂子沒有打中"
+  },
+  {
    "template": "{我方}被鳥屎擊中分心，{敵方}發起攻擊造成 {n} 點傷害",
    "count": 2,
    "styles": {
@@ -956,6 +1012,40 @@
    "crucial": 0,
    "damaged": {},
    "sample": "體育老師朝小白兔1發動攻擊，但是因為有隻蟲飛到臉上而沒有打中"
+  },
+  {
+   "template": "獲得了S級兔皮",
+   "count": 2,
+   "styles": {
+    "info": 2
+   },
+   "crucial": 0,
+   "damaged": {},
+   "sample": "獲得了S級兔皮"
+  },
+  {
+   "template": "{我方}對{敵方}使出撞擊，造成 {n} 傷害",
+   "count": 2,
+   "styles": {
+    "skill": 2
+   },
+   "crucial": 2,
+   "damaged": {
+    "b": 2
+   },
+   "sample": "獨角獸對小白兔1使出撞擊，造成 226 傷害"
+  },
+  {
+   "template": "{我方}對{敵方}使出斜斬，造成 {n} 傷害",
+   "count": 2,
+   "styles": {
+    "skill": 2
+   },
+   "crucial": 2,
+   "damaged": {
+    "b": 2
+   },
+   "sample": "雷霆天降對小黑兔2使出斜斬，造成 496 傷害"
   },
   {
    "template": "{我方}對{敵方}使出抓擊，但是因為左眼飛進砂子沒有打中",
@@ -1042,18 +1132,6 @@
    "crucial": 0,
    "damaged": {},
    "sample": "體育老師朝小白兔1發動攻擊，但是因為踩到一灘油腳滑沒有打中"
-  },
-  {
-   "template": "一隻蟲子飛進{敵方}的左眼，{我方}趁勢攻擊造成 {n} 點傷害",
-   "count": 1,
-   "styles": {
-    "lucky": 1
-   },
-   "crucial": 1,
-   "damaged": {
-    "b": 1
-   },
-   "sample": "一隻蟲子飛進小白兔3的左眼，大火慢炒趁勢攻擊造成 122 點傷害"
   },
   {
    "template": "一顆棒球飛來砸中{敵方}的要害，造成 {n} 點傷害",
@@ -1308,16 +1386,6 @@
    "sample": "野狗1對黑色獠牙使出了叫聲，暫時降低了黑色獠牙的攻擊力"
   },
   {
-   "template": "{我方}朝{敵方}發動攻擊，但是因為爆ping沒有打中",
-   "count": 1,
-   "styles": {
-    "sub": 1
-   },
-   "crucial": 0,
-   "damaged": {},
-   "sample": "黑色獠牙朝野狗2發動攻擊，但是因為爆ping沒有打中"
-  },
-  {
    "template": "獲得了高級兔肉",
    "count": 1,
    "styles": {
@@ -1390,30 +1458,6 @@
    "sample": "體育老師 2 連擊，但是被小黑兔格擋了"
   },
   {
-   "template": "{我方}左小腿抽筋，被{敵方}攻擊造成 {n} 點傷害",
-   "count": 1,
-   "styles": {
-    "lucky": 1
-   },
-   "crucial": 0,
-   "damaged": {
-    "a": 1
-   },
-   "sample": "黑色獠牙左小腿抽筋，被小黑兔攻擊造成 23 點傷害"
-  },
-  {
-   "template": "一隻巨大山豬衝過來猛撞{敵方}，造成 {n} 點傷害",
-   "count": 1,
-   "styles": {
-    "lucky": 1
-   },
-   "crucial": 1,
-   "damaged": {
-    "b": 1
-   },
-   "sample": "一隻巨大山豬衝過來猛撞小白兔2，造成 64 點傷害"
-  },
-  {
    "template": "{我方}踩到水坑嚇到被{敵方}趁機攻擊受到 {n} 點傷害",
    "count": 1,
    "styles": {
@@ -1424,16 +1468,6 @@
     "a": 1
    },
    "sample": "體育老師踩到水坑嚇到被小白兔趁機攻擊受到 17 點傷害"
-  },
-  {
-   "template": "{我方}朝{敵方}發動攻擊，但是因為左眼飛進砂子沒有打中",
-   "count": 1,
-   "styles": {
-    "sub": 1
-   },
-   "crucial": 0,
-   "damaged": {},
-   "sample": "黑色獠牙朝嫩寶發動攻擊，但是因為左眼飛進砂子沒有打中"
   },
   {
    "template": "{我方}朝{敵方}發動攻擊，但是被鳥屎滴到分心而沒有打中",
@@ -1522,6 +1556,18 @@
    "crucial": 0,
    "damaged": {},
    "sample": "小白兔1 2 連擊，但是被體育老師閃開了"
+  },
+  {
+   "template": "{我方}對{敵方}使出斜斬，命中要害，造成 {n} 傷害",
+   "count": 1,
+   "styles": {
+    "skill": 1
+   },
+   "crucial": 1,
+   "damaged": {
+    "b": 1
+   },
+   "sample": "雷霆天降對小黑兔使出斜斬，命中要害，造成 558 傷害"
   }
  ]
 }
