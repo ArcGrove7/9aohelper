@@ -31,6 +31,9 @@
     node tools/gao-bot.js --token-file <放 token 的檔> --label <帳號代號> \
       [--plan tools/gao/plan-<誰>.js] --minutes 60                  # 照劇本操作帳號並持續蒐戰報
     node tools/gao-sync-capture.js                                  # 把 bot 的工作檔併進這個目錄（去重、按時間排序）
+    node tools/gao-transfer.js --from <A的token> --from-label <A> \
+      --to <B的token> --to-label <B> --kind mines|equipments \
+      [--exclude 泥土] [--top 3]                                    # 兩個帳號之間搬東西（走市場）
     node tools/build-bestiary.js                                    # 重建敵人／地點彙整
     node tools/build-messages.js                                    # 重建戰報文本模板
     node tools/build-forge-log.js                                   # 重建鍛造配方對照
