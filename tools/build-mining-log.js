@@ -13,6 +13,12 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
+
+// 時間一律用台灣時間（UTC+8）——人下的令
+function twStamp(iso) {
+  return new Date(new Date(iso).getTime() + 8 * 3600 * 1000)
+    .toISOString().replace('T', ' ').slice(0, 19) + ' (UTC+8)';
+}
 const IN = path.join(ROOT, 'capture', 'work-log.jsonl');
 const OUT_JSON = path.join(ROOT, 'capture', 'mining-log.json');
 const OUT_MD = path.join(ROOT, 'capture', 'mining-log.md');
@@ -87,7 +93,7 @@ function main() {
 
   const md = ['# 礦區產出', '',
     `由 \`tools/build-mining-log.js\` 從 ${rows.length} 趟挖礦生成，請勿手改。`,
-    `生成時間：${json.generatedAt}`, '',
+    `生成時間：${twStamp(json.generatedAt)}`, '',
     '同一個礦區每趟挖到的品類差很多——不是固定產表，要看的是「這個礦區出現過什麼」，',
     '而不是「這個礦區只出這些」。趟數越多越準。', '',
     '收穫看的是消耗的體力，時間拉長是跳級的：三分鐘那趟「什麼也沒挖到」，', 

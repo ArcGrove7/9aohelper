@@ -38,8 +38,13 @@ let lastTend = 0;
 function lastTendReset() { lastTend = 0; }
 let state = readJson(PHASE_FILE) || { phase: 'probe', routeIdx: 0, deaths: 0, hunts: 0 };
 
+// 時間一律用台灣時間（UTC+8）顯示——人下的令，看日誌不必再心算時差
+function twNow() {
+  return new Date(Date.now() + 8 * 3600 * 1000).toISOString().replace('T', ' ').slice(0, 19);
+}
+
 function log(...a) {
-  const t = new Date().toISOString().slice(11, 19);
+  const t = twNow().slice(11);
   console.log(`[${t}] [${LABEL}/${state.phase}] ${a.join(' ')}`);
 }
 function saveState() { fs.writeFileSync(PHASE_FILE, JSON.stringify(state, null, 1)); }

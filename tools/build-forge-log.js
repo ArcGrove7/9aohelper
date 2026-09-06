@@ -13,6 +13,12 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
+
+// 時間一律用台灣時間（UTC+8）——人下的令
+function twStamp(iso) {
+  return new Date(new Date(iso).getTime() + 8 * 3600 * 1000)
+    .toISOString().replace('T', ' ').slice(0, 19) + ' (UTC+8)';
+}
 const IN = path.join(ROOT, 'capture', 'work-log.jsonl');
 const OUT_JSON = path.join(ROOT, 'capture', 'forge-log.json');
 const OUT_MD = path.join(ROOT, 'capture', 'forge-log.md');
@@ -56,7 +62,7 @@ function main() {
 
   const md = ['# 鍛造配方對照', '',
     `由 \`tools/build-forge-log.js\` 從 ${entries.length} 爐的紀錄生成，請勿手改。`,
-    `生成時間：${json.generatedAt}`, '',
+    `生成時間：${twStamp(json.generatedAt)}`, '',
     '站上有素材數值與標籤加成規則，但沒有「這樣配會打出什麼」。這張表補的就是這一段：',
     '每一列是一爐實際的鍛造，左邊放了什麼、右邊出來什麼。',
     '同樣的配方每次結果仍有落差（品質有隨機成分），所以要看的是趨勢不是單筆。', ''];

@@ -16,6 +16,12 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
+
+// 時間一律用台灣時間（UTC+8）——人下的令
+function twStamp(iso) {
+  return new Date(new Date(iso).getTime() + 8 * 3600 * 1000)
+    .toISOString().replace('T', ' ').slice(0, 19) + ' (UTC+8)';
+}
 // 狩獵與 PvP 的訊息共用同一套文本，所以三種戰報一起吃。
 // PvP 的 a／b 兩邊都是玩家英雄，模板化成 {我方}／{敵方} 之後語意一樣通順。
 const INPUTS = ['hunt-reports.jsonl', 'attack-reports.jsonl', 'defend-reports.jsonl']
@@ -99,7 +105,7 @@ function main() {
 
   const md = ['# 戰報文本模板', '',
     `由 \`tools/build-messages.js\` 從 ${reports.length} 份戰報（狩獵＋對戰）生成，請勿手改。`,
-    `生成時間：${json.generatedAt}`, '',
+    `生成時間：${twStamp(json.generatedAt)}`, '',
     `共 ${json.templateCount} 種模板。角色名換成 \`{我方}\`／\`{敵方}\`，數字換成 \`{n}\`。`,
     '分組依據是遊戲自己給訊息標的顏色類別。', ''];
   const order = ['skill', 'lucky', 'strong', 'critical', 'state', 'heal', 'sub', 'info', 'exp', 'subInfo', 'default'];

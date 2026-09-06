@@ -16,6 +16,12 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
+
+// 時間一律用台灣時間（UTC+8）——人下的令
+function twStamp(iso) {
+  return new Date(new Date(iso).getTime() + 8 * 3600 * 1000)
+    .toISOString().replace('T', ' ').slice(0, 19) + ' (UTC+8)';
+}
 const IN = path.join(ROOT, 'capture', 'hunt-reports.jsonl');
 const OUT_JSON = path.join(ROOT, 'capture', 'bestiary.json');
 const OUT_MD = path.join(ROOT, 'capture', 'bestiary.md');
@@ -166,7 +172,7 @@ function main() {
   md.push('# 敵人觀測彙整');
   md.push('');
   md.push(`由 \`tools/build-bestiary.js\` 從 ${reports.length} 份狩獵戰報生成，請勿手改。`);
-  md.push(`生成時間：${json.generatedAt}`);
+  md.push(`生成時間：${twStamp(json.generatedAt)}`);
   md.push('');
   md.push('數值是**觀測區間**，不是設定值——同一隻怪每次出現的 HP／體力都不一樣，');
   md.push('這裡記的是目前看過的最小到最大。掉落記在「出沒地點」那一節：');
