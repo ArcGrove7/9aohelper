@@ -1,6 +1,6 @@
 {
- "generatedAt": "2026-09-06T08:07:58.895Z",
- "count": 4,
+ "generatedAt": "2026-09-06T08:16:05.962Z",
+ "count": 5,
  "entries": [
   {
    "time": "2026-09-06T07:22:43.388Z",
@@ -220,6 +220,64 @@
     {
      "name": "楊木",
      "quantity": 4,
+     "value": 0
+    }
+   ]
+  },
+  {
+   "time": "2026-09-06T08:15:56.300Z",
+   "smith": "大火慢炒",
+   "equipType": "armor",
+   "quality": "史詩",
+   "product": {
+    "name": "青苔守鎧",
+    "quality": "史詩",
+    "type": "盔甲",
+    "atk": 66,
+    "def": 679,
+    "int": 16,
+    "lck": 28,
+    "wgt": 291,
+    "dur": 321,
+    "slots": 10
+   },
+   "soilCount": 3,
+   "woodCount": 6,
+   "total": 16,
+   "mines": [
+    {
+     "name": "石頭",
+     "quantity": 2,
+     "value": 6
+    },
+    {
+     "name": "S級兔皮",
+     "quantity": 2,
+     "value": 6
+    },
+    {
+     "name": "嫩寶殼",
+     "quantity": 2,
+     "value": 6
+    },
+    {
+     "name": "杉木",
+     "quantity": 3,
+     "value": 4.6
+    },
+    {
+     "name": "兔皮",
+     "quantity": 1,
+     "value": 3.3
+    },
+    {
+     "name": "泥土",
+     "quantity": 3,
+     "value": 2
+    },
+    {
+     "name": "楊木",
+     "quantity": 3,
      "value": 0
     }
    ]
