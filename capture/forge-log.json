@@ -1,6 +1,6 @@
 {
- "generatedAt": "2026-09-06T07:38:34.183Z",
- "count": 1,
+ "generatedAt": "2026-09-06T08:07:58.895Z",
+ "count": 4,
  "entries": [
   {
    "time": "2026-09-06T07:22:43.388Z",
@@ -46,6 +46,180 @@
     {
      "name": "楊木",
      "quantity": 6,
+     "value": 0
+    }
+   ]
+  },
+  {
+   "time": "2026-09-06T07:40:18.405Z",
+   "smith": "大火慢炒",
+   "equipType": "armor",
+   "quality": "劣質",
+   "product": {
+    "name": "長夜禦護體",
+    "quality": "劣質",
+    "type": "盔甲",
+    "atk": 44,
+    "def": 288,
+    "int": 5,
+    "lck": 9,
+    "wgt": 407,
+    "dur": 229,
+    "slots": 6
+   },
+   "soilCount": 2,
+   "woodCount": 4,
+   "total": 16,
+   "mines": [
+    {
+     "name": "鐵",
+     "quantity": 1,
+     "value": 6.5
+    },
+    {
+     "name": "石頭",
+     "quantity": 1,
+     "value": 6
+    },
+    {
+     "name": "S級兔皮",
+     "quantity": 1,
+     "value": 6
+    },
+    {
+     "name": "嫩寶殼",
+     "quantity": 2,
+     "value": 6
+    },
+    {
+     "name": "鉛",
+     "quantity": 2,
+     "value": 3.75
+    },
+    {
+     "name": "兔皮",
+     "quantity": 2,
+     "value": 3.3
+    },
+    {
+     "name": "黑兔皮",
+     "quantity": 1,
+     "value": 2.6
+    },
+    {
+     "name": "泥土",
+     "quantity": 2,
+     "value": 2
+    },
+    {
+     "name": "楊木",
+     "quantity": 4,
+     "value": 0
+    }
+   ]
+  },
+  {
+   "time": "2026-09-06T07:47:44.554Z",
+   "smith": "大火慢炒",
+   "equipType": "armor",
+   "quality": "破爛",
+   "product": {
+    "name": "流雲禦戰甲",
+    "quality": "破爛",
+    "type": "盔甲",
+    "atk": 27,
+    "def": 142,
+    "int": 1,
+    "lck": 5,
+    "wgt": 381,
+    "dur": 281,
+    "slots": 5
+   },
+   "soilCount": 2,
+   "woodCount": 4,
+   "total": 16,
+   "mines": [
+    {
+     "name": "S級兔皮",
+     "quantity": 1,
+     "value": 6
+    },
+    {
+     "name": "嫩寶殼",
+     "quantity": 4,
+     "value": 6
+    },
+    {
+     "name": "鉛",
+     "quantity": 1,
+     "value": 3.75
+    },
+    {
+     "name": "兔皮",
+     "quantity": 2,
+     "value": 3.3
+    },
+    {
+     "name": "黑兔皮",
+     "quantity": 2,
+     "value": 2.6
+    },
+    {
+     "name": "泥土",
+     "quantity": 2,
+     "value": 2
+    },
+    {
+     "name": "楊木",
+     "quantity": 4,
+     "value": 0
+    }
+   ]
+  },
+  {
+   "time": "2026-09-06T07:55:55.837Z",
+   "smith": "大火慢炒",
+   "equipType": "armor",
+   "quality": "次等",
+   "product": {
+    "name": "白晝守重甲",
+    "quality": "次等",
+    "type": "盔甲",
+    "atk": 19,
+    "def": 187,
+    "int": 3,
+    "lck": 6,
+    "wgt": 235,
+    "dur": 137,
+    "slots": 5
+   },
+   "soilCount": 2,
+   "woodCount": 4,
+   "total": 16,
+   "mines": [
+    {
+     "name": "嫩寶殼",
+     "quantity": 6,
+     "value": 6
+    },
+    {
+     "name": "兔皮",
+     "quantity": 2,
+     "value": 3.3
+    },
+    {
+     "name": "黑兔皮",
+     "quantity": 2,
+     "value": 2.6
+    },
+    {
+     "name": "泥土",
+     "quantity": 2,
+     "value": 2
+    },
+    {
+     "name": "楊木",
+     "quantity": 4,
      "value": 0
     }
    ]

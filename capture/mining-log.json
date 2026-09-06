@@ -1,6 +1,6 @@
 {
- "generatedAt": "2026-09-06T07:38:34.213Z",
- "runs": 5,
+ "generatedAt": "2026-09-06T08:07:58.934Z",
+ "runs": 6,
  "zones": [
   {
    "target": 1,
@@ -41,10 +41,10 @@
    "target": 2,
    "name": "森林區",
    "desc": "有各式各樣的樹木和肥沃的土壤，獲取木材的最佳地點",
-   "runs": 4,
+   "runs": 5,
    "emptyRuns": 1,
    "spPerRun": {
-    "avg": 16.5,
+    "avg": 18.2,
     "min": 2,
     "max": 27
    },
@@ -53,9 +53,17 @@
      "total": 20,
      "seenInRuns": 1
     },
+    "泥土": {
+     "total": 19,
+     "seenInRuns": 3
+    },
     "礫石": {
      "total": 14,
      "seenInRuns": 1
+    },
+    "杉木": {
+     "total": 13,
+     "seenInRuns": 3
     },
     "楊木": {
      "total": 11,
@@ -64,14 +72,6 @@
     "砂石": {
      "total": 11,
      "seenInRuns": 1
-    },
-    "杉木": {
-     "total": 10,
-     "seenInRuns": 2
-    },
-    "泥土": {
-     "total": 9,
-     "seenInRuns": 2
     },
     "樺木": {
      "total": 7,
