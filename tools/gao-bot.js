@@ -115,6 +115,93 @@ async function reviveAndRest() {
   return null;
 }
 
+// 吃補品。人下的令是「戰鬥人員 HP 與體力都不准低於五成」——
+// 補品比休息快，先吃；庫存有限所以只補到 plan.healUntil 就收手，剩下交給休息。
+// 一次 use 可以帶 quantity，所以一個英雄一次請求就補完。
+async function useConsumables(heroes) {
+  if (!plan.useItems) return heroes;
+  const below = plan.restBelow || 0.5;
+  const upTo = plan.healUntil || 0.65;
+  const crew = heroes.filter((h) => plan.grinders.includes(h.id) && h.hp > 0);
+  const needy = crew.filter((h) => h.hp / (h.fullHp || 1) < below || h.sp / (h.fullSp || 1) < below);
+  if (!needy.length) return heroes;
+
+  let stock;
+  try {
+    stock = (await client.get('/api/items')).items || [];
+  } catch (e) { log('看不到道具欄：', e.message); return heroes; }
+
+  // 只吃補 HP 或體力的，增益類（戰鬥口糧那種）不在這裡處理
+  const potions = stock.filter((i) => i.available > 0 && i.target === 'hero' && ((i.healHp || 0) > 0 || (i.healSp || 0) > 0));
+  if (!potions.length) return heroes;
+
+  for (const h of needy) {
+    for (const stat of ['hp', 'sp']) {
+      const full = stat === 'hp' ? h.fullHp : h.fullSp;
+      const heal = stat === 'hp' ? 'healHp' : 'healSp';
+      if (!full) continue;
+      let cur = stat === 'hp' ? h.hp : h.sp;
+      if (cur / full >= below) continue;
+
+      // 專補這一項的排前面，兩用的留著
+      const usable = potions
+        .filter((p) => (p[heal] || 0) > 0 && p.available > 0)
+        .sort((a, b) => (b[heal] || 0) - (a[heal] || 0));
+
+      for (const p of usable) {
+        const gap = Math.max(0, Math.ceil(full * upTo) - cur);
+        if (gap <= 0) break;
+        const want = Math.min(p.available, Math.ceil(gap / p[heal]));
+        if (want <= 0) continue;
+        try {
+          const r = await client.post(`/api/items/${p.id}/use`, { quantity: want, heroId: h.id });
+          p.available -= want;
+          if (r.hero) { h.hp = r.hero.hp; h.sp = r.hero.sp; }
+          cur = stat === 'hp' ? h.hp : h.sp;
+          log(`${h.name} 吃了 ${p.name} ×${want} → HP ${h.hp}/${h.fullHp}、體力 ${h.sp}/${h.fullSp}`);
+        } catch (e) { log(`${h.name} 吃 ${p.name} 失敗：${e.message}`); break; }
+        if (cur / full >= upTo) break;
+      }
+    }
+  }
+  return heroes;
+}
+
+// 增益類補品（戰鬥口糧那種：攻擊力 +10、三十分鐘）。
+// 到期時間記在 state 裡，沒到期就不打擾伺服器——不然每打一場都要多抓一次道具欄。
+async function useBuffs(heroes) {
+  if (!plan.useBuffs) return;
+  const now = Date.now();
+  state.buffUntil = state.buffUntil || {};
+  const due = heroes.filter(
+    (h) => plan.grinders.includes(h.id) && h.hp > 0 && (state.buffUntil[h.id] || 0) < now,
+  );
+  if (!due.length) return;
+
+  let stock;
+  try {
+    stock = (await client.get('/api/items')).items || [];
+  } catch (e) { log('看不到道具欄：', e.message); return; }
+
+  const buffs = stock.filter((i) => i.available > 0 && i.target === 'hero' && i.effectDurationSec > 0);
+  if (!buffs.length) {
+    // 沒庫存就先擱著，半小時後再看，省得每場都白抓一次
+    for (const h of due) state.buffUntil[h.id] = now + 30 * 60 * 1000;
+    return;
+  }
+  for (const h of due) {
+    const b = buffs.find((x) => x.available > 0);
+    if (!b) break;
+    try {
+      await client.post(`/api/items/${b.id}/use`, { quantity: 1, heroId: h.id });
+      b.available--;
+      state.buffUntil[h.id] = now + b.effectDurationSec * 1000;
+      const what = (b.effectTexts || []).join('、');
+      log(`${h.name} 吃了 ${b.name}（${what}，${Math.round(b.effectDurationSec / 60)} 分鐘）`);
+    } catch (e) { log(`${h.name} 吃 ${b.name} 失敗：${e.message}`); break; }
+  }
+}
+
 // 劇本裡的 grinders 可以寫名字（比 id 好讀）。開跑時對應成 id 存回 plan。
 async function resolveGrinders() {
   if (!plan.grinders.some((g) => typeof g === 'string')) return;
@@ -398,10 +485,18 @@ async function stepGrind(info) {
     return client.huntInfo();
   }
 
-  const hurt = heroes.filter((h) => h.hp / (h.fullHp || 1) < plan.restBelow);
+  await useBuffs(heroes);
+
+  // HP 與體力都不准低於門檻
+  const lowOn = (h) => h.hp / (h.fullHp || 1) < plan.restBelow || h.sp / (h.fullSp || 1) < plan.restBelow;
+  if (heroes.some(lowOn)) {
+    // 補品比休息快，先吃
+    await useConsumables(heroes);
+  }
+  const hurt = heroes.filter(lowOn);
   if (hurt.length) {
-    log(`${hurt.map((h) => h.name).join('、')} 血量偏低 → 全隊休息`);
-    const until = plan.restUntil || 0.75;
+    log(`${hurt.map((h) => `${h.name}(HP ${Math.round((h.hp / (h.fullHp || 1)) * 100)}%/體 ${Math.round((h.sp / (h.fullSp || 1)) * 100)}%)`).join('、')} 低於門檻 → 全隊休息`);
+    const until = plan.restUntil || 0.9;
     let latest = info;
     for (let round = 0; round < (plan.restRounds || 5); round++) {
       try {
@@ -412,7 +507,7 @@ async function stepGrind(info) {
         latest = r.huntInfo || latest;
       } catch (e) { log('休息失敗：', e.message); break; }
       const crew = (latest && latest.heroes) || [];
-      if (crew.every((h) => h.hp / (h.fullHp || 1) >= until)) break;
+      if (crew.every((h) => h.hp / (h.fullHp || 1) >= until && h.sp / (h.fullSp || 1) >= until)) break;
     }
     return latest;
   }

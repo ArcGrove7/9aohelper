@@ -17,8 +17,12 @@ module.exports = {
     { zoneId: 2, zoneName: '黑暗山洞', stage: 1, untilLevel: null },
   ],
 
-  restBelow: 0.35,
-  restUntil: 0.75,
+  // 人下的令：戰鬥人員的 HP 與體力都不准低於五成
+  restBelow: 0.5,
+  restUntil: 0.9,
+  healUntil: 0.65,
+  useItems: true,
+  useBuffs: true,
   restMs: 5 * 60 * 1000,
   restRounds: 5,
 };
