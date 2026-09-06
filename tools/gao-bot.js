@@ -216,6 +216,31 @@ async function tendEquipment() {
   }
 }
 
+// 練到指定等級就換崗。矮人工匠這種角色先跟隊練等，到了再回城專心鍛造——
+// 同一隻不能又打架又鍛造，所以要把他從練功隊移出、掛進鍛造組，並讓隊伍重組一次。
+function checkPromotion(heroes) {
+  if (!plan.promote) return false;
+  let changed = false;
+  for (const [idStr, rule] of Object.entries(plan.promote)) {
+    const id = Number(idStr);
+    const h = heroes.find((x) => x.id === id);
+    if (!h || h.lv < rule.atLevel) continue;
+    if (!plan.grinders.includes(id)) continue; // 已經換過了
+
+    plan.grinders = plan.grinders.filter((g) => g !== id);
+    if (rule.smith) {
+      plan.smiths = { ...(plan.smiths || {}), [id]: rule.smith };
+      log(`${h.name} 練到 lv${h.lv}，退出練功隊、回城專心鍛造`);
+    }
+    if (rule.mine) {
+      plan.miners = { ...(plan.miners || {}), [id]: rule.mine };
+      log(`${h.name} 練到 lv${h.lv}，退出練功隊、改去挖礦（礦區 ${rule.mine}）`);
+    }
+    changed = true;
+  }
+  return changed;
+}
+
 // 升級紀錄用的：這隻英雄從上次升級到現在做了什麼。
 // 「行動會影響升級時長哪些能力」是要研究的題目，所以行動要跟成長一起記。
 function bumpAction(heroId, kind, n = 1) {
@@ -304,9 +329,15 @@ async function tendPoints(heroes) {
 
     // 配點（記錄完才配，免得把配點算進自然成長）
     if (!plan.points || !detail.point) continue;
-    const weights = plan.points[h.id] || plan.points.default;
+    let weights = plan.points[h.id] || plan.points.default;
     if (!weights) continue;
-    const keys = Object.keys(weights).filter((k) => weights[k] > 0);
+    // spIfBelow：體力上限還沒到這個數之前，先全部補體力。
+    // 體力太低會一直卡在休息門檻，點再多敏捷幸運也打不了幾場。
+    if (weights.spIfBelow && detail.fullSp < weights.spIfBelow) {
+      log(`${h.name} 體力上限 ${detail.fullSp} 還不到 ${weights.spIfBelow}，這級先補體力`);
+      weights = { sp: 1 };
+    }
+    const keys = Object.keys(weights).filter((k) => k !== 'spIfBelow' && weights[k] > 0);
     if (!keys.length) continue;
 
     const totalW = keys.reduce((n, k) => n + weights[k], 0);
@@ -624,7 +655,12 @@ async function main() {
       try { await tendWorkers(await client.heroes()); } catch (e) { log('tendWorkers:', e.message); }
       try { await tendQuests(); } catch (e) { log('tendQuests:', e.message); }
       try { await tendEquipment(); } catch (e) { log('tendEquipment:', e.message); }
-      try { await tendPoints(await client.heroes()); } catch (e) { log('tendPoints:', e.message); }
+      try {
+        const hs = await client.heroes();
+        await tendPoints(hs);
+        // 有人換崗就讓隊伍重組一次（stepSplit 會回城、重設隊伍、派工）
+        if (checkPromotion(hs)) { state.phase = 'split'; saveState(); }
+      } catch (e) { log('tendPoints:', e.message); }
     }
 
     try {
