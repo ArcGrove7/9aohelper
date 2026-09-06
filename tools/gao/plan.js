@@ -33,8 +33,10 @@ module.exports = {
   grinders: [816, 1041],
 
   // 練功路線：先到大草原 4 練到 10 等，再轉黑暗山洞
+  // 人下的令：練功點推到大草原 7 樓（人自己先把隊伍移過去了，這裡跟上，
+  // 否則下次陣亡回城後 bot 會照舊設定把他們帶回 4 樓）
   route: [
-    { zoneId: 1, zoneName: '大草原', stage: 4, untilLevel: 10 },
+    { zoneId: 1, zoneName: '大草原', stage: 7, untilLevel: 10 },
     { zoneId: 2, zoneName: '黑暗山洞', stage: 1, untilLevel: null },
   ],
 
