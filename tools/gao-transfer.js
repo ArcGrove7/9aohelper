@@ -9,7 +9,7 @@
 //
 //   node tools/gao-transfer.js --from <token檔> --from-label <代號> \
 //     --to <token檔> --to-label <代號> --kind mines|equipments \
-//     [--exclude 泥土,兔皮] [--only 鐵,石頭] [--unit-price 2] [--floor-price 30] [--min-total 40] [--top 3] [--gap 2500]
+//     [--exclude 泥土,兔皮] [--only 鐵,石頭] [--unit-price 2] [--floor-price 30] [--min-total 40] [--top 3] [--gap 6000]
 //
 // --top 只對 equipments 有意義：挑攻＋防最高的前 N 件。
 
@@ -28,7 +28,8 @@ for (let i = 2; i < process.argv.length; i++) {
 const ROOT = path.resolve(__dirname, '..');
 const STATE = path.join(ROOT, '.gao-state');
 const kind = args.kind || 'mines';
-const gap = Number(args.gap || 2500);
+// 掛單之間的間隔。賣慢一點——同時掛在市場上的筆數越少，被撿走的機會越少。
+const gap = Number(args.gap || 6000);
 const unitPrice = Number(args['unit-price'] || 2);
 // 每筆的最低價。小額品項照單價算會變成個位數，那種價格路過的人會順手撿走
 // （轉一批礦物時「藍寶殼 ×2 掛 4 元」就這樣沒了，暴露不到十秒）。
@@ -69,13 +70,25 @@ async function pickSource() {
   let mines = (inv.mines || []).filter((m) => m.available > 0);
   if (only.size) mines = mines.filter((m) => only.has(m.name));
   mines = mines.filter((m) => !exclude.has(m.name));
-  return mines.map((m) => ({
-    id: m.id,
-    label: `${m.name} ×${m.available}`,
-    name: m.name,
-    quantity: m.available,
-    price: Math.max(floorPrice, Math.round(m.available * unitPrice)),
-  }));
+
+  // 好素材要照它的身價掛，不能一律用最低價——S 級兔皮掛 30 元被撿走過兩次，
+  // 市場上顯然有人在掃便宜貨。用素材表的攻＋防當身價指標往上加。
+  let table = null;
+  try { table = require('./gao/materials.js').loadMaterials(); } catch { /* 沒有就算了 */ }
+
+  return mines.map((m) => {
+    const meta = table && table.get(m.name);
+    const worth = meta ? Math.max(meta.atk || 0, meta.def || 0) : 1;
+    const byQuantity = Math.round(m.available * unitPrice);
+    const byWorth = Math.round(m.available * worth * unitPrice);
+    return {
+      id: m.id,
+      label: `${m.name} ×${m.available}`,
+      name: m.name,
+      quantity: m.available,
+      price: Math.max(floorPrice, byQuantity, byWorth),
+    };
+  });
 }
 
 (async () => {
@@ -110,12 +123,14 @@ async function pickSource() {
         : { price: it.price, quantity: it.quantity, message: '轉帳' };
       await from.post(sellPath, body);
 
-      const market = await to.get(`/api/trades?type=${kind}`);
+      // 買快一點：東西一掛上去就是公開的，查市場與買回都走急件，
+      // 不等平均間隔（額度仍受每小時上限管）。
+      const market = await to.get(`/api/trades?type=${kind}`, { urgent: true });
       // 認自己人掛的那一筆：賣方 id 對得上、價格對得上、素材名也對得上
       const hit = listOf(market).find((x) => x.sellerId === seller && x.price === it.price
         && (kind === 'equipments' ? true : x.name === it.name));
       if (!hit) { console.log(`✗ ${it.label}：掛上去了但市場找不到，可能被搶`); continue; }
-      await to.post(`/api/trades/${hit.id}/buy`);
+      await to.post(`/api/trades/${hit.id}/buy`, undefined, { urgent: true });
       spent += it.price;
       done++;
       console.log(`✓ ${it.label} → ${it.price} 元（累計 ${spent}）`);

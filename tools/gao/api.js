@@ -61,22 +61,26 @@ class RateLimiter {
   }
 
   // 需要等多久才輪得到下一次請求（毫秒）。
-  waitMs() {
+  //
+  // urgent＝急件：只看「這一小時還有沒有額度」，不等平均間隔。
+  // 真正的限制是每小時 600 次，平均攤開只是我們自己為了平順加的。
+  // 有些動作差幾秒就會出事——把東西掛上公開市場後要立刻買回來，
+  // 中間每多等一秒都是別人把它撿走的機會。那種場合就走急件。
+  waitMs(urgent = false) {
     this.reload();
     const now = Date.now();
     this.prune(now);
-    if (this.stamps.length < this.cap) {
-      // 額度沒滿也不要連發：平均攤成一小時。
-      const minGap = WINDOW_MS / this.cap;
-      const last = this.stamps[this.stamps.length - 1] || 0;
-      return Math.max(0, last + minGap - now);
-    }
-    return this.stamps[0] + WINDOW_MS - now + 50;
+    if (this.stamps.length >= this.cap) return this.stamps[0] + WINDOW_MS - now + 50;
+    if (urgent) return 0;
+    // 額度沒滿也不要連發：平均攤成一小時。
+    const minGap = WINDOW_MS / this.cap;
+    const last = this.stamps[this.stamps.length - 1] || 0;
+    return Math.max(0, last + minGap - now);
   }
 
-  async take() {
+  async take(urgent = false) {
     for (;;) {
-      const wait = this.waitMs();
+      const wait = this.waitMs(urgent);
       if (wait <= 0) break;
       // 抖動不是裝飾：好幾個行程共用同一份額度時，大家都照
       // 「上一次請求 + 固定間隔」算等待，就會一起醒來、同一個行程每次都先搶到，
@@ -117,10 +121,10 @@ class Client {
     return Date.now() + this.serverSkewMs;
   }
 
-  async request(method, url, body, { retries = 3 } = {}) {
+  async request(method, url, body, { retries = 3, urgent = false } = {}) {
     let lastErr;
     for (let attempt = 0; attempt <= retries; attempt++) {
-      await this.limiter.take();
+      await this.limiter.take(urgent);
       const headers = { 'User-Agent': UA, token: this.token, Accept: 'application/json' };
       const init = { method, headers };
       if (body !== undefined) {
@@ -158,12 +162,12 @@ class Client {
     throw lastErr;
   }
 
-  get(url) {
-    return this.request('GET', url);
+  get(url, opts) {
+    return this.request('GET', url, undefined, opts);
   }
 
-  post(url, body) {
-    return this.request('POST', url, body);
+  post(url, body, opts) {
+    return this.request('POST', url, body, opts);
   }
 
   // ---- 遊戲端點 ----
