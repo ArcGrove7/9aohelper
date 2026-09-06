@@ -434,7 +434,13 @@ async function stepGrind(info) {
     r = await client.hunt();
   } catch (e) {
     if (e instanceof ApiError && /沒有可戰鬥/.test(e.message)) {
-      log('沒人能打 → 回城整備');
+      // 多半只是休息還掛著沒按完成，不是真的全隊倒了。
+      // 先在原地收尾——回城再走回來要重新爬好幾層，太貴。
+      await ensureCrewIdle();
+      const fresh = await client.huntInfo();
+      const ready = (fresh.heroes || []).filter((h) => h.hp > 0 && h.actionState === ActionState.Idle);
+      if (ready.length) { log(`原地收尾後還有 ${ready.length} 人能打，繼續`); return fresh; }
+      log('真的沒人能打 → 回城整備');
       await backToTown();
       await reviveAndRest();
       state.phase = 'travel';
