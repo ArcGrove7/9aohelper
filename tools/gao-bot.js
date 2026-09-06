@@ -178,31 +178,25 @@ async function tendEquipment() {
   let es;
   try { es = await client.equipments(); } catch (e) { log('看不到裝備欄：', e.message); return; }
 
-  const free = es.filter((e) => !e.equipped && e.state === 0);
-  if (!free.length) return;
-
-  // 誰身上有什麼類型的裝備
-  const worn = new Map();
-  for (const e of es) {
-    if (!e.equipped) continue;
-    if (!worn.has(e.equipped)) worn.set(e.equipped, new Set());
-    worn.get(e.equipped).add(e.type);
-  }
+  const score = (e) => e.atk + e.def;
 
   for (const heroId of plan.grinders) {
-    const has = worn.get(heroId) || new Set();
     for (const type of plan.equipSlots || ['單手劍', '盔甲']) {
-      if (has.has(type)) continue;
-      const pick = free
-        .filter((e) => e.type === type && !e.equipped)
-        .sort((a, b) => (b.atk + b.def) - (a.atk + a.def))[0];
-      if (!pick) continue;
+      const worn = es.find((e) => e.equipped === heroId && e.type === type);
+      const best = es
+        .filter((e) => e.type === type && !e.equipped && e.state === 0)
+        .sort((a, b) => score(b) - score(a))[0];
+      if (!best) continue;
+      // 空手就補，手上那件比庫存最好的差也換——新打的好裝備擺著等它壞掉才用太浪費，
+      // 而且裝備本來就是消耗品，先穿好的划算。
+      if (worn && score(worn) >= score(best)) continue;
       try {
-        await client.post(`/api/equipments/${pick.id}/equip`, { heroId });
-        pick.equipped = heroId;
-        has.add(type);
-        log(`補裝備：${pick.quality}的${pick.name}（${type} 攻${pick.atk} 防${pick.def} 耐${pick.fullDur}）→ ${heroId}`);
-      } catch (e) { log(`補裝備失敗：${e.message}`); }
+        await client.post(`/api/equipments/${best.id}/equip`, { heroId });
+        best.equipped = heroId;
+        if (worn) worn.equipped = null;
+        const how = worn ? `換掉 ${worn.quality}的${worn.name}（攻${worn.atk} 防${worn.def}）` : '原本空手';
+        log(`換裝：${best.quality}的${best.name}（${type} 攻${best.atk} 防${best.def} 耐${best.fullDur}）→ ${heroId}，${how}`);
+      } catch (e) { log(`換裝失敗：${e.message}`); }
     }
   }
 }

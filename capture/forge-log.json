@@ -1,5 +1,54 @@
 {
- "generatedAt": "2026-09-06T07:08:15.961Z",
- "count": 0,
- "entries": []
+ "generatedAt": "2026-09-06T07:23:06.777Z",
+ "count": 1,
+ "entries": [
+  {
+   "time": "2026-09-06T07:22:43.388Z",
+   "smith": "大火慢炒",
+   "equipType": "armor",
+   "quality": "破爛",
+   "product": {
+    "name": "霜寒堅鎧",
+    "quality": "破爛",
+    "type": "盔甲",
+    "atk": 35,
+    "def": 229,
+    "int": 4,
+    "lck": 13,
+    "wgt": 343,
+    "dur": 96,
+    "slots": 9
+   },
+   "soilCount": 3,
+   "woodCount": 6,
+   "total": 16,
+   "mines": [
+    {
+     "name": "石頭",
+     "quantity": 3,
+     "value": 6
+    },
+    {
+     "name": "兔皮",
+     "quantity": 2,
+     "value": 3.3
+    },
+    {
+     "name": "黑兔皮",
+     "quantity": 2,
+     "value": 2.6
+    },
+    {
+     "name": "泥土",
+     "quantity": 3,
+     "value": 2
+    },
+    {
+     "name": "楊木",
+     "quantity": 6,
+     "value": 0
+    }
+   ]
+  }
+ ]
 }
