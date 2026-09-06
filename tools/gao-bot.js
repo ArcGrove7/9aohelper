@@ -660,13 +660,18 @@ async function stepGrind(info) {
     // 已經在休息中就別再 restAll——那只會換來「沒有需要休息的英雄」然後空轉一輪。
     // 恢復量看的是躺了多久，所以躺著的直接等時間到再收，不要打斷重來。
     for (let round = 0; round < (plan.restRounds || 8); round++) {
+      // 每輪都拿新鮮的狀態來判斷。用上一輪的快照會發生這種事：
+      // 以為大家還躺著所以跳過 restAll，白等五分鐘，收尾時才發現「沒有正在休息的英雄」。
+      try { latest = await client.huntInfo(); } catch { /* 用手上這份 */ }
       const resting = (latest.heroes || []).some((h) => h.actionState === ActionState.Resting);
       if (!resting) {
         try {
           await client.restAll();
         } catch (e) {
           // 「沒有需要休息的英雄」＝已經滿了，不是錯
-          if (!/沒有需要休息/.test(e.message)) { log('休息失敗：', e.message); break; }
+          if (/沒有需要休息/.test(e.message)) break;
+          log('休息失敗：', e.message);
+          break;
         }
       }
       await sleep(plan.restMs);
