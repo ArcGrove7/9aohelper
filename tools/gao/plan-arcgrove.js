@@ -23,6 +23,10 @@ module.exports = {
   ],
 
   // 人下的令：戰鬥人員的 HP 與體力都不准低於五成
+  // 裝備耐久歸零就消失（實測一場狩獵吃掉約 1.4 點），所以壞了自動從庫存補上
+  autoEquip: true,
+  equipSlots: ['單手劍', '盔甲'],
+
   restBelow: 0.5,
   restUntil: 0.9,
   healUntil: 0.65,

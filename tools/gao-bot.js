@@ -33,6 +33,9 @@ const store = new ReportStore(path.join(STATE_DIR, `hunt-reports-${LABEL}.jsonl`
 const client = new Client({ token, stateDir: STATE_DIR, label: LABEL });
 
 const PHASE_FILE = path.join(STATE_DIR, `phase-${LABEL}.json`);
+// 主迴圈的維護節奏；壞裝備這種事不必等滿五分鐘，把它歸零就會立刻補做一次
+let lastTend = 0;
+function lastTendReset() { lastTend = 0; }
 let state = readJson(PHASE_FILE) || { phase: 'probe', routeIdx: 0, deaths: 0, hunts: 0 };
 
 function log(...a) {
@@ -165,6 +168,43 @@ async function useConsumables(heroes) {
     }
   }
   return heroes;
+}
+
+// 裝備是消耗品：耐久歸零就直接消失（實測一場狩獵吃掉約 1.4 點，八秒一場，
+// 一把 500 耐久的劍撐不到一小時）。所以壞了要自動補上，不然英雄會一直空手打。
+// 每個部位挑庫存裡沒人用、同類型中「攻＋防」最高的那件。
+async function tendEquipment() {
+  if (plan.autoEquip === false) return;
+  let es;
+  try { es = await client.equipments(); } catch (e) { log('看不到裝備欄：', e.message); return; }
+
+  const free = es.filter((e) => !e.equipped && e.state === 0);
+  if (!free.length) return;
+
+  // 誰身上有什麼類型的裝備
+  const worn = new Map();
+  for (const e of es) {
+    if (!e.equipped) continue;
+    if (!worn.has(e.equipped)) worn.set(e.equipped, new Set());
+    worn.get(e.equipped).add(e.type);
+  }
+
+  for (const heroId of plan.grinders) {
+    const has = worn.get(heroId) || new Set();
+    for (const type of plan.equipSlots || ['單手劍', '盔甲']) {
+      if (has.has(type)) continue;
+      const pick = free
+        .filter((e) => e.type === type && !e.equipped)
+        .sort((a, b) => (b.atk + b.def) - (a.atk + a.def))[0];
+      if (!pick) continue;
+      try {
+        await client.post(`/api/equipments/${pick.id}/equip`, { heroId });
+        pick.equipped = heroId;
+        has.add(type);
+        log(`補裝備：${pick.quality}的${pick.name}（${type} 攻${pick.atk} 防${pick.def} 耐${pick.fullDur}）→ ${heroId}`);
+      } catch (e) { log(`補裝備失敗：${e.message}`); }
+    }
+  }
 }
 
 // 顧任務。完成了就領獎，冷卻過了就接新的——不然任務欄會一直卡著同一批。
@@ -433,7 +473,7 @@ async function main() {
   // 沒有蒐證階段的劇本（例如純練功的帳號），別停在 probe 上
   if (!plan.probe && state.phase === 'probe') state.phase = 'travel';
   let info = await client.huntInfo();
-  let lastTend = 0;
+  lastTend = 0;
 
   while (Date.now() < DEADLINE) {
     // 每 5 分鐘照顧一次挖礦／鍛造的人
@@ -441,6 +481,7 @@ async function main() {
       lastTend = Date.now();
       try { await tendWorkers(await client.heroes()); } catch (e) { log('tendWorkers:', e.message); }
       try { await tendQuests(); } catch (e) { log('tendQuests:', e.message); }
+      try { await tendEquipment(); } catch (e) { log('tendEquipment:', e.message); }
     }
 
     try {
@@ -652,6 +693,11 @@ async function stepGrind(info) {
     throw e;
   }
   keepReport(r.report);
+  const broken = (r.equipmentChanges && r.equipmentChanges.deletedIds) || [];
+  if (broken.length) {
+    log(`有 ${broken.length} 件裝備耐久見底壞掉了，下一輪維護會補上`);
+    lastTendReset();
+  }
   const enemies = (r.report.b || []).map((b) => `${b.name}Lv${b.lv}`).join('、');
   log(`${r.report.zone}${r.report.stage}F #${state.hunts} 敵：${enemies}`);
   return r.huntInfo || info;
