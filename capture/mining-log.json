@@ -1,19 +1,23 @@
 {
- "generatedAt": "2026-09-06T08:41:48.061Z",
- "runs": 6,
+ "generatedAt": "2026-09-06T09:12:33.066Z",
+ "runs": 7,
  "zones": [
   {
    "target": 1,
    "name": "砂石場",
    "desc": "大部分都是砂土的荒廢礦區，新手也能在這挖到點東西",
-   "runs": 1,
+   "runs": 2,
    "emptyRuns": 0,
    "spPerRun": {
-    "avg": 21,
+    "avg": 22,
     "min": 21,
-    "max": 21
+    "max": 23
    },
    "items": {
+    "泥土": {
+     "total": 10,
+     "seenInRuns": 2
+    },
     "石頭": {
      "total": 8,
      "seenInRuns": 1
@@ -23,10 +27,6 @@
      "seenInRuns": 1
     },
     "安山岩": {
-     "total": 4,
-     "seenInRuns": 1
-    },
-    "泥土": {
      "total": 4,
      "seenInRuns": 1
     },
