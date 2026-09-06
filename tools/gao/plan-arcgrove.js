@@ -14,10 +14,11 @@ module.exports = {
   miningMinutes: 30,
 
   // 用名字寫，bot 啟動時自己對應到 id
-  grinders: ['雷霆天降', '白人戰士'],
+  // 慈祥老醫生（後排補師）加進來，試試有補師撐不撐得住 5 樓
+  grinders: ['雷霆天降', '白人戰士', '慈祥老醫生'],
 
   route: [
-    { zoneId: 1, zoneName: '大草原', stage: 4, untilLevel: 10 },
+    { zoneId: 1, zoneName: '大草原', stage: 5, untilLevel: 10 },
     { zoneId: 2, zoneName: '黑暗山洞', stage: 1, untilLevel: null },
   ],
 
