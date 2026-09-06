@@ -21,12 +21,18 @@
 ## 重跑
 
     node tools/gao-fetch-reports.js --token-file <放 token 的檔>   # 撈伺服器上還留著的歷史戰報（只保留最近 100 份）
-    node tools/gao-bot.js --token-file <放 token 的檔> --minutes 60 # 照 tools/gao/plan.js 的劇本操作帳號並持續蒐戰報
+    node tools/gao-bot.js --token-file <放 token 的檔> --label <帳號代號> \
+      [--plan tools/gao/plan-<誰>.js] --minutes 60                  # 照劇本操作帳號並持續蒐戰報
     node tools/gao-sync-capture.js                                  # 把 bot 的工作檔併進這個目錄（去重、按時間排序）
     node tools/build-bestiary.js                                    # 重建敵人／地點彙整
     node tools/build-messages.js                                    # 重建戰報文本模板
 
 token 放在 `.gao-state/`（已在 `.gitignore`），不要進版控。
+
+一個帳號一支 bot，用 `--label` 分開（額度、階段、工作檔都各自一份），可以同時跑；
+劇本用 `--plan` 指定，`tools/gao/plan.js` 是預設的那一份。
+入庫時所有帳號的工作檔會併進同一份 `hunt-reports.jsonl`——都是同一個遊戲的觀測資料，
+用戰報 id 去重就夠。
 
 bot **不直接寫這個目錄**——它每隔幾秒就產一份戰報，直接寫的話工作區永遠是
 「有未提交的變更」，也挑不到乾淨的提交點。它只寫 `.gao-state/` 的同名工作檔，

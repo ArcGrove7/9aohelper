@@ -59,14 +59,14 @@
   用來替敵人圖鑑累積可查證的底料。
 
       node tools/gao-fetch-reports.js --token-file <放 token 的檔>    # 撈伺服器上還留著的歷史戰報
-      node tools/gao-bot.js --token-file <放 token 的檔> --minutes 60  # 照 tools/gao/plan.js 的劇本操作帳號
+      node tools/gao-bot.js --token-file <檔> --label <帳號代號> --minutes 60  # 照劇本操作帳號（一帳號一支，可同時跑）
       node tools/gao-sync-capture.js                                   # 把 bot 的工作檔併進 capture/
       node tools/build-bestiary.js                                     # 從戰報重建敵人／地點彙整
       node tools/build-messages.js                                     # 從戰報重建戰鬥文本模板
 
   規矩見 `capture/README.md`：戰報的我方那一半（暱稱、英雄名、自家裝備）**不上站**，
   可上站的只有敵人與地點。帳號 token 放 `.gao-state/`，已在 `.gitignore`。
-  每個帳號每小時請求上限 600，`tools/gao/api.js` 自己壓在 500 並把用量存在磁碟上。
+  每個帳號每小時請求上限 600，`tools/gao/api.js` 自己壓在 500 並把用量存在磁碟上（依 `--label` 分帳）。
 
 ## 資料怎麼加
 

@@ -11,7 +11,6 @@ const fs = require('fs');
 const path = require('path');
 const { Client, ApiError, ActionState, sleep } = require('./gao/api.js');
 const { ReportStore } = require('./gao/capture.js');
-const plan = require('./gao/plan.js');
 const { pickMines, FORGE_LIMIT } = require('./gao/materials.js');
 
 const args = parseArgs(process.argv.slice(2));
@@ -19,21 +18,25 @@ const ROOT = path.resolve(__dirname, '..');
 const STATE_DIR = args.state || path.join(ROOT, '.gao-state');
 const RUN_MINUTES = Number(args.minutes || 60);
 const DEADLINE = Date.now() + RUN_MINUTES * 60 * 1000;
+// 每個帳號各自一份額度、階段與工作檔，用 label 分開；兩個帳號可以同時跑。
+const LABEL = args.label || 'u140';
 
 const token = fs.readFileSync(args['token-file'], 'utf8').trim();
 fs.mkdirSync(STATE_DIR, { recursive: true });
 
+const plan = require(path.resolve(ROOT, args.plan || 'tools/gao/plan.js'));
+
 // bot 只寫工作檔（.gao-state/，已忽略）。要入庫再跑 tools/gao-sync-capture.js
 // 併進 capture/——否則每隔幾秒就多一份戰報，工作區永遠是髒的。
-const store = new ReportStore(path.join(STATE_DIR, 'hunt-reports.jsonl'));
-const client = new Client({ token, stateDir: STATE_DIR, label: 'u140' });
+const store = new ReportStore(path.join(STATE_DIR, `hunt-reports-${LABEL}.jsonl`));
+const client = new Client({ token, stateDir: STATE_DIR, label: LABEL });
 
-const PHASE_FILE = path.join(STATE_DIR, 'phase.json');
+const PHASE_FILE = path.join(STATE_DIR, `phase-${LABEL}.json`);
 let state = readJson(PHASE_FILE) || { phase: 'probe', routeIdx: 0, deaths: 0, hunts: 0 };
 
 function log(...a) {
   const t = new Date().toISOString().slice(11, 19);
-  console.log(`[${t}] [${state.phase}] ${a.join(' ')}`);
+  console.log(`[${t}] [${LABEL}/${state.phase}] ${a.join(' ')}`);
 }
 function saveState() { fs.writeFileSync(PHASE_FILE, JSON.stringify(state, null, 1)); }
 function readJson(f) { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return null; } }
@@ -109,6 +112,19 @@ async function reviveAndRest() {
     return r.huntInfo;
   } catch (e) { log('restAll:', e.message); }
   return null;
+}
+
+// 劇本裡的 grinders 可以寫名字（比 id 好讀）。開跑時對應成 id 存回 plan。
+async function resolveGrinders() {
+  if (!plan.grinders.some((g) => typeof g === 'string')) return;
+  const heroes = await client.heroes();
+  plan.grinders = plan.grinders.map((g) => {
+    if (typeof g !== 'string') return g;
+    const hit = heroes.find((h) => h.name === g);
+    if (!hit) throw new Error(`劇本裡的「${g}」在這個帳號找不到`);
+    return hit.id;
+  });
+  log('練功隊:', plan.grinders.join('、'));
 }
 
 // 移動要求全隊閒置。休息、移動這種「做完還要按一下完成」的狀態，
@@ -220,7 +236,7 @@ async function startForge(hero, smith) {
 }
 
 function appendWorkLog(entry) {
-  const f = path.join(STATE_DIR, 'work-log.jsonl');
+  const f = path.join(STATE_DIR, `work-log-${LABEL}.jsonl`);
   fs.mkdirSync(path.dirname(f), { recursive: true });
   fs.appendFileSync(f, JSON.stringify({ time: new Date().toISOString(), ...entry }) + '\n');
 }
@@ -229,6 +245,9 @@ function appendWorkLog(entry) {
 
 async function main() {
   log(`開跑，預計 ${RUN_MINUTES} 分鐘；已存戰報 ${store.count} 份`);
+  await resolveGrinders();
+  // 沒有蒐證階段的劇本（例如純練功的帳號），別停在 probe 上
+  if (!plan.probe && state.phase === 'probe') state.phase = 'travel';
   let info = await client.huntInfo();
   let lastTend = 0;
 
@@ -264,6 +283,7 @@ async function step(info) {
 
 // 階段 0：全隊在大草原 10 原地硬打，蒐戰報與敵人資料。有人倒下就回城整備。
 async function stepProbe(info) {
+  if (!plan.probe) { state.phase = 'travel'; return info; }
   if (info.huntZone !== plan.probe.zoneId || info.huntStage !== plan.probe.stage) {
     log(`不在 ${plan.probe.zoneId}-${plan.probe.stage}，改走分工`);
     state.phase = 'split';

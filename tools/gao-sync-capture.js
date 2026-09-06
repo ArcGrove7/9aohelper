@@ -15,11 +15,20 @@ const ROOT = path.resolve(__dirname, '..');
 const STATE_DIR = process.argv[2] || path.join(ROOT, '.gao-state');
 const CAPTURE = path.join(ROOT, 'capture');
 
-// [工作檔, 版控檔, 去重用的鍵]
+// [工作檔的前綴, 版控檔, 去重用的鍵]
+// 每個帳號各有一份工作檔（hunt-reports-u140.jsonl…），全部併進同一份版控檔——
+// 戰報是同一個遊戲的觀測資料，用 report id 去重就夠。
 const PAIRS = [
-  ['hunt-reports.jsonl', 'hunt-reports.jsonl', (r) => r.id],
-  ['work-log.jsonl', 'work-log.jsonl', (r) => JSON.stringify(r)],
+  ['hunt-reports', 'hunt-reports.jsonl', (r) => r.id],
+  ['work-log', 'work-log.jsonl', (r) => JSON.stringify(r)],
 ];
+
+function workFiles(prefix) {
+  if (!fs.existsSync(STATE_DIR)) return [];
+  return fs.readdirSync(STATE_DIR)
+    .filter((f) => f.startsWith(prefix) && f.endsWith('.jsonl'))
+    .map((f) => path.join(STATE_DIR, f));
+}
 
 function readJsonl(file) {
   if (!fs.existsSync(file)) return [];
@@ -32,8 +41,8 @@ function readJsonl(file) {
 }
 
 let total = 0;
-for (const [src, dst, keyOf] of PAIRS) {
-  const from = readJsonl(path.join(STATE_DIR, src));
+for (const [prefix, dst, keyOf] of PAIRS) {
+  const from = workFiles(prefix).flatMap(readJsonl);
   if (!from.length) continue;
   const target = path.join(CAPTURE, dst);
   const existing = readJsonl(target);
