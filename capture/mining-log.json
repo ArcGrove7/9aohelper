@@ -1,0 +1,96 @@
+{
+ "generatedAt": "2026-09-06T07:19:31.195Z",
+ "runs": 5,
+ "zones": [
+  {
+   "target": 1,
+   "name": "砂石場",
+   "desc": "大部分都是砂土的荒廢礦區，新手也能在這挖到點東西",
+   "runs": 1,
+   "emptyRuns": 0,
+   "spPerRun": {
+    "avg": 21,
+    "min": 21,
+    "max": 21
+   },
+   "items": {
+    "石頭": {
+     "total": 8,
+     "seenInRuns": 1
+    },
+    "砂石": {
+     "total": 5,
+     "seenInRuns": 1
+    },
+    "安山岩": {
+     "total": 4,
+     "seenInRuns": 1
+    },
+    "泥土": {
+     "total": 4,
+     "seenInRuns": 1
+    },
+    "鐵": {
+     "total": 2,
+     "seenInRuns": 1
+    }
+   },
+   "events": []
+  },
+  {
+   "target": 2,
+   "name": "森林區",
+   "desc": "有各式各樣的樹木和肥沃的土壤，獲取木材的最佳地點",
+   "runs": 4,
+   "emptyRuns": 1,
+   "spPerRun": {
+    "avg": 16.5,
+    "min": 2,
+    "max": 27
+   },
+   "items": {
+    "安山岩": {
+     "total": 20,
+     "seenInRuns": 1
+    },
+    "礫石": {
+     "total": 14,
+     "seenInRuns": 1
+    },
+    "楊木": {
+     "total": 11,
+     "seenInRuns": 2
+    },
+    "砂石": {
+     "total": 11,
+     "seenInRuns": 1
+    },
+    "杉木": {
+     "total": 10,
+     "seenInRuns": 2
+    },
+    "泥土": {
+     "total": 9,
+     "seenInRuns": 2
+    },
+    "樺木": {
+     "total": 7,
+     "seenInRuns": 1
+    },
+    "鉛": {
+     "total": 3,
+     "seenInRuns": 1
+    },
+    "紅砂岩": {
+     "total": 2,
+     "seenInRuns": 1
+    },
+    "鐵": {
+     "total": 1,
+     "seenInRuns": 1
+    }
+   },
+   "events": []
+  }
+ ]
+}
