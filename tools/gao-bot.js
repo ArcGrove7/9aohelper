@@ -87,6 +87,10 @@ async function reviveAndRest() {
       log(`重生中 ${reviving.length} 隻，等 10 分鐘`);
       for (let i = 0; i < 45; i++) {
         await sleep(30000);
+        // 重生要等十分鐘，這段空檔別讓挖礦跟鍛造的人閒著
+        if (i % 4 === 3) {
+          try { await tendWorkers(await client.heroes()); } catch (e) { log('tendWorkers:', e.message); }
+        }
         try { await client.reviveAllComplete(); log('重生完成'); break; } catch { /* 還沒好 */ }
       }
     }
@@ -268,6 +272,8 @@ async function stepProbe(info) {
 // 階段 1：回城、復活、休息
 async function stepRegroup() {
   await backToTown();
+  // 復活要趁全員都還在隊上——reviveAll 只管隊伍裡的人。
+  // 休息留到分工之後再做，免得把正在鍛造的人也一起叫去休息。
   await reviveAndRest();
   state.phase = 'split';
   return client.huntInfo();
@@ -278,6 +284,17 @@ async function stepSplit() {
   await backToTown();
   const heroes = await setParty(plan.grinders);
   await tendWorkers(heroes);
+  // 練功隊出發前先補滿——這時隊伍裡只剩他們，不會吵到挖礦與鍛造的人
+  const crew = heroes.filter((h) => plan.grinders.includes(h.id));
+  if (crew.some((h) => h.hp < h.fullHp || h.sp < h.fullSp)) {
+    try {
+      await client.restAll();
+      log(`練功隊休息 ${Math.round(plan.restMs / 1000)} 秒`);
+      await sleep(plan.restMs);
+      const r = await client.restAllComplete();
+      log('休息完成:', (r.messages || []).join(' / ') || '（無）');
+    } catch (e) { log('休息失敗：', e.message); }
+  }
   state.routeIdx = 0;
   state.phase = 'travel';
   return client.huntInfo();
@@ -343,9 +360,9 @@ async function stepGrind(info) {
     } catch (e) { log('休息失敗：', e.message); }
   }
 
+  // huntInfo 本來就帶等級，不必為了看等級多打一次 heroes()
   if (leg && leg.untilLevel) {
-    const full = await client.heroes();
-    const crew = full.filter((h) => plan.grinders.includes(h.id));
+    const crew = heroes.filter((h) => plan.grinders.includes(h.id));
     if (crew.length && crew.every((h) => h.lv >= leg.untilLevel)) {
       log(`練功隊都到 ${leg.untilLevel} 等 → 前往下一段`);
       state.routeIdx++;

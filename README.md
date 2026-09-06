@@ -61,6 +61,7 @@
       node tools/gao-fetch-reports.js --token-file <放 token 的檔>    # 撈伺服器上還留著的歷史戰報
       node tools/gao-bot.js --token-file <放 token 的檔> --minutes 60  # 照 tools/gao/plan.js 的劇本操作帳號
       node tools/build-bestiary.js                                     # 從戰報重建敵人／地點彙整
+      node tools/build-messages.js                                     # 從戰報重建戰鬥文本模板
 
   規矩見 `capture/README.md`：戰報的我方那一半（暱稱、英雄名、自家裝備）**不上站**，
   可上站的只有敵人與地點。帳號 token 放 `.gao-state/`，已在 `.gitignore`。

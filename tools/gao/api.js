@@ -78,7 +78,10 @@ class RateLimiter {
     for (;;) {
       const wait = this.waitMs();
       if (wait <= 0) break;
-      await sleep(wait);
+      // 抖動不是裝飾：好幾個行程共用同一份額度時，大家都照
+      // 「上一次請求 + 固定間隔」算等待，就會一起醒來、同一個行程每次都先搶到，
+      // 另一個永遠排不進去。錯開醒來的時間才輪得到。
+      await sleep(wait + Math.floor(Math.random() * 900));
     }
     this.stamps.push(Date.now());
     this.save();
