@@ -279,7 +279,9 @@ async function setParty(keepIds) {
 // 那樣拿到的是「消耗了 2 點體力，什麼也沒挖到」。挖滿 plan.miningMinutes
 // 或體力見底才收。
 function minedLongEnough(h) {
-  if (h.sp <= 30) return true;
+  // 體力真的見底才提早收。門檻設高的話「至少挖滿 plan.miningMinutes」就形同虛設——
+  // 派工前本來就有五成保護，開挖時體力至少一半，撐三十分鐘綽綽有餘。
+  if (h.sp <= 5) return true;
   const started = h.actionStart ? new Date(h.actionStart).getTime() : 0;
   if (!started) return true;
   return client.now() - started >= (plan.miningMinutes || 20) * 60 * 1000;

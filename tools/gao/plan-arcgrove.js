@@ -10,7 +10,8 @@ module.exports = {
   // 「交付 10 份礫石」與「消耗 30 點體力挖礦」，挖砂石場一趟兩個一起推進。
   miners: { 1189: 1 },
   smiths: {},
-  miningMinutes: 20,
+  // 人下的令：挖礦至少 30 分鐘一個階段，收太快沒有收穫
+  miningMinutes: 30,
 
   // 用名字寫，bot 啟動時自己對應到 id
   grinders: ['雷霆天降', '白人戰士'],
