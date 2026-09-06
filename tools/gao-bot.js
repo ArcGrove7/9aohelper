@@ -450,8 +450,9 @@ async function tendWorkers(heroes) {
 
     if (h.actionState !== ActionState.Idle) continue;
 
-    // 人下的令：挖礦與鍛造都吃體力，這些人也守五成——先吃補品，補不上來就休息。
-    const below = plan.restBelow || 0.5;
+    // 挖礦與鍛造都吃體力，這些人也守門檻——先吃補品，補不上來就休息。
+    // 鍛造師用自己的門檻：他在城裡打鐵沒有倒地風險，壓低才不會一直被抓去休息停產。
+    const below = smith ? (plan.smithRestBelow ?? plan.restBelow ?? 0.5) : (plan.restBelow || 0.5);
     if (h.hp / (h.fullHp || 1) < below || h.sp / (h.fullSp || 1) < below) {
       await useConsumables([h]);
       if (h.hp / (h.fullHp || 1) < below || h.sp / (h.fullSp || 1) < below) {
