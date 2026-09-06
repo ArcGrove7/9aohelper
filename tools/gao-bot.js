@@ -378,13 +378,20 @@ async function stepGrind(info) {
   const hurt = heroes.filter((h) => h.hp / (h.fullHp || 1) < plan.restBelow);
   if (hurt.length) {
     log(`${hurt.map((h) => h.name).join('、')} 血量偏低 → 全隊休息`);
-    try {
-      await client.restAll();
-      await sleep(plan.restMs);
-      const r = await client.restAllComplete();
-      log('休息完成:', (r.messages || []).join(' / ') || '（無）');
-      return r.huntInfo || info;
-    } catch (e) { log('休息失敗：', e.message); }
+    const until = plan.restUntil || 0.75;
+    let latest = info;
+    for (let round = 0; round < (plan.restRounds || 5); round++) {
+      try {
+        await client.restAll();
+        await sleep(plan.restMs);
+        const r = await client.restAllComplete();
+        log(`休息第 ${round + 1} 輪:`, (r.messages || []).join(' / ') || '（無）');
+        latest = r.huntInfo || latest;
+      } catch (e) { log('休息失敗：', e.message); break; }
+      const crew = (latest && latest.heroes) || [];
+      if (crew.every((h) => h.hp / (h.fullHp || 1) >= until)) break;
+    }
+    return latest;
   }
 
   // huntInfo 本來就帶等級，不必為了看等級多打一次 heroes()
