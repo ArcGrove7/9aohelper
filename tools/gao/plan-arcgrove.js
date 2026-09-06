@@ -28,7 +28,7 @@ module.exports = {
   equipSlots: ['單手劍', '盔甲'],
 
   restBelow: 0.5,
-  restUntil: 0.9,
+  restUntil: 0.75,
   healUntil: 0.65,
   useItems: true,
   // 增益補品（戰鬥口糧那種）**只能留著打 BOSS**（人下的令）——練功時一律不准吃
