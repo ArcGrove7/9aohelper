@@ -169,17 +169,21 @@ function pickSoilWood(inventory, cands, cap, stat) {
     .filter((m) => m.available > 0 && isWood(m.name, table.get(m.name)))
     .sort((a, b) => ((table.get(b.name) || {})[stat] || 0) - ((table.get(a.name) || {})[stat] || 0));
 
-  if (!soils.length || !woods.length) {
+  if (!soils.length || woods.length === 0) {
     // 缺任何一邊，泥土加成就啟動不了，退回一般貪心
     const missing = !soils.length ? '沒有泥土類素材' : '沒有木頭類素材';
     return assemble(greedy(cands, cap), cands, stat, { note: `${missing}，泥土加成啟動不了` });
   }
 
   const soilStock = soils.reduce((n, s) => n + s.available, 0);
+  const woodStock = woods.reduce((n, w) => n + w.available, 0);
   const wood = woods[0];
   let best = null;
 
-  for (let k = 0; k <= Math.min(soilStock, cap - 1); k++) {
+  // 人下的令：1 土要配 2 木。所以 k 個泥土就要 2k 個木頭，佔掉 3k 格。
+  const RATIO = 2;
+  const maxK = Math.min(soilStock, Math.floor(woodStock / RATIO), Math.floor(cap / (1 + RATIO)));
+  for (let k = 1; k <= maxK; k++) {
     const preset = new Map();
     let bonus = 0;
     let left = k;
@@ -192,17 +196,27 @@ function pickSoilWood(inventory, cands, cap, stat) {
       left -= take;
       if (!byName.has(s.name)) byName.set(s.name, { id: s.id, name: s.name, available: s.available, value: (table.get(s.name) || {})[stat] || 0 });
     }
-    // 一個木頭就夠啟動
-    preset.set(wood.name, (preset.get(wood.name) || 0) + 1);
-    if (!byName.has(wood.name)) byName.set(wood.name, { id: wood.id, name: wood.name, available: wood.available, value: (table.get(wood.name) || {})[stat] || 0 });
+    // 1 土配 2 木——木頭也照防禦值高的先放
+    let needWood = k * RATIO;
+    for (const w of woods) {
+      if (needWood <= 0) break;
+      const take = Math.min(w.available, needWood);
+      preset.set(w.name, (preset.get(w.name) || 0) + take);
+      needWood -= take;
+      if (!byName.has(w.name)) byName.set(w.name, { id: w.id, name: w.name, available: w.available, value: (table.get(w.name) || {})[stat] || 0 });
+    }
+    if (needWood > 0) continue; // 木頭不夠配這個 k
 
     const pool = [...byName.values()];
     const counts = greedy(pool, cap, preset);
     const r = assemble(counts, pool, stat);
     const effective = r.score * (1 + bonus);
     if (!best || effective > best.effective) {
-      best = { ...r, soilCount: k, soilBonus: Math.round(bonus * 100), effective: Math.round(effective * 100) / 100 };
+      best = { ...r, soilCount: k, woodCount: k * RATIO, soilBonus: Math.round(bonus * 100), effective: Math.round(effective * 100) / 100 };
     }
+  }
+  if (!best) {
+    return assemble(greedy(cands, cap), cands, stat, { note: '木頭不夠配 1 土 2 木' });
   }
   return best;
 }

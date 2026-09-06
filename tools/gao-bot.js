@@ -122,7 +122,7 @@ async function useConsumables(heroes) {
   if (!plan.useItems) return heroes;
   const below = plan.restBelow || 0.5;
   const upTo = plan.healUntil || 0.65;
-  const crew = heroes.filter((h) => plan.grinders.includes(h.id) && h.hp > 0);
+  const crew = heroes.filter((h) => h.hp > 0);
   const needy = crew.filter((h) => h.hp / (h.fullHp || 1) < below || h.sp / (h.fullSp || 1) < below);
   if (!needy.length) return heroes;
 
@@ -289,6 +289,19 @@ async function tendWorkers(heroes) {
 
     if (h.actionState !== ActionState.Idle) continue;
 
+    // 人下的令：挖礦與鍛造都吃體力，這些人也守五成——先吃補品，補不上來就休息。
+    const below = plan.restBelow || 0.5;
+    if (h.hp / (h.fullHp || 1) < below || h.sp / (h.fullSp || 1) < below) {
+      await useConsumables([h]);
+      if (h.hp / (h.fullHp || 1) < below || h.sp / (h.fullSp || 1) < below) {
+        try {
+          await client.rest(h.id);
+          log(`${h.name} 低於五成，先休息（HP ${Math.round((h.hp / (h.fullHp || 1)) * 100)}%／體 ${Math.round((h.sp / (h.fullSp || 1)) * 100)}%）`);
+        } catch (e) { log(`${h.name} 休息失敗：${e.message}`); }
+        continue;
+      }
+    }
+
     try {
       // 兩種身分都掛著的人（工匠自己挖料自己打）：配方湊得齊就鍛造，湊不齊就去挖。
       if (mineTarget && smith) {
@@ -304,7 +317,7 @@ async function tendWorkers(heroes) {
           log(`${h.name} 去挖料（礦區 ${mineTarget}）——${recipe.note || '素材不夠'}`);
         }
       } else if (mineTarget) {
-        if (h.sp <= 20) { await client.rest(h.id); log(`${h.name} 體力不足，休息`); continue; }
+        if (h.sp <= 20) { await client.rest(h.id); log(`${h.name} 體力見底，休息`); continue; }
         await client.mining(h.id, mineTarget);
         log(`${h.name} 開始挖礦（礦區 ${mineTarget}）`);
       } else if (smith) {
@@ -511,7 +524,7 @@ async function stepGrind(info) {
   const lowOn = (h) => h.hp / (h.fullHp || 1) < plan.restBelow || h.sp / (h.fullSp || 1) < plan.restBelow;
   if (heroes.some(lowOn)) {
     // 補品比休息快，先吃
-    await useConsumables(heroes);
+    await useConsumables(heroes.filter((h) => plan.grinders.includes(h.id)));
   }
   const hurt = heroes.filter(lowOn);
   if (hurt.length) {
