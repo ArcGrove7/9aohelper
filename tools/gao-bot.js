@@ -471,7 +471,24 @@ async function ensureCrewIdle() {
       await sleep(15000);
     }
   }
-  return crew;
+
+  // 集合收尾（restAllComplete／reviveAllComplete）有時候會回「沒有可以完成休息的英雄」，
+  // 但人明明還躺著——那批狀態不是這一輪 restAll 開的，集合 API 就認不得它。
+  // 收不掉的話接下來的 move 會一路吃「隊伍中有英雄在非閒置狀態」，整支 bot 卡死在原地
+  // （18:50 就這樣停了五分鐘），所以退一步逐隻 completeAction 把人挖起來。
+  const after = await client.heroes();
+  const stuck = after.filter(
+    (h) => h.selected && h.hp > 0
+      && h.actionState !== ActionState.Idle
+      && h.actionState !== ActionState.Reviving,
+  );
+  for (const h of stuck) {
+    try {
+      await client.completeAction(h.id);
+      log(`${h.name} 單獨收尾（狀態 ${h.actionState}）`);
+    } catch (e) { log(`${h.name} 收尾不掉：`, e.message); }
+  }
+  return stuck.length ? (await client.heroes()).filter((h) => h.selected) : after.filter((h) => h.selected);
 }
 
 // 把不該跟著跑的人踢出隊伍
