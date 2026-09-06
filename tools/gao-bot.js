@@ -187,16 +187,15 @@ async function tendEquipment() {
         .filter((e) => e.type === type && !e.equipped && e.state === 0)
         .sort((a, b) => score(b) - score(a))[0];
       if (!best) continue;
-      // 空手就補，手上那件比庫存最好的差也換——新打的好裝備擺著等它壞掉才用太浪費，
-      // 而且裝備本來就是消耗品，先穿好的划算。
-      if (worn && score(worn) >= score(best)) continue;
+      // 只補空缺，不做升級換裝（人下的令，2026-09-06）：
+      // 人自己會回收裝備換錢，bot 再去搶著換上就變成「我裝上、他回收」互相抵消，
+      // 還白燒額度。手上有東西就別動它。
+      if (worn) continue;
       try {
         await client.post(`/api/equipments/${best.id}/equip`, { heroId });
         best.equipped = heroId;
-        if (worn) worn.equipped = null;
-        const how = worn ? `換掉 ${worn.quality}的${worn.name}（攻${worn.atk} 防${worn.def}）` : '原本空手';
-        log(`換裝：${best.quality}的${best.name}（${type} 攻${best.atk} 防${best.def} 耐${best.fullDur}）→ ${heroId}，${how}`);
-      } catch (e) { log(`換裝失敗：${e.message}`); }
+        log(`補裝備：${best.quality}的${best.name}（${type} 攻${best.atk} 防${best.def} 耐${best.fullDur}）→ ${heroId}（原本空手）`);
+      } catch (e) { log(`補裝備失敗：${e.message}`); }
     }
   }
 }
