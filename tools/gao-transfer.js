@@ -9,7 +9,7 @@
 //
 //   node tools/gao-transfer.js --from <token檔> --from-label <代號> \
 //     --to <token檔> --to-label <代號> --kind mines|equipments \
-//     [--exclude 泥土,兔皮] [--only 鐵,石頭] [--unit-price 2] [--floor-price 30] [--top 3] [--gap 2500]
+//     [--exclude 泥土,兔皮] [--only 鐵,石頭] [--unit-price 2] [--floor-price 30] [--min-total 40] [--top 3] [--gap 2500]
 //
 // --top 只對 equipments 有意義：挑攻＋防最高的前 N 件。
 
@@ -35,6 +35,9 @@ const unitPrice = Number(args['unit-price'] || 2);
 // 錢是自己人左手換右手，寧可掛貴一點也別讓東西飛掉。
 const floorPrice = Number(args['floor-price'] || 30);
 const exclude = new Set(String(args.exclude || '').split(',').filter(Boolean));
+// 累積到這個總量才值得跑一趟——每筆都要掛單、查市場、買回，
+// 為了三五個素材開一次市場不划算，而且每次掛單都有被路過的人撿走的風險。
+const minTotal = Number(args['min-total'] || 0);
 const only = new Set(String(args.only || '').split(',').filter(Boolean));
 
 const from = new Client({
@@ -78,6 +81,14 @@ async function pickSource() {
 (async () => {
   const items = await pickSource();
   if (!items.length) { console.log('沒有可轉移的東西'); return; }
+  if (minTotal > 0) {
+    const total = items.reduce((n, it) => n + it.quantity, 0);
+    if (total < minTotal) {
+      console.log(`只有 ${total} 份（門檻 ${minTotal}），先不轉，等累積夠再說`);
+      return;
+    }
+    console.log(`累積 ${total} 份，達到門檻 ${minTotal}，開始轉`);
+  }
   const seller = (await from.profile()).id;
   const budget = (await to.profile()).money;
   console.log(`要轉 ${items.length} 筆，買方現有 ${budget} 元`);
