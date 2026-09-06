@@ -1,6 +1,6 @@
 {
- "generatedAt": "2026-09-06T08:16:05.962Z",
- "count": 5,
+ "generatedAt": "2026-09-06T08:41:48.032Z",
+ "count": 6,
  "entries": [
   {
    "time": "2026-09-06T07:22:43.388Z",
@@ -278,6 +278,74 @@
     {
      "name": "楊木",
      "quantity": 3,
+     "value": 0
+    }
+   ]
+  },
+  {
+   "time": "2026-09-06T08:23:40.509Z",
+   "smith": "大火慢炒",
+   "equipType": "armor",
+   "quality": "上等",
+   "product": {
+    "name": "幽鐵鎮鎧",
+    "quality": "上等",
+    "type": "盔甲",
+    "atk": 41,
+    "def": 184,
+    "int": 7,
+    "lck": 21,
+    "wgt": 191,
+    "dur": 430,
+    "slots": 6
+   },
+   "soilCount": 2,
+   "woodCount": 4,
+   "total": 16,
+   "mines": [
+    {
+     "name": "石頭",
+     "quantity": 1,
+     "value": 6
+    },
+    {
+     "name": "S級兔皮",
+     "quantity": 3,
+     "value": 6
+    },
+    {
+     "name": "嫩寶殼",
+     "quantity": 2,
+     "value": 6
+    },
+    {
+     "name": "藍黑寶殼",
+     "quantity": 1,
+     "value": 6
+    },
+    {
+     "name": "兔皮",
+     "quantity": 2,
+     "value": 3.3
+    },
+    {
+     "name": "黑兔皮",
+     "quantity": 1,
+     "value": 2.6
+    },
+    {
+     "name": "泥土",
+     "quantity": 2,
+     "value": 2
+    },
+    {
+     "name": "楊木",
+     "quantity": 3,
+     "value": 0
+    },
+    {
+     "name": "樺木",
+     "quantity": 1,
      "value": 0
     }
    ]
